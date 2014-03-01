@@ -1,0 +1,1 @@
+faber.controller 'FaberEditorController', ($scope)->

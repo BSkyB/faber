@@ -1,0 +1,19 @@
+{
+  "name": "faber",
+  "version": "0.0.1",
+  "description": "Block based content editor",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.2.13",
+    "angular-local-storage": "~0.0.1",
+    "angular-slugify": "~1.0.0",
+    "angular-medium-editor": "*",
+    "angular-ui-utils": "~0.1.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.14"
+  },
+  "resolutions": {
+    "angular": "~1.2.13"
+  }
+}

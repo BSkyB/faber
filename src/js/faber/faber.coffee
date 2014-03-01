@@ -1,0 +1,1 @@
+window.faber = angular.module 'faber', []

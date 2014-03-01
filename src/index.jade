@@ -1,0 +1,16 @@
+doctype html
+html(lang="en")
+  head
+    title Faber
+  body
+    #faber(ng-app="faber", ng-controller="FaberEditorController")
+
+  //script(data-main="/js/main", src="/lib/require.js")
+
+  script(src="/lib/angular.js")
+  script(src="/lib/angular-local-storage.js")
+  script(src="/lib/angular-slugify.js")
+  script(src="/lib/angular-ui-utils.js")
+
+  script(src="/js/faber/faber.js")
+  script(src="/js/faber/controllers/FaberEditorController.js")

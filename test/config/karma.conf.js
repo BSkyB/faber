@@ -1,0 +1,44 @@
+module.exports = function(config){
+  config.set({
+    basePath: '../../',
+
+    files: [
+//      'app/lib/angular/angular-*.js',
+      'dev/lib/angular.js',
+      'test/lib/angular-mocks.js',
+      'dev/lib/**/*.js',
+      'dev/js/faber/faber.js',
+      'dev/js/faber/controllers/*.js',
+      'test/unit/**/*Spec.coffee'
+    ],
+
+    exclude: [
+//      'app/lib/angular/angular-loader.js',
+//      'app/lib/angular/*.min.js',
+//      'app/lib/angular/angular-scenario.js'
+    ],
+
+    preprocessors: {
+      '**/*.coffee': ['coffee']
+    },
+
+    autoWatch: true,
+
+    frameworks: ['jasmine'],
+
+    browsers: ['Chrome'],
+
+    plugins: [
+      'karma-coffee-preprocessor',
+      'karma-chrome-launcher',
+      'karma-firefox-launcher',
+      'karma-jasmine',
+      'karma-coverage'
+    ]
+
+//    junitReporter : {
+//      outputFile: 'test_out/unit.xml',
+//      suite: 'unit'
+//    }
+
+  })}
