@@ -1,1 +1,2 @@
-window.faber = angular.module 'faber', []
+window.faber = angular.module('faber', [])
+  .constant('faberConfig', {})

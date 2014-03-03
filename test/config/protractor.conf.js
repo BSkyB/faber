@@ -16,6 +16,10 @@ exports.config = {
       '../../test/e2e/**/*Spec.coffee'
   ],
 
+  onPrepare: function() {
+    global.By = protractor.by;
+  },
+
   // Options to be passed to Jasmine-node.
   jasmineNodeOpts: {
     showColors: true,

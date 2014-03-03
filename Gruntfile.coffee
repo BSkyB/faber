@@ -5,6 +5,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-jade'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-jasmine'
+  grunt.loadNpmTasks 'grunt-angular-templates'
   grunt.loadNpmTasks 'grunt-slim'
   grunt.loadNpmTasks 'grunt-karma'
   grunt.loadNpmTasks 'grunt-protractor-runner'
