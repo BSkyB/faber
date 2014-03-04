@@ -21,8 +21,8 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: ['**/*.coffee']
-#        tasks: ['coffee', 'karma:unit:run']
-        tasks: ['coffee']
+        tasks: ['coffee', 'karma:unit:run', 'jasmine']
+#        tasks: ['coffee']
       jade:
         files: ['src/**/*.jade']
         tasks: 'jade'
