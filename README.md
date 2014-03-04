@@ -22,14 +22,12 @@ Block based content editor
 npm install
 ./node_modules/protractor/bin/webdriver-manager update
 grunt dev
-
 ```
 
 ### To start dev environment
 
 ```
 grunt dev
-
 ```
 
 This will run [Karma](http://karma-runner.github.io/ "Karma") [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
@@ -42,7 +40,6 @@ This will run [Karma](http://karma-runner.github.io/ "Karma") [Jasmine](http://j
 ```
 ./node_modules/protractor/bin/webdriver-manager start
 grunt test
-
 ```
 
 `webdriver-manager start` before `grunt test` so [Protractor](https://github.com/angular/protractor "Protractor") can run.
@@ -53,20 +50,17 @@ grunt test
 
 ```
 ./node_modules/protractor/bin/webdriver-manager start
-
 ```
 and then
 
 ```
 grunt protractor
-
 ```
 or
 
 
 ```
 ./node_modules/.bin/protractor test/config/protractor.conf.js
-
 ```
 
 ### To publish
