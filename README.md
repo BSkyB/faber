@@ -69,6 +69,6 @@ or
 
 ```
 
-###ß To publish
+### To publish
 
 [WIP]
