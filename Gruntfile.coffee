@@ -28,8 +28,7 @@ module.exports = (grunt) ->
         tasks: 'jade'
       test:
         files: ['test/**/*.coffee']
-        tasks: ['karma:unit:run']
-#        tasks: ['karma:unit:run', 'jasmine']
+        tasks: ['karma:unit:run', 'jasmine']
 
     coffee:
       compile:

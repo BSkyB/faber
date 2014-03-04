@@ -9,3 +9,7 @@ describe 'ContentService:', ()->
   describe 'when initialised', ->
     it 'should be defined', ->
       expect(@contentService).toBeDefined()
+
+  describe 'when initialised', ->
+    it 'should be defined', ->
+      expect(@contentService).toBeDefined()
