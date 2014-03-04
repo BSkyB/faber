@@ -8,7 +8,8 @@ Block based content editor
 1.	Pluggable component templates
 2.	Pluggable themes
 3.	Setup publish task
-4.	Responsive preview
+4.  Code coverage
+5.	Responsive preview
 
 ### Grunt tasks
 
