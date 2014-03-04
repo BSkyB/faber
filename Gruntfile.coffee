@@ -21,13 +21,15 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: ['**/*.coffee']
-        tasks: ['coffee', 'karma:unit:run']
+#        tasks: ['coffee', 'karma:unit:run']
+        tasks: ['coffee']
       jade:
         files: ['src/**/*.jade']
         tasks: 'jade'
       test:
         files: ['test/**/*.coffee']
         tasks: ['karma:unit:run']
+#        tasks: ['karma:unit:run', 'jasmine']
 
     coffee:
       compile:
@@ -121,12 +123,17 @@ module.exports = (grunt) ->
           keepalive: false
 
     karma:
-      unit: testConfig 'test/config/karma.conf.js'
-      server:
+      options:
         configFile: 'test/config/karma.conf.js'
-      continuous:
-        configFile: 'test/config/karma.conf.js'
+#      unit: testConfig 'test/config/karma.conf.js'
+      unit:
         background: true
+        port: 9877
+#      server:
+#        configFile: 'test/config/karma.conf.js'
+      continuous:
+        singleRun: true
+        background: false
 #      coverage:
 #        configFile: 'test/config/karma.conf.js'
 #        reporters: ['progress', 'coverage']

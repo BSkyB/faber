@@ -8,7 +8,7 @@ module.exports = function(config){
       'test/lib/angular-mocks.js',
       'dev/lib/**/*.js',
       'dev/js/faber/faber.js',
-      'dev/js/faber/controllers/*.js',
+      'dev/js/faber/**/*.js',
       'test/unit/**/*Spec.coffee'
     ],
 
@@ -22,13 +22,17 @@ module.exports = function(config){
       '**/*.coffee': ['coffee']
     },
 
-    autoWatch: true,
+    autoWatch: false,
+
+    port: 9018,
+    runnerPort: 9101,
 
     frameworks: ['jasmine'],
 
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     plugins: [
+      'karma-phantomjs-launcher',
       'karma-coffee-preprocessor',
       'karma-chrome-launcher',
       'karma-firefox-launcher',

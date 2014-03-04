@@ -1,0 +1,2 @@
+faber.factory 'contentService', ()->
+  {}
