@@ -21,14 +21,10 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: ['**/*.coffee']
-        tasks: ['coffee', 'karma:unit:run', 'jasmine']
-#        tasks: ['coffee']
+        tasks: ['coffee', 'karma:unit:run']
       jade:
         files: ['src/**/*.jade']
         tasks: 'jade'
-      test:
-        files: ['test/**/*.coffee']
-        tasks: ['karma:unit:run', 'jasmine']
 
     coffee:
       compile:
@@ -163,6 +159,8 @@ module.exports = (grunt) ->
           'test/lib/angular-mocks.js'
         ]
 #        helpers: 'test/helpers/helper.js'
+        display: 'short'
+        summary: true
         keepRunner: true
 
   grunt.registerTask 'default', ['coffee', 'jade', 'copy', 'karma:unit', 'protractor']
