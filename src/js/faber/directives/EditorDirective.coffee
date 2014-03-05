@@ -1,7 +1,6 @@
 faber.directive 'faberEditor', ()->
-#  scope: true
+  scope: true
   restrict: 'AE'
-#  template: '<p>{{greeting}}</p>'
   templateUrl: 'faber-editor.html'
   controller: 'EditorController'
 

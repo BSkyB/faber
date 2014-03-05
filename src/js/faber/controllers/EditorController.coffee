@@ -1,2 +1,5 @@
 faber.controller 'EditorController', ($scope, contentService)->
-  $scope.greeting = 'hello'
+  $scope.blocks = contentService.getAll()
+
+  $scope.$on 'imported', (evt, blocks)->
+    $scope.blocks = blocks

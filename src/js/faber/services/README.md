@@ -7,8 +7,9 @@ Deals everything concerns the content blocks.
 Always keep the data clean from all angular clutters.
 
 *	`import` from JSON
+	* $broadcast: `imported`, blocks
 *	`export` to JSON
-
+	* $broadcast: `exported`, json
 
 ## StorageService
 

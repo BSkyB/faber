@@ -3,10 +3,20 @@ describe 'EditorController', ->
 
   beforeEach ->
     inject ($injector, $rootScope, $controller)->
-      @editorController = $controller('EditorController', $scope: $rootScope.$new())
+      @scope = $rootScope.$new()
+      @editorController = $controller('EditorController', $scope: @scope)
       @contentService = $injector.get 'contentService'
 
   describe 'when initialised', ->
     it 'should be defined', ->
       expect(@editorController).toBeDefined()
+
+    it 'should get all initial blocks from content service', ->
+      expect(@scope.blocks).toBe @contentService.getAll()
+
+  describe 'when content is imported', ->
+    it 'should get all imported blocks from content service', ->
+      @contentService.import sampleJson
+
+      expect(@scope.blocks.length).toBe angular.fromJson(sampleJson).length
 

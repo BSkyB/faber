@@ -1,16 +1,20 @@
-describe 'Faber Editor Directive:', ()->
+describe 'Editor Directive:', ()->
 
   beforeEach module 'faber'
 
   beforeEach ->
     inject ($compile, $rootScope)->
-      $rootScope.greeting = 'hello'
-      @element = $compile('<faber-editor></faber-editor>')($rootScope)
-      $rootScope.$digest()
+      @scope = $rootScope.$new()
+      @directive = $compile('<faber-editor></faber-editor>')(@scope)
+      @scope.$digest()
 
   describe 'when initialised', ->
     it 'should be defined', ->
-      expect(@element).toBeDefined()
+      expect(@directive).toBeDefined()
 
-    it 'should show correct greeting', ->
-      expect(@element.text()).toMatch 'hello'
+#  describe 'if a block is added', ->
+#    it 'should add the block to the block list', ->
+#      expect(@scope.add).toBeDefined()
+#      @scope.add {}
+#
+#      expect(@scope.blocks.length).toBe 1

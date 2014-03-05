@@ -122,7 +122,7 @@ module.exports = (grunt) ->
     connect:
       options:
         base: 'dev'
-        open: true
+        open: false
         livereload: false
       server:
         options:
@@ -183,4 +183,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['coffee', 'jade', 'copy', 'ngtemplates', 'karma:unit', 'protractor']
   grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'ngtemplates', 'karma:unit', 'connect:continuous', 'karma:continuous', 'watch']
 #  grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'karma:unit', 'karma:continuous', 'watch']
+  grunt.registerTask 'jasminetest', ['coffee', 'jade', 'copy', 'ngtemplates', 'jasmine']
   grunt.registerTask 'test', ['coffee', 'jade', 'copy', 'ngtemplates', 'jasmine', 'karma:unit', 'protractor']
