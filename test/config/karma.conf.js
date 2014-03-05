@@ -25,8 +25,8 @@ module.exports = function(config){
 
     autoWatch: false,
 
-//    port: 9018,
-//    runnerPort: 9101,
+    port: 9018,
+    runnerPort: 9101,
 
     frameworks: ['jasmine'],
 

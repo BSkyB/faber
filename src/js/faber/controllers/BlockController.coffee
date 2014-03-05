@@ -1,5 +1,9 @@
-faber.controller 'BlockController', ($scope)->
+faber.controller 'BlockController', ($scope, contentService)->
   $scope.blocks = []
 
   $scope.add = (block)->
-    $scope.blocks.push block
+    if contentService.validateBlock block
+      $scope.blocks.push block
+      return true
+    else
+      return false

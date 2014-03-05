@@ -10,13 +10,22 @@ describe 'BlockController', ->
     it 'should be defined', ->
       expect(@blockController).toBeDefined()
 
-  describe 'when a block is added', ->
-    it 'should be able to validate the new block', ->
-      expect(false).toBe true
+  describe 'when adding a block', ->
+    it 'should be able to validate the new block before it is added', ->
+      invalid = {}
+      valid =
+        inputs:
+          title: 'new title'
+          body: 'new body'
+        component: 'test-component'
+        type: 'element'
 
-    it 'should be able to add a new block to the block list', ->
-      @scope.add {}
+      invalidResult = @scope.add invalid
+      expect(invalidResult).toBeFalsy()
+      expect(@scope.blocks.length).toBe 0
+
+      validResult = @scope.add valid
+      expect(validResult).toBeTruthy()
       expect(@scope.blocks.length).toBe 1
 
-  it 'should be able to remove a block from the block list', ->
-    expect(false).toBe true
+  
