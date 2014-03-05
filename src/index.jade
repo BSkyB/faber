@@ -3,7 +3,8 @@ html(lang="en")
   head
     title Faber
   body
-    #faber(ng-app="faber", ng-controller="FaberEditorController")
+    #faber(ng-app="faber")
+      faber-editor
 
   //script(data-main="/js/main", src="/lib/require.js")
 
@@ -13,4 +14,13 @@ html(lang="en")
   script(src="/lib/angular-ui-utils.js")
 
   script(src="/js/faber/faber.js")
-  script(src="/js/faber/controllers/FaberEditorController.js")
+
+  // Controllers
+  script(src="/js/faber/controllers/EditorController.js")
+
+  // Services
+  script(src="/js/faber/services/ContentService.js")
+
+  // Directives
+  script(src="/js/faber/directives/templates.js")
+  script(src="/js/faber/directives/EditorDirective.js")

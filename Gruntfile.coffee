@@ -24,7 +24,7 @@ module.exports = (grunt) ->
         tasks: ['coffee', 'karma:unit:run']
       jade:
         files: ['src/**/*.jade']
-        tasks: 'jade'
+        tasks: ['jade', 'ngtemplates']
 
     coffee:
       compile:
@@ -78,6 +78,14 @@ module.exports = (grunt) ->
           ext: '.html'
         ]
 
+    ngtemplates:
+      faber:
+#        options:
+#          prefix: 'directive-templates'
+        cwd: 'dev/directive-templates/'
+        src: '**.html'
+        dest: 'dev/js/faber/directives/templates.js'
+
     copy:
       dev:
         files: [
@@ -115,7 +123,7 @@ module.exports = (grunt) ->
       options:
         base: 'dev'
         open: true
-        livereload: true
+        livereload: false
       server:
         options:
           keepalive: true
@@ -172,7 +180,7 @@ module.exports = (grunt) ->
         summary: true
         keepRunner: true
 
-  grunt.registerTask 'default', ['coffee', 'jade', 'copy', 'karma:unit', 'protractor']
-#  grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'karma:unit', 'connect:continuous', 'karma:continuous', 'watch']
-  grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'karma:unit', 'karma:continuous', 'watch']
-  grunt.registerTask 'test', ['coffee', 'jade', 'copy', 'jasmine', 'karma:unit', 'protractor']
+  grunt.registerTask 'default', ['coffee', 'jade', 'copy', 'ngtemplates', 'karma:unit', 'protractor']
+  grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'ngtemplates', 'karma:unit', 'connect:continuous', 'karma:continuous', 'watch']
+#  grunt.registerTask 'dev', ['coffee', 'jade', 'copy', 'karma:unit', 'karma:continuous', 'watch']
+  grunt.registerTask 'test', ['coffee', 'jade', 'copy', 'ngtemplates', 'jasmine', 'karma:unit', 'protractor']

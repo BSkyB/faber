@@ -1,0 +1,2 @@
+faber.controller 'BlockController', ($scope)->
+

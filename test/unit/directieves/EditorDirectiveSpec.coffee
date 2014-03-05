@@ -5,7 +5,7 @@ describe 'Faber Editor Directive:', ()->
   beforeEach ->
     inject ($compile, $rootScope)->
       $rootScope.greeting = 'hello'
-      @element = $compile('<div faber-editor></div>')($rootScope)
+      @element = $compile('<faber-editor></faber-editor>')($rootScope)
       $rootScope.$digest()
 
   describe 'when initialised', ->
@@ -13,4 +13,4 @@ describe 'Faber Editor Directive:', ()->
       expect(@element).toBeDefined()
 
     it 'should show correct greeting', ->
-      expect(@element.text()).toBe 'hello'
+      expect(@element.text()).toMatch 'hello'
