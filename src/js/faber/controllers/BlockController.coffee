@@ -7,3 +7,6 @@ faber.controller 'BlockController', ($scope, contentService)->
       return true
     else
       return false
+
+  $scope.remove = (block)->
+    $scope.blocks.splice($scope.blocks.indexOf(block), 1)
