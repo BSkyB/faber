@@ -4,14 +4,6 @@ faber.factory 'contentService', ($rootScope)->
   clear: ()->
     blocks = []
 
-  newBlock: (inputs, component, type)->
-    'inputs': inputs
-    'component': component
-    'type': type
-
-  validateBlock: (block)->
-    angular.isObject(block.inputs) and angular.isString(block.component) and (block.type is 'element' or block.type is 'group')
-
   getAll: ()->
     blocks
 

@@ -5,7 +5,7 @@ Block based content editor
 
 ## TODOs
 
-1.	Pluggable component templates
+1.	Pluggable components
 2.	Pluggable themes
 3.	Configurable Medium editor
 4.	Setup publish task
@@ -14,8 +14,7 @@ Block based content editor
 
 ### Grunt tasks
 
-*	Use [grunt-angular-templates](https://github.com/ericclemmons/grunt-angular-templates) to prepare templates
-*	[grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify)
+*	[grunt-contrib-uglify](https://github.com/gruntjs/grunt-contrib-uglify) to concatenate files?
 
 
 ## To get it started
