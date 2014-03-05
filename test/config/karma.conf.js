@@ -32,6 +32,9 @@ module.exports = function(config){
 
     browsers: ['PhantomJS'],
 
+//    logLevel: config.LOG_ERROR,
+    reporters: ['dots'],
+
     plugins: [
       'karma-phantomjs-launcher',
       'karma-coffee-preprocessor',
