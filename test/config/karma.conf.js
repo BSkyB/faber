@@ -9,6 +9,7 @@ module.exports = function(config){
       'dev/lib/**/*.js',
       'dev/js/faber/faber.js',
       'dev/js/faber/**/*.js',
+      'test/helpers/**/*',
       'test/unit/**/*Spec.coffee'
     ],
 

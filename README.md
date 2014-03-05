@@ -7,9 +7,10 @@ Block based content editor
 
 1.	Pluggable component templates
 2.	Pluggable themes
-3.	Setup publish task
-4.  Code coverage
-5.	Responsive preview
+3.	Configurable Medium editor
+4.	Setup publish task
+5.  Code coverage
+6.	Responsive preview
 
 ### Grunt tasks
 

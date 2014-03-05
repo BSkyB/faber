@@ -44,6 +44,12 @@ module.exports = (grunt) ->
           dest: 'jasmine/'
           expand: true
           ext: '.js'
+        ,
+          cwd: 'test/helpers/'
+          src: ['**/*.coffee']
+          dest: 'jasmine/'
+          expand: true
+          ext: '.js'
         ]
 
     slim:
@@ -158,7 +164,10 @@ module.exports = (grunt) ->
           'dev/lib/angular.js'
           'test/lib/angular-mocks.js'
         ]
-#        helpers: 'test/helpers/helper.js'
+        helpers: [
+          'jasmine/sample_blocks.js'
+          'jasmine/sample_json.js'
+        ]
         display: 'short'
         summary: true
         keepRunner: true
