@@ -1,0 +1,90 @@
+describe 'ComponentsService:', ()->
+
+  beforeEach module 'faber'
+
+  beforeEach ->
+    inject ($injector)->
+      @componentsService = $injector.get 'componentsService'
+
+  describe 'when initialised', ->
+    it 'should be defined', ->
+      expect(@componentsService).toBeDefined()
+
+  describe 'if given a list of components', ->
+    describe 'if a given component is not valid', ->
+      beforeEach ->
+        inject ($log)->
+          $log.reset()
+          @log = $log
+
+        @invalid = {test: "test copy"}
+        @invalidInputs =
+          inputs: 'invalid'
+          template: 'a-component'
+          type: 'element'
+        @invalidTemplate =
+          inputs:
+            title: 'block title'
+          template: null
+          type: 'group'
+        @invalidType =
+          inputs:
+            title: 'block title'
+          template: 'a-component'
+          type: 'no idea what this is'
+        @valid =
+          inputs:
+            title: 'block title'
+          template: 'a-component'
+          type: 'group'
+        @validNoInputs =
+          template: 'a-component'
+          type: 'element'
+
+        @componentsService.init [@invalid, @invalidInputs, @invalidTemplate, @invalidType, @valid, @validNoInputs]
+
+      afterEach ->
+        inject ($log)->
+          $log.reset()
+
+      it 'should warn', ->
+        logs = @log.warn.logs
+
+        expect(logs.length).toBe 4
+        expect(logs).toContain ['invalid': @invalid]
+        expect(logs).toContain ['invalid': @invalidInputs]
+        expect(logs).toContain ['invalid': @invalidTemplate]
+        expect(logs).toContain ['invalid': @invalidType]
+
+      it 'should store other valid components', ->
+        components = @componentsService.getAll()
+
+        expect(components.length).toBe 2
+        expect(components).toContain @valid
+        expect(components).toContain @validNoInputs
+
+    it 'should be able to find components of given type', ->
+      @componentsService.init [
+        template: 'a-component'
+        type: 'element'
+      ,
+        template: 'a-component'
+        type: 'element'
+      ,
+        template: 'a-component'
+        type: 'element'
+      ,
+        template: 'a-component'
+        type: 'group'
+      ,
+        template: 'a-component'
+        type: 'group'
+      ]
+
+      elements = @componentsService.findByType 'element'
+      groups = @componentsService.findByType 'group'
+
+      expect(elements.length).toBe 3
+      expect(groups.length).toBe 2
+
+    it 'should be able to find component of given template/id', ->
