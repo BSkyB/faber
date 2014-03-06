@@ -2,28 +2,9 @@ module.exports = function(config){
   config.set({
     basePath: '../../',
 
-    files: [
-//      'app/lib/angular/angular-*.js',
-      'dev/lib/angular.js',
-      'test/lib/angular-mocks.js',
-      'dev/lib/**/*.js',
-      'dev/js/faber/faber.js',
-      'dev/js/faber/**/*.js',
-      'test/helpers/**/*',
-      'test/unit/**/*Spec.coffee'
-    ],
-
-    exclude: [
-//      'app/lib/angular/angular-loader.js',
-//      'app/lib/angular/*.min.js',
-//      'app/lib/angular/angular-scenario.js'
-    ],
-
     preprocessors: {
       '**/*.coffee': ['coffee']
     },
-
-    autoWatch: false,
 
     port: 9018,
     runnerPort: 9101,
@@ -32,7 +13,6 @@ module.exports = function(config){
 
     browsers: ['PhantomJS'],
 
-//    logLevel: config.LOG_ERROR,
     reporters: ['dots'],
 
     plugins: [
@@ -43,10 +23,5 @@ module.exports = function(config){
       'karma-jasmine',
       'karma-coverage'
     ]
-
-//    junitReporter : {
-//      outputFile: 'test_out/unit.xml',
-//      suite: 'unit'
-//    }
 
   })}
