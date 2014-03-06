@@ -1,7 +1,7 @@
-faber.directive 'faberEditor', ($templateCache)->
+faber.directive 'faberEditor', ()->
   scope: true
   restrict: 'AE'
-  template: $templateCache 'faber-editor.html'
+  template: 'faber-editor.html'
   controller: 'EditorController'
 
   link: ($scope, $element, attrs)->
