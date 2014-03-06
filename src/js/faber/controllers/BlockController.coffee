@@ -8,6 +8,14 @@ faber.controller 'BlockController', ($scope)->
     angular.isObject(block.inputs) and angular.isString(block.component) and (block.type is 'element' or block.type is 'group')
 
   $scope.blocks = []
+  $scope.expandWatch =
+    expanded: true
+
+  $scope.$on 'CollapseAll', (evt)->
+    $scope.expandWatch.expanded = false
+
+  $scope.$on 'ExpandAll', (evt)->
+    $scope.expandWatch.expanded = true
 
   $scope.add = (block)->
     if validateBlock block

@@ -50,3 +50,21 @@ describe 'BlockController', ->
         @scope.remove = 'test block'
 
         expect(@scope.blocks.length).toBe 4
+
+  describe 'when collapse all event is fired', ->
+    beforeEach ->
+      inject ($rootScope)->
+        $rootScope.$broadcast 'CollapseAll'
+
+    it 'should be collapsed', ->
+      expect(@scope.expandWatch.expanded).toBe false
+
+  describe 'when expand all event is fired', ->
+    beforeEach ->
+      @scope.expandWatch.expanded = false
+
+      inject ($rootScope)->
+        $rootScope.$broadcast 'ExpandAll'
+
+    it 'should be expanded', ->
+      expect(@scope.expandWatch.expanded).toBe true

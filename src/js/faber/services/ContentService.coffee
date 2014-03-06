@@ -7,9 +7,6 @@ faber.factory 'contentService', ($rootScope)->
   getAll: ()->
     blocks
 
-  getBlocks: ()->
-    blocks
-
   import: (json)->
     imported = angular.fromJson json
 
