@@ -1,7 +1,7 @@
-faber.directive 'faberBlock', ()->
+faber.directive 'faberBlock', ($templateCache)->
   scope: true
   restrict: 'AE'
-  templateUrl: 'faber-block.html'
+  template: $templateCache.get 'faber-block.html'
   controller: 'BlockController'
 
   link: ($scope, $element, attrs)->

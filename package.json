@@ -17,6 +17,6 @@
     "gulp-jade": "^0.4.2",
     "gulp-karma": "0.0.2",
     "gulp-bower": "0.0.3",
-    "gulp-angular-templatecache": "^1.1.0"
+    "gulp-angular-templatecache": "~1.1.0"
   }
 }

@@ -1,5 +1,4 @@
 describe 'Block Directive:', ()->
-
   beforeEach module 'faber'
 
   beforeEach ->
