@@ -1,4 +1,4 @@
-xdescribe 'Block Directive:', ()->
+describe 'Block Directive:', ()->
 
   beforeEach module 'faber'
 

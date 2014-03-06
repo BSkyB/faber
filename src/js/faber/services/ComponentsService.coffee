@@ -5,6 +5,7 @@ faber.factory 'componentsService', ($filter, $log)->
     (angular.isObject(component.inputs) or !component.inputs) and angular.isString(component.template) and (component.type is 'element' or component.type is 'group')
 
   init: (list)->
+    components = []
     for comp in list
       if validate comp
         components.push comp

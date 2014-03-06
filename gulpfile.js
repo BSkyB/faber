@@ -35,6 +35,7 @@ gulp.task('karma', function() {
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
         './src/js/faber/faber.coffee',
+        DEV_DIR + '/js/faber/directives/templates.js',
         './src/js/faber/**/*.coffee',
         './test/helpers/**/*.coffee',
         './test/unit/**/*.coffee'

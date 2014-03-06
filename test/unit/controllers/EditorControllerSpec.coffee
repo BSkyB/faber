@@ -41,6 +41,51 @@ describe 'EditorController', ->
       it 'should broadcast expand all event', ->
         expect(@scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'
 
+    describe 'if given an element component', ->
+      beforeEach ->
+        inject (faberConfig)->
+          @config = faberConfig
+          @elementComp = new FaberComponent({ name: 'Base component', type: 'element', template: 'template.html'})
+          @config.components = [ @elementComp ]
+
+      beforeEach ->
+        inject ($injector, $rootScope, $controller)->
+          @scope = $rootScope.$new()
+          @controller = $controller('EditorController', $scope: @scope)
+          @componentsService = $injector.get 'componentsService'
+
+      afterEach ->
+        @config = {}
+
+      it 'should add it to the ComponentsService', ->
+        allComponents = @componentsService.getAll()
+
+        expect(allComponents.length).toBe 1
+        expect(allComponents[0]).toBe @elementComp
+
+    describe 'if given an group component', ->
+      beforeEach ->
+        inject (faberConfig)->
+          @config = faberConfig
+          @groupComp = new FaberComponent({ name: 'Base component', type: 'group', template: 'template.html'})
+          @config.components = [ @groupComp ]
+
+      beforeEach ->
+        inject ($injector, $rootScope, $controller)->
+          @scope = $rootScope.$new()
+          @controller = $controller('EditorController', $scope: @scope)
+          @componentsService = $injector.get 'componentsService'
+
+      afterEach ->
+        @config = {}
+
+      it 'should add it to the ComponentsService', ->
+        allComponents = @componentsService.getAll()
+
+        expect(allComponents.length).toBe 1
+        expect(allComponents[0]).toBe @groupComp
+
+
   describe 'when content is imported', ->
     it 'should get all imported blocks from content service', ->
       @contentService.import sampleJson
