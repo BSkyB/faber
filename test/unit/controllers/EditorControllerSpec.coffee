@@ -14,6 +14,9 @@ describe 'EditorController', ->
     it 'should get all initial blocks from content service', ->
       expect(@scope.blocks).toBe @contentService.getAll()
 
+    it 'should bind blocks to ContentService', ->
+
+
   describe 'when content is imported', ->
     it 'should get all imported blocks from content service', ->
       @contentService.import sampleJson

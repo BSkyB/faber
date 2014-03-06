@@ -1,4 +1,4 @@
-describe 'Editor Directive:', ()->
+xdescribe 'Editor Directive:', ()->
 
   beforeEach module 'faber'
 
