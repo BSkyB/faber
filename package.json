@@ -4,7 +4,6 @@
   "description": "Block based content editor",
   "private": true,
   "dependencies": {},
-  "engine": "node 0.10.22",
   "devDependencies": {
     "coffee-script": "^1.7.1",
     "karma-coffee-preprocessor": "^0.1.3",

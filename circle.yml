@@ -1,0 +1,3 @@
+dependencies:
+  override:
+    - 'nvm use 0.10.22 && npm install'
