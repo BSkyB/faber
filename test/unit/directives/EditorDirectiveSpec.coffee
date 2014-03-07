@@ -1,20 +1,32 @@
-xdescribe 'Editor Directive:', ()->
-
+describe 'Editor Directive:', ()->
   beforeEach module 'faber'
-
-  beforeEach ->
-    inject ($compile, $rootScope)->
-      @scope = $rootScope.$new()
-      @directive = $compile('<faber-editor></faber-editor>')(@scope)
-      @scope.$digest()
+  beforeEach module 'templates'
 
   describe 'when initialised', ->
-    it 'should be defined', ->
-      expect(@directive).toBeDefined()
+    beforeEach ->
+      inject ($compile, $rootScope)->
+        scope = $rootScope.$new()
+        @element = $compile('<faber-editor></faber-editor>')(scope)
+        scope.$digest()
+        @scope = @element.scope()
 
-#  describe 'if a block is added', ->
-#    it 'should add the block to the block list', ->
-#      expect(@scope.add).toBeDefined()
-#      @scope.add {}
-#
-#      expect(@scope.blocks.length).toBe 1
+    it 'should be defined', ->
+      expect(@element).toBeDefined()
+
+  describe 'if the content is imported', ->
+    beforeEach ->
+      inject ($compile, $rootScope, $injector)->
+        scope = $rootScope.$new()
+        @element = $compile('<faber-editor></faber-editor>')(scope)
+        scope.$digest()
+        @scope = @element.scope()
+
+        @contentService = $injector.get 'contentService'
+
+    it 'should add the blocks to the block list', ->
+      @contentService.import sampleJson
+      @scope.$digest()
+
+      expect(@scope.blocks.length).toBe 4
+      expect(@element.find('faber-block').length).toBe 4
+
