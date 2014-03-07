@@ -17,3 +17,8 @@ faber.factory 'componentsService', ($filter, $log)->
 
   findByType: (type)->
     $filter('filter') components, type: type, true
+
+  findByTemplate: (template)->
+    res = $filter('filter') components, template: template, true
+
+    return if res.length > 0 then res[0] else null

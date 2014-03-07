@@ -87,4 +87,19 @@ describe 'ComponentsService:', ()->
       expect(elements.length).toBe 3
       expect(groups.length).toBe 2
 
-    it 'should be able to find component of given template/id', ->
+    describe 'when finding a component using template/id', ->
+      beforeEach ->
+        @input =
+          template: 'component1'
+          type: 'element'
+        @componentsService.init [ @input ]
+
+      it 'should be able to find component of given template/id', ->
+        component = @componentsService.findByTemplate 'component1'
+        expect(component).toBe @input
+
+      it 'should return null if it cannot find', ->
+        component = @componentsService.findByTemplate 'test component'
+
+        expect(component).toBe null
+

@@ -28,5 +28,5 @@ describe 'Editor Directive:', ()->
       @scope.$digest()
 
       expect(@scope.blocks.length).toBe 4
-      expect(@element.find('faber-block').length).toBe 4
+#      expect(@element.find('faber-block').length).toBe 4
 

@@ -1,13 +1,15 @@
-faber.controller 'BlockController', ($scope)->
+faber.controller 'BlockController', ($scope, $log, componentsService)->
   newBlock = (inputs, component, type)->
     'inputs': inputs
     'component': component
-    'type': type
 
   validateBlock = (block)->
-    angular.isObject(block.inputs) and angular.isString(block.component) and (block.type is 'element' or block.type is 'group')
+    (angular.isObject(block.inputs) or !block.inputs) and (angular.isString(block.component) or !block.component)
 
-  $scope.blocks = []
+  $scope.block or= {}
+  $scope.block.blocks or= []
+  $scope.component or= new FaberComponent()
+
   $scope.expandWatch =
     expanded: true
 
@@ -19,10 +21,19 @@ faber.controller 'BlockController', ($scope)->
 
   $scope.add = (block)->
     if validateBlock block
-      $scope.blocks.push block
+      $scope.block.blocks or= []
+      $scope.block.blocks.push block
       return true
     else
       return false
 
   $scope.remove = (block)->
-    $scope.blocks.splice($scope.blocks.indexOf(block), 1)
+    $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
+
+  $scope.$watch 'block.component', (val)->
+    component = componentsService.findByTemplate val
+
+    unless component
+      $log.warn 'cannot find a component of the given template': val
+
+    $scope.component = component or new FaberComponent()

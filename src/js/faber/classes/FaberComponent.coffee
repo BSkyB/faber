@@ -1,5 +1,5 @@
 class FaberComponent
-  constructor: (opts)->
+  constructor: (opts = [])->
     @name = opts.name or ''
     @template = opts.template or ''
     @type = opts.type or 'group'
