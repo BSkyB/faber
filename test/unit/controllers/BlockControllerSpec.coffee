@@ -1,35 +1,25 @@
 describe 'BlockController', ->
+  log = null
+
   beforeEach module 'faber'
 
   beforeEach ->
-    inject ($injector, $rootScope, $controller)->
+    inject ($injector, $rootScope, $controller, $log)->
+      log = $log
+      log.reset()
+
       @scope = $rootScope.$new()
       @blockController = $controller('BlockController', $scope: @scope)
+      @componentsService = $injector.get 'componentsService'
+
+  afterEach ->
+    log.reset()
 
   describe 'when initialised', ->
     it 'should be defined', ->
       expect(@blockController).toBeDefined()
 
-  describe 'when adding a block', ->
-    it 'should be able to validate the new block before it is added', ->
-      invalid =
-        inputs: 'invalid'
-
-      valid =
-        inputs:
-          title: 'new title'
-          body: 'new body'
-        component: 'test-component'
-
-      invalidResult = @scope.add invalid
-      expect(invalidResult).toBeFalsy()
-      expect(@scope.block.blocks.length).toBe 0
-
-      validResult = @scope.add valid
-      expect(validResult).toBeTruthy()
-      expect(@scope.block.blocks.length).toBe 1
-
-  describe 'when removing a block', ->
+  describe 'when removing a child block', ->
     beforeEach ->
       @blockToRemove =
         inputs:
@@ -68,3 +58,32 @@ describe 'BlockController', ->
 
     it 'should be expanded', ->
       expect(@scope.expandWatch.expanded).toBe true
+
+  describe 'when a component is set for the block', ->
+    beforeEach ->
+      inject ($injector)->
+        @componentsService = $injector.get 'componentsService'
+        @componentsService.init [
+          inputs:
+            title: 'block title'
+          template: 'aaaaa-component'
+          type: 'element'
+        ]
+
+    describe 'if the component is available in ComponentsService', ->
+      it 'should apply the component to the block', ->
+        @scope.block.component = 'aaaaa-component'
+        @scope.$digest()
+
+        expect(@scope.component.inputs.title).toBe 'block title'
+
+    describe 'if the component is not available', ->
+      it 'should warn', ->
+        logs = log.warn.logs
+
+        @scope.block.component = 'invalid'
+        @scope.$digest()
+
+        expect(logs.length).toBe 1
+        expect(logs).toContain ['cannot find a component of the given template': 'invalid']
+

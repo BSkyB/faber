@@ -1,46 +1,58 @@
 describe 'Block Directive:', ()->
+  blockTemplate = '<faber-block data-faber-block-content="passedDownBlock" data-faber-block-inherited-blacklist="blacklist"></faber-block>'
+
+  rootScope = null
+  compile = null
+  componentsService = null
+
   beforeEach module 'faber'
   beforeEach module 'templates'
+  beforeEach ->
+    inject ($rootScope, $compile, $injector)->
+      compile = $compile
+      rootScope = $rootScope
+      componentsService = $injector.get 'componentsService'
+
+  createDirective = (template)->
+    scope = rootScope.$new()
+    scope.passedDownBlock = { component: 'a component' }
+    element = compile(template or blockTemplate)(scope)
+    scope.$digest()
+
+    return element
 
   describe 'when initialised', ->
-    beforeEach ->
-      inject ($compile, $rootScope)->
-        scope = $rootScope.$new()
-        scope.passedDownBlock = { component: 'a component' }
-        @element = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
-        scope.$digest()
-
     it 'should be defined', ->
+      @element = createDirective()
       expect(@element).toBeDefined()
 
   describe 'when a block is added', ->
     beforeEach ->
-      inject ($compile, $rootScope)->
-        scope = $rootScope.$new()
-        scope.passedDownBlock = { component: 'a component' }
-        @element = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
-        scope.$digest()
-        @scope = @element.isolateScope()
+      componentsService.init [
+        inputs:
+          title: 'component title'
+        template: 'a-component'
+        type: 'element'
+      ,
+        template: 'top-level-only-component'
+        type: 'element'
+        topLevelOnly: true
+      ]
+
+      @element = createDirective()
+      @scope = @element.isolateScope()
+
+    afterEach ->
+      @scope.block.blocks = []
 
     it 'should have as many block directives as the number of child blocks', ->
-      @scope.add { component: 'a component' }
-
+      @scope.add { component: 'a-component' }
       @scope.$digest()
 
       expect(@scope.block.blocks.length).toBe 1
       expect(@element.find('faber-block').length).toBe 1
 
     describe 'if the block has component', ->
-      beforeEach ->
-        inject ($injector)->
-          @componentsService = $injector.get 'componentsService'
-          @componentsService.init [
-            inputs:
-              title: 'block title'
-            template: 'a-component'
-            type: 'element'
-          ]
-
       describe 'if the component is available in ComponentsService', ->
         it 'should apply the component to the block', ->
           @scope.add
@@ -53,38 +65,26 @@ describe 'Block Directive:', ()->
           @childElement = angular.element(@element.find('faber-block')[0])
           @childScope = @childElement.isolateScope()
 
-          expect(@childScope.component.inputs.title).toBe 'block title'
+          expect(@childScope.component.inputs.title).toBe 'component title'
 
-      describe 'if the component is not available', ->
-        beforeEach ->
-          inject ($log)->
-            $log.reset()
-            @log = $log
+    describe 'if the block is not top level', ->
+      it 'should not set top level only component to the block', ->
+        result = @scope.add
+          inputs:
+            title: 'top level'
+          component: 'a-component'
+        @scope.$digest()
 
-          @scope.add
-            inputs:
-              title: 'new title'
-              body: 'new body'
-            component: 'no template'
-          @scope.$digest()
+        @childElement = angular.element(@element.find('faber-block')[0])
+        @childScope = @childElement.isolateScope()
 
-          @childElement = angular.element(@element.find('faber-block')[0])
-          @childScope = @childElement.isolateScope()
+        childResult = @childScope.add
+          inputs:
+            title: 'second level'
+          component: 'top-level-only-component'
+        @childScope.$digest()
 
-        afterEach ->
-          inject ($log)->
-            $log.reset()
-
-        it 'should warn', ->
-          logs = @log.warn.logs
-
-          expect(logs.length).toBe 1
-          expect(logs).toContain ['cannot find a component of the given template': 'no template']
-
-        it 'should set the block\'s component to base component', ->
-          baseComponent = new FaberComponent()
-
-          expect(@childScope.component.name).toBe baseComponent.name
-          expect(@childScope.component.template).toBe baseComponent.template
-          expect(@childScope.component.type).toBe baseComponent.type
-          expect(@childScope.component.nestable).toBe baseComponent.nestable
+        expect(result).toBeTruthy()
+        expect(@scope.block.blocks.length).toBe 1
+        expect(childResult).toBeFalsy()
+        expect(@childScope.block.blocks.length).toBe 0

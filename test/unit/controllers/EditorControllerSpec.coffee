@@ -17,7 +17,7 @@ describe 'EditorController', ->
       expect(@editorController).toBeDefined()
 
     it 'should get all initial blocks from content service', ->
-      expect(@scope.blocks).toBe @contentService.getAll()
+      expect(@scope.block.blocks).toBe @contentService.getAll()
 
     describe 'when setting expanded flag', ->
       beforeEach ->
@@ -85,10 +85,29 @@ describe 'EditorController', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toBe @groupComp
 
+  xdescribe 'when a block is added', ->
+    it 'should be able to set top level only component to the block', ->
+      inject ($injector)->
+        componentsService = $injector.get 'componentsService'
+
+        componentsService.init [
+          template: 'top-level-only-component'
+          type: 'element'
+          topLevelOnly: true
+        ]
+
+        topLevelOnly =
+          inputs:
+            title: 'top level only component set'
+          component: 'top-level-only-component'
+
+        topLevelOnlyResult = @scope.add topLevelOnly
+        expect(topLevelOnlyResult).toBeTruthy()
+        expect(@scope.block.blocks.length).toBe 1
 
   describe 'when content is imported', ->
     it 'should get all imported blocks from content service', ->
       @contentService.import sampleJson
 
-      expect(@scope.blocks.length).toBe angular.fromJson(sampleJson).length
+      expect(@scope.block.blocks.length).toBe angular.fromJson(sampleJson).length
 

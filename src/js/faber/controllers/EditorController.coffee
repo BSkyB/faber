@@ -1,5 +1,7 @@
-faber.controller 'EditorController', ($rootScope, $scope, contentService, componentsService, faberConfig)->
-  $scope.blocks = contentService.getAll()
+faber.controller 'EditorController', ($rootScope, $scope, $controller, contentService, componentsService, faberConfig)->
+  $controller('BlockController', {$scope: $scope})
+
+  $scope.block.blocks = contentService.getAll()
   $scope.expanded = faberConfig.expanded
 
   $scope.$broadcast if $scope.expanded then 'ExpandAll' else 'CollapseAll'
@@ -7,4 +9,4 @@ faber.controller 'EditorController', ($rootScope, $scope, contentService, compon
   componentsService.init(faberConfig.components or [])
 
   $scope.$on 'imported', (evt, blocks)->
-    $scope.blocks = blocks
+    $scope.block.blocks = blocks

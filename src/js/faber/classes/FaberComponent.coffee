@@ -3,4 +3,4 @@ class FaberComponent
     @name = opts.name or ''
     @template = opts.template or ''
     @type = opts.type or 'group'
-    @nestable = opts.type is 'group' and (opts.nestable is true or opts.nestable is undefined)
+    @topLevelOnly = opts.type is 'group' and (opts.topLevelOnly is true or opts.topLevelOnly is undefined)

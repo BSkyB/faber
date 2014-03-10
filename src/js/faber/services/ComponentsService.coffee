@@ -18,6 +18,9 @@ faber.factory 'componentsService', ($filter, $log)->
   findByType: (type)->
     $filter('filter') components, type: type, true
 
+  findTopLevelOnly: ->
+    $filter('filter') components, topLevelOnly: true, true
+
   findByTemplate: (template)->
     res = $filter('filter') components, template: template, true
 
