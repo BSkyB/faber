@@ -12,10 +12,10 @@ describe 'ContentService:', ()->
 
   describe 'when import', ->
     it 'should check if it\'s array', ->
-      importError = @contentService.import '{"test": "test copy"}'
+      importFail = @contentService.import '{"test": "test copy"}'
       importPass = @contentService.import '[{"test": "test copy"}]'
 
-      expect(importError).toBeFalsy()
+      expect(importFail).toBeFalsy()
       expect(importPass).toBeTruthy()
 
   describe 'when export', ->
@@ -24,3 +24,9 @@ describe 'ContentService:', ()->
       exported = @contentService.export()
 
       expect(exported).toBe sampleJson
+
+  it 'should be able to clear the content blocks', ->
+    @contentService.import sampleJson
+    @contentService.clear()
+
+    expect(@contentService.getAll().length).toBe 0

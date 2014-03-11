@@ -6,9 +6,13 @@ Deals everything concerns the content blocks.
 
 Always keep the data clean from all angular clutters.
 
+*	`clear`
+	*	May not need...
+*	`getAll`
 *	`import` from JSON
+	*	$broadcast: `imported`, blocks
 *	`export` to JSON
-
+	*	$broadcast: `exported`, json
 
 ## StorageService
 
@@ -26,8 +30,3 @@ Manage plugged components + base components
 
 * `import`
 * `find` by types, template(id) and so on
-
-
-## ThemesService
-
-Manage plugged themes

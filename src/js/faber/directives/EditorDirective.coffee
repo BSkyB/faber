@@ -1,8 +1,6 @@
-faber.directive 'faberEditor', ()->
-#  scope: true
+faber.directive 'faberEditor', () ->
   restrict: 'AE'
-#  template: '<p>{{greeting}}</p>'
   templateUrl: 'faber-editor.html'
   controller: 'EditorController'
 
-  link: ($scope, $element, attrs)->
+  link: ($scope, $element, attrs) ->
