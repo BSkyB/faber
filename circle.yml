@@ -3,6 +3,6 @@ dependencies:
     - 'nvm use 0.10.22 && npm install gulp -g && npm install bower -g && npm install'
 test:
   override:
-    - 'nvm use 0.10.22 gulp bower'
-    - 'nvm use 0.10.22 gulp templatecache'
-    - 'nvm use 0.10.22 gulp specs'
+    - 'nvm use 0.10.22 && gulp bower'
+    - 'nvm use 0.10.22 && gulp templatecache'
+    - 'nvm use 0.10.22 && gulp specs'
