@@ -45,6 +45,20 @@ gulp.task('karma', function() {
     }));
 });
 
+gulp.task('karma-specs', function() {
+    return gulp.src([
+        DEV_DIR + '/js/lib/angular/angular.js',
+        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+        DEV_DIR + '/js/faber/directives/templates.js',
+        './src/js/faber/faber.coffee',
+        './src/js/faber/**/*.coffee',
+        './test/helpers/**/*.coffee',
+        './test/unit/**/*.coffee'
+    ]).pipe(karma({
+        configFile: 'test/config/karma.conf.js'
+    }));
+});
+
 gulp.task('watch', function() {
     gulp.watch(['./src/**/*.coffee', './test/**/*.coffee'], ['coffee']);
     gulp.watch(['./src/**/*.jade'], ['jade', 'templatecache']);
