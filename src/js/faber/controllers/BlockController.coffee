@@ -1,9 +1,18 @@
 faber.controller 'BlockController', ($scope, $log, componentsService)->
-  newBlock = (inputs, component, type)->
-    'inputs': inputs
-    'component': component
+  $scope.block or= {}
+  $scope.block.blocks or= []
+  $scope.component or= new FaberComponent()
 
-  validateBlock = (block)->
+  $scope.expandWatch =
+    expanded: true
+
+  $scope.$on 'CollapseAll', (evt)->
+    $scope.expandWatch.expanded = false
+
+  $scope.$on 'ExpandAll', (evt)->
+    $scope.expandWatch.expanded = true
+
+  $scope.validateBlock = (block)->
     result = true
     if angular.isString(block.component)
       component = componentsService.findByTemplate block.component
@@ -18,21 +27,8 @@ faber.controller 'BlockController', ($scope, $log, componentsService)->
 
     result &= (!block.inputs or angular.isObject(block.inputs))
 
-  $scope.block or= {}
-  $scope.block.blocks or= []
-  $scope.component or= new FaberComponent()
-
-  $scope.expandWatch =
-    expanded: true
-
-  $scope.$on 'CollapseAll', (evt)->
-    $scope.expandWatch.expanded = false
-
-  $scope.$on 'ExpandAll', (evt)->
-    $scope.expandWatch.expanded = true
-
   $scope.add = (block)->
-    if validateBlock block
+    if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
       return true

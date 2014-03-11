@@ -7,10 +7,28 @@ describe 'EditorController', ->
       @config.expanded = false
 
   beforeEach ->
-    inject ($injector, $rootScope, $controller)->
+    inject ($injector, $rootScope, $controller, $log)->
       @scope = $rootScope.$new()
       @editorController = $controller('EditorController', $scope: @scope)
       @contentService = $injector.get 'contentService'
+
+      @componentsService = $injector.get 'componentsService'
+      @componentsService.init [
+        inputs:
+          title: 'component title'
+        template: 'a-component'
+        type: 'element'
+      ,
+        template: 'top-level-only-component'
+        type: 'element'
+        topLevelOnly: true
+      ]
+
+      @log = $log
+      @log.reset()
+
+  afterEach ->
+    @log.reset()
 
   describe 'when initialised', ->
     it 'should be defined', ->
@@ -85,29 +103,129 @@ describe 'EditorController', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toBe @groupComp
 
-  xdescribe 'when a block is added', ->
-    it 'should be able to set top level only component to the block', ->
-      inject ($injector)->
-        componentsService = $injector.get 'componentsService'
-
-        componentsService.init [
-          template: 'top-level-only-component'
+  describe 'if the content is imported', ->
+    describe 'if all the block\'s have valid components', ->
+      it 'should add the blocks to the block list', ->
+        @componentsService.init [
+          template: 'text'
           type: 'element'
-          topLevelOnly: true
+        ,
+          template: 'image'
+          type: 'element'
+        ,
+          template: 'tabs'
+          type: 'group'
         ]
+        @contentService.import sampleJson
 
-        topLevelOnly =
-          inputs:
-            title: 'top level only component set'
-          component: 'top-level-only-component'
+        expect(@scope.block.blocks.length).toBe 4
+        expect(@scope.block.blocks[2].blocks.length).toBe 4
+        expect(@scope.block.blocks[2].blocks[0].blocks.length).toBe 9
 
-        topLevelOnlyResult = @scope.add topLevelOnly
-        expect(topLevelOnlyResult).toBeTruthy()
-        expect(@scope.block.blocks.length).toBe 1
+    describe 'if a block\'s component is not valid', ->
+      it 'should not add the block', ->
+        @componentsService.init [
+          template: 'text'
+          type: 'element'
+        ,
+          template: 'tabs'
+          type: 'group'
+        ]
+        @contentService.import '[
+          {
+            "inputs": {
+              "contents": "text content"
+            },
+            "component": "text"
+          },
+          {
+            "inputs": {
+              "src": ""
+            },
+            "component": "INVALID"
+          },
+          {
+            "component": "tabs",
+            "blocks": [
+              {
+                "inputs": {
+                  "title": "tab 1"
+                },
+                "blocks": [
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  },
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  }
+                ]
+              },
+              {
+                "inputs": {
+                  "title": "tab 2"
+                },
+                "blocks": [
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  },
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  },
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "INVALID"
+                  },
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  }
+                ]
+              },
+              {
+                "inputs": {
+                  "title": "tab 3"
+                },
+                "blocks": [
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  },
+                  {
+                    "inputs": {
+                      "contents": "text content"
+                    },
+                    "component": "text"
+                  }
+                ]
+              }
+            ]
+          }
+        ]'
 
-  describe 'when content is imported', ->
-    it 'should get all imported blocks from content service', ->
-      @contentService.import sampleJson
+        logs = @log.warn.logs
 
-      expect(@scope.block.blocks.length).toBe angular.fromJson(sampleJson).length
+        expect(@scope.block.blocks.length).toBe 2
+        expect(logs.length).toBe 2
+        expect(logs).toContain ['cannot find a component of the given template': 'INVALID']
+
+        expect(@scope.block.blocks[1].blocks.length).toBe 3
+        expect(@scope.block.blocks[1].blocks[1].blocks.length).toBe 3
 
