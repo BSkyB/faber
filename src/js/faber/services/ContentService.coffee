@@ -1,13 +1,13 @@
-faber.factory 'contentService', ($rootScope)->
+faber.factory 'contentService', ($rootScope) ->
   blocks = []
 
-  clear: ()->
+  clear: () ->
     blocks = []
 
-  getAll: ()->
+  getAll: () ->
     blocks
 
-  import: (json)->
+  import: (json) ->
     imported = angular.fromJson json
 
     if angular.isArray imported
@@ -17,7 +17,7 @@ faber.factory 'contentService', ($rootScope)->
     else
       return false
 
-  export: ()->
+  export: () ->
     json = angular.toJson blocks
     $rootScope.$broadcast 'exported', json
     return json
