@@ -66,4 +66,4 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['coffee', 'jade', 'bower', 'templatecache']);
 gulp.task('dev', ['coffee', 'jade', 'templatecache', 'karma', 'watch']);
-gulp.task('specs', ['coffee', 'jade', 'templatecache', 'karma-specs']);
+gulp.task('specs', ['coffee', 'jade', 'karma-specs']);
