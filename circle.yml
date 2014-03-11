@@ -3,4 +3,4 @@ dependencies:
     - 'nvm use 0.10.22 && npm install gulp -g && npm install'
 test:
   override:
-    - 'gulp karma-specs'
+    - 'nvm use 0.10.22 && gulp specs'
