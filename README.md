@@ -9,8 +9,7 @@ Block based content editor
 2.	Pluggable themes
 3.	Configurable Medium editor
 4.	Setup publish task
-5.  Code coverage
-6.	Responsive preview
+5.	Responsive preview
 
 
 ## Get started

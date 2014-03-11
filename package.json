@@ -18,6 +18,8 @@
     "gulp-jade": "^0.4.2",
     "gulp-karma": "lazd/gulp-karma",
     "gulp-bower": "0.0.3",
-    "gulp-angular-templatecache": "~1.1.0"
+    "gulp-angular-templatecache": "~1.1.0",
+    "gulp-protractor": "0.0.7",
+    "protractor": "^0.20.1"
   }
 }

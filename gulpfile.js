@@ -4,6 +4,8 @@ var jade = require('gulp-jade');
 var templateCache = require('gulp-angular-templatecache');
 var karma = require('gulp-karma');
 var bower = require('gulp-bower');
+var protractor = require("gulp-protractor").protractor;
+var webdriver_update = require("gulp-protractor").webdriver_update;
 
 var DEV_DIR = './dev';
 
@@ -60,6 +62,18 @@ gulp.task('karma-specs', function() {
     ]).pipe(karma({
         configFile: 'test/config/karma.conf.js'
     }));
+});
+
+gulp.task('webdriver_update', webdriver_update);
+
+gulp.task('protractor', ['webdriver_update'], function() {
+    gulp.src(['./test/e2e/FaberUISpec.coffee'])
+        .pipe(coffee({bare: true}))
+        .pipe(protractor({
+            configFile: "test/config/protractor.conf.js",
+            args: ['--baseUrl', 'http://127.0.0.1:8000']
+        }))
+        .on('error', function(e) { throw e })
 });
 
 gulp.task('watch', function() {
