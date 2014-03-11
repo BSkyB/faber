@@ -3,6 +3,7 @@ module.exports = function(config){
     basePath: '../../',
 
     preprocessors: {
+      'dev/js/faber/**/*.js': ['coverage'],
       '**/*.coffee': ['coffee']
     },
 
@@ -13,7 +14,7 @@ module.exports = function(config){
 
     browsers: ['PhantomJS'],
 
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
 
     plugins: [
       'karma-phantomjs-launcher',

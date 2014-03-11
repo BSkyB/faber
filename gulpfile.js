@@ -9,7 +9,7 @@ var DEV_DIR = './dev';
 
 gulp.task('coffee', function() {
     return gulp.src('./src/**/*.coffee')
-        .pipe(coffee())
+        .pipe(coffee({bare: true}))
         .pipe(gulp.dest(DEV_DIR));
 });
 
@@ -34,9 +34,12 @@ gulp.task('karma', function() {
     return gulp.src([
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+        DEV_DIR + '/js/faber/classes/FaberComponent.js',
         DEV_DIR + '/js/faber/directives/templates.js',
-        './src/js/faber/faber.coffee',
-        './src/js/faber/**/*.coffee',
+        DEV_DIR + '/js/faber/faber.js',
+        DEV_DIR + '/js/faber/**/*.js',
+//        './src/js/faber/faber.coffee',
+//        './src/js/faber/**/*.coffee',
         './test/helpers/**/*.coffee',
         './test/unit/**/*.coffee'
     ]).pipe(karma({
