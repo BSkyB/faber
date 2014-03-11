@@ -67,8 +67,9 @@ gulp.task('karma-specs', function() {
 gulp.task('webdriver_update', webdriver_update);
 
 gulp.task('protractor', ['webdriver_update'], function() {
-    gulp.src(['./test/e2e/FaberUISpec.coffee'])
-        .pipe(coffee({bare: true}))
+    gulp.src(['./test/e2e/**/*.coffee'])
+        .pipe(coffee())
+        .pipe(gulp.dest('./test/e2e'))
         .pipe(protractor({
             configFile: "test/config/protractor.conf.js",
             args: ['--baseUrl', 'http://127.0.0.1:8000']
