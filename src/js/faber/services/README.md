@@ -30,9 +30,3 @@ Manage plugged components + base components
 
 * `import`
 * `find` by types, template(id) and so on
-
-
-## ThemesService
-
-Manage plugged themes
-

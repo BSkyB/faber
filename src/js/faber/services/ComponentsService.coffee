@@ -1,10 +1,20 @@
-faber.factory 'componentsService', ($filter, $log)->
+faber.factory 'componentsService', ($filter, $log) ->
+  # Initalize components collection.
   components = []
 
-  validate = (component)->
+  # Validates the component is valid.
+  #
+  # @param [object] component to validate.
+  # @return [Boolean] true when the component is valid.
+  #
+  validate = (component) ->
     (angular.isObject(component.inputs) or !component.inputs) and angular.isString(component.template) and (component.type is 'element' or component.type is 'group')
 
-  init: (list)->
+  # Initalizes the component service.
+  #
+  # @param [Array] list of components the faber will support.
+  #
+  init: (list) ->
     components = []
     for comp in list
       if validate comp
@@ -12,16 +22,34 @@ faber.factory 'componentsService', ($filter, $log)->
       else
         $log.warn 'invalid': comp
 
-  getAll: ()->
+  # Get all components.
+  #
+  # @return [Array<FaberComponent>] all of the available components.
+  #
+  getAll: ->
     components
 
-  findByType: (type)->
+  # Find components by their type.
+  #
+  # @param [string] type the type of component to filter on.
+  # @return [Array<FaberComponent>] the filtered components.
+  #
+  findByType: (type) ->
     $filter('filter') components, type: type, true
 
+  # Find top level only components.
+  #
+  # @return [Array<FaberComponent>] the top level components.
+  #
   findTopLevelOnly: ->
     $filter('filter') components, topLevelOnly: true, true
 
-  findByTemplate: (template)->
+  # Find components by template.
+  #
+  # @param [string] template the template name to filter by.
+  # @return [Array<FaberComponent>] the components with the supploed template.
+  #
+  findByTemplate: (template) ->
     res = $filter('filter') components, template: template, true
 
     return if res.length > 0 then res[0] else null

@@ -1,4 +1,4 @@
-faber.controller 'BlockController', ($scope, $log, componentsService)->
+faber.controller 'BlockController', ($scope, $log, componentsService) ->
   $scope.block or= {}
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
@@ -6,13 +6,13 @@ faber.controller 'BlockController', ($scope, $log, componentsService)->
   $scope.expandWatch =
     expanded: true
 
-  $scope.$on 'CollapseAll', (evt)->
+  $scope.$on 'CollapseAll', (evt) ->
     $scope.expandWatch.expanded = false
 
-  $scope.$on 'ExpandAll', (evt)->
+  $scope.$on 'ExpandAll', (evt) ->
     $scope.expandWatch.expanded = true
 
-  $scope.validateBlock = (block)->
+  $scope.validateBlock = (block) ->
     result = true
     if angular.isString(block.component)
       component = componentsService.findByTemplate block.component
@@ -27,7 +27,7 @@ faber.controller 'BlockController', ($scope, $log, componentsService)->
 
     result &= (!block.inputs or angular.isObject(block.inputs))
 
-  $scope.add = (block)->
+  $scope.add = (block) ->
     if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
@@ -36,10 +36,10 @@ faber.controller 'BlockController', ($scope, $log, componentsService)->
       $log.warn 'cannot find a component of the given template': block.component
       return false
 
-  $scope.remove = (block)->
+  $scope.remove = (block) ->
     $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
 
-  $scope.$watch 'block.component', (val)->
+  $scope.$watch 'block.component', (val) ->
     component = componentsService.findByTemplate val
 
     unless component

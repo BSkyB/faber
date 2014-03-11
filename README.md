@@ -13,7 +13,7 @@ Block based content editor
 6.	Responsive preview
 
 
-## To get it started
+## Get started
 
 ```
 sudo ./installs.sh
@@ -28,12 +28,3 @@ gulp dev
 ```
 
 This will run [Karma](http://karma-runner.github.io/ "Karma") [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
-
-
-### To run Protractor manually
-
-[TODO]
-
-### To publish
-
-[WIP]
