@@ -4,10 +4,16 @@ var jade = require('gulp-jade');
 var templateCache = require('gulp-angular-templatecache');
 var karma = require('gulp-karma');
 var bower = require('gulp-bower');
+var connect = require('gulp-connect');
 var protractor = require("gulp-protractor").protractor;
 var webdriver_update = require("gulp-protractor").webdriver_update;
 
 var DEV_DIR = './dev';
+
+gulp.task('connect', connect.server({
+  root: ['dev'],
+  port: 1337
+}));
 
 gulp.task('coffee', function() {
     return gulp.src('./src/**/*.coffee')
@@ -72,7 +78,7 @@ gulp.task('protractor', ['webdriver_update'], function() {
         .pipe(gulp.dest('./test/e2e'))
         .pipe(protractor({
             configFile: "test/config/protractor.conf.js",
-            args: ['--baseUrl', 'http://127.0.0.1:8000']
+            args: ['--baseUrl', 'http://localhost:1337/']
         }))
         .on('error', function(e) { throw e })
 });
@@ -83,5 +89,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['coffee', 'jade', 'bower', 'templatecache']);
-gulp.task('dev', ['coffee', 'jade', 'templatecache', 'karma', 'watch']);
+gulp.task('dev', ['coffee', 'jade', 'connect', 'templatecache', 'karma', 'watch']);
 gulp.task('specs', ['coffee', 'jade', 'karma-specs']);

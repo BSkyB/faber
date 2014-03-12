@@ -8,19 +8,27 @@ html(lang="en")
 
   //script(data-main="/js/main", src="/lib/require.js")
 
-  script(src="/lib/angular.js")
-  script(src="/lib/angular-local-storage.js")
-  script(src="/lib/angular-slugify.js")
-  script(src="/lib/angular-ui-utils.js")
+  script(src="js/lib/angular/angular.js")
+  script(src="js/lib/angular-local-storage/angular-local-storage.js")
+  script(src="js/lib/angular-slugify/angular-slugify.js")
+  script(src="js/lib/angular-ui-utils/ui-utils.js")
 
-  script(src="/js/faber/faber.js")
+  // Classes
+  script(src="js/faber/classes/FaberComponent.js")
+
+  // Directive Templates
+  script(src="js/faber/directives/templates.js")
+
+  script(src="js/faber/faber.js")
 
   // Controllers
-  script(src="/js/faber/controllers/EditorController.js")
-
-  // Services
-  script(src="/js/faber/services/ContentService.js")
+  script(src="js/faber/controllers/BlockController.js")
+  script(src="js/faber/controllers/EditorController.js")
 
   // Directives
-  script(src="/js/faber/directives/templates.js")
-  script(src="/js/faber/directives/EditorDirective.js")
+  script(src="js/faber/directives/BlockDirective.js")
+  script(src="js/faber/directives/EditorDirective.js")
+
+  // Services
+  script(src="js/faber/services/ComponentsService.js")
+  script(src="js/faber/services/ContentService.js")
