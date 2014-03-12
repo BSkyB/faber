@@ -44,6 +44,16 @@ faber.factory 'componentsService', ($filter, $log) ->
   findTopLevelOnly: ->
     $filter('filter') components, topLevelOnly: true, true
 
+  # Find non-top-level-only components.
+  #
+  # @return [Array<FaberComponent>] the top level components.
+  #
+  findNonTopLevelOnly: ->
+    result = []
+    for comp in components
+      result.push(comp) unless comp.topLevelOnly
+    return result
+
   # Find components by template.
   #
   # @param [string] template the template name to filter by.

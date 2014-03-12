@@ -12,6 +12,12 @@ faber.controller 'BlockController', ($scope, $log, componentsService) ->
   $scope.$on 'ExpandAll', (evt) ->
     $scope.expandWatch.expanded = true
 
+  $scope.components = ()->
+    if $scope.isTopLevel
+      return componentsService.getAll()
+    else
+      return componentsService.findNonTopLevelOnly()
+
   $scope.validateBlock = (block) ->
     result = true
     if angular.isString(block.component)
@@ -20,7 +26,7 @@ faber.controller 'BlockController', ($scope, $log, componentsService) ->
       component = componentsService.findByTemplate block.component.template
 
     if component
-      isTopLevelScope = !$scope.$parent.$parent
+      isTopLevelScope = $scope.isTopLevel
       result &= !(component.topLevelOnly) or (component.topLevelOnly and isTopLevelScope)
     else
       return false
@@ -42,7 +48,7 @@ faber.controller 'BlockController', ($scope, $log, componentsService) ->
   $scope.$watch 'block.component', (val) ->
     component = componentsService.findByTemplate val
 
-    unless component
+    if !component and componentsService.getAll().length > 0
       $log.warn 'cannot find a component of the given template': val
     else
       $scope.component = component or new FaberComponent()

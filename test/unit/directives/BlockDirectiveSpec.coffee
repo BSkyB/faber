@@ -37,6 +37,10 @@ describe 'Block Directive:', ()->
         template: 'top-level-only-component'
         type: 'element'
         topLevelOnly: true
+      ,
+        template: 'another-top-level-only-component'
+        type: 'group'
+        topLevelOnly: true
       ]
 
       @element = createDirective()
@@ -68,8 +72,8 @@ describe 'Block Directive:', ()->
           expect(@childScope.component.inputs.title).toBe 'component title'
 
     describe 'if the block is not top level', ->
-      it 'should not set top level only component to the block', ->
-        result = @scope.add
+      beforeEach ->
+        @result = @scope.add
           inputs:
             title: 'top level'
           component: 'a-component'
@@ -78,13 +82,18 @@ describe 'Block Directive:', ()->
         @childElement = angular.element(@element.find('faber-block')[0])
         @childScope = @childElement.isolateScope()
 
-        childResult = @childScope.add
+        @childResult = @childScope.add
           inputs:
             title: 'second level'
           component: 'top-level-only-component'
         @childScope.$digest()
 
-        expect(result).toBeTruthy()
+      it 'should not set top level only component to the block', ->
+        expect(@result).toBeTruthy()
         expect(@scope.block.blocks.length).toBe 1
-        expect(childResult).toBeFalsy()
+        expect(@childResult).toBeFalsy()
         expect(@childScope.block.blocks.length).toBe 0
+
+      it 'should not have top level only components in its component list', ->
+        expect(@scope.components().length).toBe 1
+        expect(@scope.components()[0].template).toBe 'a-component'

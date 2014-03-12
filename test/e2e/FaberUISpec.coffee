@@ -1,4 +1,8 @@
 describe 'Faber Editor', ->
-  describe 'when initialised', ->
+
+  beforeEach ->
     browser.get '/index.html'
-    expect(true).toEqual true
+
+  describe 'when initialised', ->
+    it 'should show a list of available components', ->
+      expect(false).toBe true

@@ -103,24 +103,29 @@ describe 'ComponentsService:', ()->
 
         expect(component).toBe null
 
+    describe 'when finding components with top level only setting', ->
+      beforeEach ->
+        @componentsService.init [
+          template: 'a-component'
+          type: 'element'
+          topLevelOnly: true
+        ,
+          template: 'b-component'
+          type: 'element'
+        ,
+          template: 'c-component'
+          type: 'element'
+        ,
+          template: 'd-component'
+          type: 'group'
+          topLevelOnly: true
+        ,
+          template: 'e-component'
+          type: 'group'
+        ]
 
-    it 'should be able to find all top level only components', ->
-      @componentsService.init [
-        template: 'a-component'
-        type: 'element'
-        topLevelOnly: true
-      ,
-        template: 'b-component'
-        type: 'element'
-      ,
-        template: 'c-component'
-        type: 'element'
-      ,
-        template: 'd-component'
-        type: 'group'
-        topLevelOnly: true
-      ,
-        template: 'e-component'
-        type: 'group'
-      ]
-      expect(@componentsService.findTopLevelOnly().length).toBe 2
+      it 'should be able to find all top level only components', ->
+        expect(@componentsService.findTopLevelOnly().length).toBe 2
+
+      it 'should be able to find all non-top-level-only components', ->
+        expect(@componentsService.findNonTopLevelOnly().length).toBe 3

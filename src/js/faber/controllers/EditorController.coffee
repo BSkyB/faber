@@ -1,6 +1,8 @@
 faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, contentService, componentsService, faberConfig) ->
   $controller('BlockController', {$scope: $scope})
 
+  $scope.isTopLevel = true
+
   $scope.block.blocks = contentService.getAll()
   $scope.expanded = faberConfig.expanded
 
@@ -38,3 +40,4 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
 
   $scope.$on 'imported', (evt, blocks) ->
     $scope.block.blocks = process blocks
+

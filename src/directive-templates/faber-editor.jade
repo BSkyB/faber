@@ -1,1 +1,9 @@
-faber-block(ng-repeat="data in blocks", data-faber-block-content="data")
+ul
+  li: button import
+  li: button export
+
+faber-components
+
+ol
+  li(ng-repeat="data in block.blocks")
+    faber-block(data-faber-block-content="data")

@@ -1,3 +1,9 @@
-.id {{$id}}
+.heading {{$id}} ({{component.template}})
 
-faber-block(ng-repeat="data in block.blocks", data-faber-block-content="data")
+ul.faber-available-components
+  li.faber-component(ng-repeat="comp in components()")
+    button(ng-click="add({component: comp.template })") {{comp.template}}
+
+ol
+  li(ng-repeat="data in block.blocks")
+    faber-block(data-faber-block-content="data")
