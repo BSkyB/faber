@@ -67,9 +67,9 @@ gulp.task('karma-specs', function() {
     return gulp.src([
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-        DEV_DIR + '/js/faber/directives/templates.js',
-        './src/js/faber/faber.coffee',
-        './src/js/faber/**/*.coffee',
+        DEV_DIR + '/js/faber/classes/FaberComponent.js',
+        DEV_DIR + '/js/faber/faber.js',
+        DEV_DIR + '/js/faber/**/*.js',
         './test/helpers/**/*.coffee',
         './test/unit/**/*.coffee'
     ]).pipe(karma({
@@ -98,4 +98,4 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['coffee', 'jade', 'sass', 'bower', 'templatecache']);
 gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
-gulp.task('specs', ['coffee', 'jade', 'karma-specs']);
+gulp.task('specs', ['coffee', 'jade', 'templatecache', 'karma-specs']);
