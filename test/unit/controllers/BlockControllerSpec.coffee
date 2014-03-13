@@ -29,7 +29,7 @@ describe 'BlockController', ->
       @scope.block.blocks = [{}, {}, @blockToRemove, {}]
 
     describe 'if the given block is in the block list', ->
-      it 'should be able to remobe it from the list', ->
+      it 'should be able to remove it from the list', ->
         @scope.remove @blockToRemove
 
         expect(@scope.block.blocks.length).toBe 3

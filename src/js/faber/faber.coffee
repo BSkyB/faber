@@ -2,26 +2,26 @@ window.faber = angular.module('faber', ['templates'])
   .constant('faberConfig', {
       expanded: true
       components: [
-          name: 'Top Level Only 1',
-          type: 'element',
-          template: '/js/components/samples/topLevelOnly1.html'
+          name: 'Top Level Only Group',
+          type: 'group',
+          template: '/js/components/samples/top-level-only-group.html'
           topLevelOnly: true
         ,
-          name: 'Top Level Only 2',
+          name: 'Top Level Only Element',
           type: 'element',
-          template: '/js/components/samples/topLevelOnly2.html'
+          template: '/js/components/samples/top-level-only-element.html'
           topLevelOnly: true
         ,
-          name: 'Comp 1',
-          type: 'element',
-          template: '/js/components/samples/comp1.html'
+          name: 'Group',
+          type: 'group',
+          template: '/js/components/samples/group.html'
         ,
-          name: 'Comp 2',
+          name: 'Element 1',
           type: 'element',
-          template: '/js/components/samples/comp2.html'
+          template: '/js/components/samples/element1.html'
         ,
-          name: 'Comp 3',
+          name: 'Element 2',
           type: 'element',
-          template: '/js/components/samples/comp3.html'
+          template: '/js/components/samples/element2.html'
       ]
     })

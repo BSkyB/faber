@@ -17,10 +17,14 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $scope.remove(block)
 
   $scope.components = ()->
+    ret = []
+
     if $scope.isTopLevel
-      return componentsService.getAll()
+      ret = componentsService.getAll()
     else
-      return componentsService.findNonTopLevelOnly()
+      ret = if $scope.component.type is 'element' then [] else componentsService.findNonTopLevelOnly()
+
+    return ret
 
   $scope.validateBlock = (block) ->
     result = true
