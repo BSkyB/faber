@@ -1,6 +1,5 @@
 describe 'Components Directive:', ->
   beforeEach module 'faber'
-  beforeEach module 'templates'
 
   beforeEach ->
     inject ($compile, $rootScope, $injector)->

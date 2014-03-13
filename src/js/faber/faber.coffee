@@ -1,4 +1,4 @@
-window.faber = angular.module('faber', ['templates'])
+window.faber = angular.module('faber', [])
   .constant('faberConfig', {
       expanded: true
       components: [

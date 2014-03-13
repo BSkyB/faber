@@ -7,7 +7,6 @@ describe 'Block Directive:', ()->
   componentsService = null
 
   beforeEach module 'faber'
-  beforeEach module 'templates'
   beforeEach ->
     inject ($rootScope, $compile, $injector, $templateCache, faberConfig)->
       $templateCache.put 'a-component', '<p>A component</p>'

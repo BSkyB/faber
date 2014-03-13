@@ -44,7 +44,7 @@ gulp.task('bower', function() {
 gulp.task('templatecache', function () {
     gulp.src('./src/directive-templates/**/*.jade')
         .pipe(jade())
-        .pipe(templateCache({ standalone: true }))
+        .pipe(templateCache({ module: 'faber' }))
         .pipe(gulp.dest(DEV_DIR + '/js/faber/directives'));
 });
 
@@ -53,11 +53,8 @@ gulp.task('karma', function() {
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
         DEV_DIR + '/js/faber/classes/FaberComponent.js',
-        DEV_DIR + '/js/faber/directives/templates.js',
         DEV_DIR + '/js/faber/faber.js',
         DEV_DIR + '/js/faber/**/*.js',
-//        './src/js/faber/faber.coffee',
-//        './src/js/faber/**/*.coffee',
         './test/helpers/**/*.coffee',
         './test/unit/**/*.coffee'
     ]).pipe(karma({
