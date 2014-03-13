@@ -18,8 +18,7 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
   componentsService.init(faberConfig.components or [])
 
   validateElementBlock = (block) ->
-    if $scope.validateBlock block
-      if block.blocks?.length > 0
+    if $scope.validateBlock block and block.blocks?.length > 0
         block.blocks = validateImported block.blocks
     return block
 
