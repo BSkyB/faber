@@ -1,4 +1,4 @@
-describe 'BlockController', ->
+describe 'BlockController:', ->
   log = null
 
   beforeEach module 'faber'
@@ -15,11 +15,11 @@ describe 'BlockController', ->
   afterEach ->
     log.reset()
 
-  describe 'when initialised', ->
+  describe 'when initialised,', ->
     it 'should be defined', ->
       expect(@blockController).toBeDefined()
 
-  describe 'when removing a child block', ->
+  describe 'when removing a child block,', ->
     beforeEach ->
       @blockToRemove =
         inputs:
@@ -28,20 +28,20 @@ describe 'BlockController', ->
         component: 'test-component'
       @scope.block.blocks = [{}, {}, @blockToRemove, {}]
 
-    describe 'if the given block is in the block list', ->
+    describe 'if the given block is in the block list,', ->
       it 'should be able to remove it from the list', ->
         @scope.remove @blockToRemove
 
         expect(@scope.block.blocks.length).toBe 3
         expect(@scope.block.blocks.indexOf @blockToRemove).toBeLessThan 0
 
-    describe 'if the given block is not in the block list', ->
+    describe 'if the given block is not in the block list,', ->
       it 'doesn\'t do anything', ->
         @scope.remove = 'test block'
 
         expect(@scope.block.blocks.length).toBe 4
 
-  describe 'when collapse all event is fired', ->
+  describe 'when collapse all event is fired,', ->
     beforeEach ->
       inject ($rootScope)->
         $rootScope.$broadcast 'CollapseAll'
@@ -49,7 +49,7 @@ describe 'BlockController', ->
     it 'should be collapsed', ->
       expect(@scope.expanded).toBe false
 
-  describe 'when expand all event is fired', ->
+  describe 'when expand all event is fired,', ->
     beforeEach ->
       @scope.expanded = false
 
@@ -59,7 +59,7 @@ describe 'BlockController', ->
     it 'should be expanded', ->
       expect(@scope.expanded).toBe true
 
-  describe 'when a component is set for the block', ->
+  describe 'when a component is set for the block,', ->
     beforeEach ->
       inject ($injector)->
         @componentsService = $injector.get 'componentsService'
@@ -70,14 +70,14 @@ describe 'BlockController', ->
           type: 'element'
         ]
 
-    describe 'if the component is available in ComponentsService', ->
+    describe 'if the component is available in ComponentsService,', ->
       it 'should apply the component to the block', ->
         @scope.block.component = 'aaaaa-component'
         @scope.$digest()
 
         expect(@scope.component.inputs.title).toBe 'block title'
 
-    describe 'if the component is not available', ->
+    describe 'if the component is not available,', ->
       it 'should warn', ->
         logs = log.warn.logs
 

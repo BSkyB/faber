@@ -6,12 +6,12 @@ describe 'ComponentsService:', ()->
     inject ($injector)->
       @componentsService = $injector.get 'componentsService'
 
-  describe 'when initialised', ->
+  describe 'when initialised,', ->
     it 'should be defined', ->
       expect(@componentsService).toBeDefined()
 
-  describe 'if given a list of components', ->
-    describe 'if a given component is not valid', ->
+  describe 'if given a list of components,', ->
+    describe 'if a given component is not valid,', ->
       beforeEach ->
         inject ($log)->
           $log.reset()
@@ -87,7 +87,7 @@ describe 'ComponentsService:', ()->
       expect(elements.length).toBe 3
       expect(groups.length).toBe 2
 
-    describe 'when finding a component using template/id', ->
+    describe 'when finding a component using template/id,', ->
       beforeEach ->
         @input =
           template: 'component1'
@@ -103,7 +103,7 @@ describe 'ComponentsService:', ()->
 
         expect(component).toBe null
 
-    describe 'when finding components with top level only setting', ->
+    describe 'when finding components with top level only setting,', ->
       beforeEach ->
         @componentsService.init [
           template: 'a-component'

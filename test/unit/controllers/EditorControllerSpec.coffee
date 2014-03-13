@@ -1,4 +1,4 @@
-describe 'EditorController', ->
+describe 'EditorController:', ->
   beforeEach module 'faber'
 
   beforeEach ->
@@ -30,14 +30,14 @@ describe 'EditorController', ->
   afterEach ->
     @log.reset()
 
-  describe 'when initialised', ->
+  describe 'when initialised,', ->
     it 'should be defined', ->
       expect(@editorController).toBeDefined()
 
     it 'should get all initial blocks from content service', ->
       expect(@scope.block.blocks).toBe @contentService.getAll()
 
-    describe 'when setting expanded flag', ->
+    describe 'when setting expanded flag,', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
@@ -60,7 +60,7 @@ describe 'EditorController', ->
       it 'should broadcast expand all event', ->
         expect(@scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'
 
-    describe 'if given an element component', ->
+    describe 'if given an element component,', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
@@ -82,7 +82,7 @@ describe 'EditorController', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toBe @elementComp
 
-    describe 'if given an group component', ->
+    describe 'if given an group component,', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
@@ -104,8 +104,8 @@ describe 'EditorController', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toBe @groupComp
 
-  describe 'if the content is imported', ->
-    describe 'if all the block\'s have valid components', ->
+  describe 'if the content is imported,', ->
+    describe 'if all the block\'s have valid components,', ->
       it 'should add the blocks to the block list', ->
         @componentsService.init [
           template: 'text'
@@ -123,7 +123,7 @@ describe 'EditorController', ->
         expect(@scope.block.blocks[2].blocks.length).toBe 4
         expect(@scope.block.blocks[2].blocks[0].blocks.length).toBe 9
 
-    describe 'if a block\'s component is not valid', ->
+    describe 'if a block\'s component is not valid,', ->
       it 'should not add the block', ->
         @componentsService.init [
           template: 'text'

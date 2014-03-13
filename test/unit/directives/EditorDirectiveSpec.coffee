@@ -25,14 +25,14 @@ describe 'Editor Directive:', ()->
       scope.$digest()
       @scope = @element.scope()
 
-  describe 'when initialised', ->
+  describe 'when initialised,', ->
     it 'should be defined', ->
       expect(@element).toBeDefined()
 
     it 'should show all available components including top level only components', ->
       expect(@element.find('faber-components').find('li').length).toBe 2
 
-  describe 'when a block is added', ->
+  describe 'when a block is added,', ->
     it 'can have top level only component', ->
       topLevelOnly =
         inputs:

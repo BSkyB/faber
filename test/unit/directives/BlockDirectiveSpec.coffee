@@ -29,7 +29,7 @@ describe 'Block Directive:', ()->
 
     return element
 
-  describe 'when initialised', ->
+  describe 'when initialised,', ->
     beforeEach ->
       componentsService.init [
         template: 'a-component'
@@ -47,7 +47,7 @@ describe 'Block Directive:', ()->
       element = createDirective()
       expect(element).toBeDefined()
 
-    describe 'if the component type is element', ->
+    describe 'if the component type is element,', ->
       beforeEach ->
         @scope.component = componentsService.findByTemplate('a-component')
         @scope.$digest()
@@ -59,7 +59,7 @@ describe 'Block Directive:', ()->
       it 'is not expandable or collapsible', ->
         expect(@element.find('input').length).toBe 0
 
-    describe 'if the component type is group', ->
+    describe 'if the component type is group,', ->
       beforeEach ->
         @scope.component = componentsService.findByTemplate('group-component')
         @scope.$digest()
@@ -71,7 +71,7 @@ describe 'Block Directive:', ()->
       it 'is not expandable or collapsible', ->
         expect(@element.find('input').length).toBe 1
 
-  describe 'when a block is added', ->
+  describe 'when a block is added,', ->
     beforeEach ->
       componentsService.init [
         inputs:
@@ -116,7 +116,7 @@ describe 'Block Directive:', ()->
 
       expect(childScope.expanded).toBe false
 
-    describe 'when removing self', ->
+    describe 'when removing self,', ->
       it 'should be able to remove self', ->
         componentsService.init [
           template: 'a-component'
@@ -157,8 +157,8 @@ describe 'Block Directive:', ()->
 
         expect(childScope.block.blocks.length).toBe 1
 
-    describe 'if the block has component', ->
-      describe 'if the component is available in ComponentsService', ->
+    describe 'if the block has component,', ->
+      describe 'if the component is available in ComponentsService,', ->
         it 'should apply the component to the block', ->
           @scope.add
             inputs:
@@ -173,7 +173,7 @@ describe 'Block Directive:', ()->
 
           expect(@childScope.component.inputs.title).toBe 'component title'
 
-    describe 'if the block is not top level', ->
+    describe 'if the block is not top level,', ->
       beforeEach ->
         @result = @scope.add
           inputs:
