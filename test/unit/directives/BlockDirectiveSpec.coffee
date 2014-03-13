@@ -49,20 +49,28 @@ describe 'Block Directive:', ()->
       expect(element).toBeDefined()
 
     describe 'if the component type is element', ->
-      it 'cannot add any children to the block', ->
+      beforeEach ->
         @scope.component = componentsService.findByTemplate('a-component')
         @scope.$digest()
 
+      it 'cannot add any children to the block', ->
         expect(@scope.component.type).toBe 'element'
         expect(@element.find('faber-components').length).toBe 0
 
+      it 'is not expandable or collapsible', ->
+        expect(@element.find('input').length).toBe 0
+
     describe 'if the component type is group', ->
-      it 'can add children to the block', ->
+      beforeEach ->
         @scope.component = componentsService.findByTemplate('group-component')
         @scope.$digest()
 
+      it 'can add children to the block', ->
         expect(@scope.component.type).toBe 'group'
         expect(@element.find('faber-components').length).toBe 1
+
+      it 'is not expandable or collapsible', ->
+        expect(@element.find('input').length).toBe 1
 
   describe 'when a block is added', ->
     beforeEach ->
