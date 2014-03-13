@@ -39,12 +39,10 @@ describe 'EditorController:', ->
 
     describe 'when setting expanded flag,', ->
       beforeEach ->
-        inject (faberConfig)->
+        inject ($injector, $rootScope, $controller, faberConfig)->
           @config = faberConfig
           @config.expanded = false
 
-      beforeEach ->
-        inject ($injector, $rootScope, $controller)->
           @scope = $rootScope
           spyOn @scope, '$broadcast'
 

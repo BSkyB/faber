@@ -6,6 +6,7 @@ faber.directive 'faberBlock', ($compile) ->
   controller: 'BlockController'
 
   compile: ($element, $attrs, transclude) ->
+    # remove nested <faber-block/> and compile it separately to prevent infinite loop
     contents = $element.contents().remove()
     compiledContents = null
 

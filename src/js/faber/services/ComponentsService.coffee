@@ -1,5 +1,5 @@
 faber.factory 'componentsService', ($filter, $log) ->
-  # Initalize components collection.
+  # Initalise components collection.
   components = []
 
   # Validates the component is valid.
