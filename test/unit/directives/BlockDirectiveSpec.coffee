@@ -1,6 +1,7 @@
 describe 'Block Directive:', ()->
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock" data-faber-block-inherited-blacklist="blacklist"></faber-block>'
 
+  config = null
   rootScope = null
   compile = null
   componentsService = null
@@ -8,7 +9,10 @@ describe 'Block Directive:', ()->
   beforeEach module 'faber'
   beforeEach module 'templates'
   beforeEach ->
-    inject ($rootScope, $compile, $injector)->
+    inject ($rootScope, $compile, $injector, faberConfig)->
+      config = faberConfig
+      config.expanded = false
+
       compile = $compile
       rootScope = $rootScope
       componentsService = $injector.get 'componentsService'
@@ -55,6 +59,19 @@ describe 'Block Directive:', ()->
 
       expect(@scope.block.blocks.length).toBe 1
       expect(@element.find('faber-block').length).toBe 1
+
+    it 'should set the child block\'s expanded flag to the root scope\'s flag', ->
+      @scope.add
+        inputs:
+          title: 'new title'
+          body: 'new body'
+        component: 'a-component'
+      @scope.$digest()
+
+      childElement = angular.element(@element.find('faber-block')[0])
+      childScope = childElement.isolateScope()
+
+      expect(childScope.expanded).toBe false
 
     describe 'if the block has component', ->
       describe 'if the component is available in ComponentsService', ->

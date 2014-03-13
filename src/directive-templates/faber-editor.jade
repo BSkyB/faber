@@ -1,7 +1,10 @@
 div
   button import
   button export
-  input(type="checkbox", ng-model="expanded")
+  label
+    input(type="checkbox", ng-model="expanded")
+    span(ng-if="expanded") Collapse all
+    span(ng-if="!expanded") Expand all
 
 faber-components
 

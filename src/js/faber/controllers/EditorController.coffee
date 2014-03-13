@@ -10,8 +10,6 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
 
   $rootScope.expanded = faberConfig.expanded
 
-#  $scope.$broadcast if $scope.expanded then 'ExpandAll' else 'CollapseAll'
-
   componentsService.init(faberConfig.components or [])
 
   processElementBlock = (block) ->

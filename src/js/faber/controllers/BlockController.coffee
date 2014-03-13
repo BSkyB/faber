@@ -1,18 +1,14 @@
-faber.controller 'BlockController', ($scope, $log, componentsService) ->
+faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService) ->
   $scope.block or= {}
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
 
-  $scope.expanded = true
-  $scope.expandWatch =
-    expanded: true
+  $scope.expanded = !!$rootScope.expanded
 
   $scope.$on 'CollapseAll', (evt) ->
-    $scope.expandWatch.expanded = false
     $scope.expanded = false
 
   $scope.$on 'ExpandAll', (evt) ->
-    $scope.expandWatch.expanded = true
     $scope.expanded = true
 
   $scope.components = ()->

@@ -47,17 +47,17 @@ describe 'BlockController', ->
         $rootScope.$broadcast 'CollapseAll'
 
     it 'should be collapsed', ->
-      expect(@scope.expandWatch.expanded).toBe false
+      expect(@scope.expanded).toBe false
 
   describe 'when expand all event is fired', ->
     beforeEach ->
-      @scope.expandWatch.expanded = false
+      @scope.expanded = false
 
       inject ($rootScope)->
         $rootScope.$broadcast 'ExpandAll'
 
     it 'should be expanded', ->
-      expect(@scope.expandWatch.expanded).toBe true
+      expect(@scope.expanded).toBe true
 
   describe 'when a component is set for the block', ->
     beforeEach ->
