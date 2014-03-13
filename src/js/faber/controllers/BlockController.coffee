@@ -5,11 +5,16 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   $scope.expanded = !!$rootScope.expanded
 
-  $scope.$on 'CollapseAll', (evt) ->
+  $scope.$on 'CollapseAll', (evt)->
     $scope.expanded = false
 
-  $scope.$on 'ExpandAll', (evt) ->
+  $scope.$on 'ExpandAll', (evt)->
     $scope.expanded = true
+
+  $scope.$on 'RemoveChildBlock', (evt, block)->
+    unless evt.targetScope is $scope
+      evt.stopPropagation()
+      $scope.remove(block)
 
   $scope.components = ()->
     if $scope.isTopLevel
@@ -43,6 +48,9 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   $scope.remove = (block) ->
     $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
+
+  $scope.removeSelf = ()->
+    $scope.$emit 'RemoveChildBlock', $scope.block
 
   $scope.$watch 'block.component', (val) ->
     component = componentsService.findByTemplate val

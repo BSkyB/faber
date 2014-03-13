@@ -1,6 +1,7 @@
 label
   input(type="checkbox", ng-model="expanded")
   | {{$id}}
+  button(ng-click="removeSelf()") x
 
 div(ng-if="expanded")
   faber-component-renderer

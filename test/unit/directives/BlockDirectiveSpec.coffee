@@ -11,6 +11,8 @@ describe 'Block Directive:', ()->
   beforeEach ->
     inject ($rootScope, $compile, $injector, $templateCache, faberConfig)->
       $templateCache.put 'a-component', '<p>A component</p>'
+      $templateCache.put 'child-component', '<p>Child component</p>'
+      $templateCache.put 'top-level-only-component', '<p>Top level only component</p>'
 
       config = faberConfig
       config.expanded = false
@@ -76,6 +78,47 @@ describe 'Block Directive:', ()->
       childScope = childElement.isolateScope()
 
       expect(childScope.expanded).toBe false
+
+    describe 'when removing self', ->
+      it 'should be able to remove self', ->
+        componentsService.init [
+          template: 'a-component'
+          type: 'group'
+        ,
+          template: 'child-component'
+          type: 'element'
+        ]
+
+        @result = @scope.add
+          inputs:
+            title: 'parent'
+          component: 'a-component'
+        @scope.expanded = true
+        @scope.$digest()
+
+        childElement = angular.element(@element.find('faber-block')[0])
+        childScope = childElement.isolateScope()
+
+        childScope.add
+          inputs:
+            title: 'child 1'
+          component: 'child-component'
+        childScope.add
+          inputs:
+            title: 'child 2'
+          component: 'child-component'
+        childScope.expanded = true
+
+        childScope.$digest()
+
+        elementToBeRemoved = angular.element(childElement.find('faber-block')[1])
+        scopeToBeRemoved = elementToBeRemoved.isolateScope()
+
+        expect(childScope.block.blocks.length).toBe 2
+
+        scopeToBeRemoved.removeSelf()
+
+        expect(childScope.block.blocks.length).toBe 1
 
     describe 'if the block has component', ->
       describe 'if the component is available in ComponentsService', ->
