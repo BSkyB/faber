@@ -3,7 +3,10 @@ describe 'Editor Directive:', ()->
   beforeEach module 'templates'
 
   beforeEach ->
-    inject ($compile, $rootScope, $injector, faberConfig)->
+    inject ($compile, $rootScope, $injector, $templateCache, faberConfig)->
+      $templateCache.put 'a-component', '<p>A component</p>'
+      $templateCache.put 'top-level-only-component', '<p>Top level component</p>'
+
       @config = faberConfig
       @config.components = [
         inputs:

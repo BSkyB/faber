@@ -1,10 +1,10 @@
 label
   input(type="checkbox", ng-model="expanded")
   | {{$id}}
-  span(ng-if="expanded") ({{component.template}})
 
-faber-components
-
-ol.faber-blocks
-  li.faber-block(ng-repeat="data in block.blocks")
-    faber-block(data-faber-block-content="data")
+div(ng-if="expanded")
+  faber-component-renderer
+  faber-components
+  ol.faber-blocks
+    li.faber-block(ng-repeat="data in block.blocks")
+      faber-block(data-faber-block-content="data")

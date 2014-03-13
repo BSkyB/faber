@@ -9,7 +9,9 @@ describe 'Block Directive:', ()->
   beforeEach module 'faber'
   beforeEach module 'templates'
   beforeEach ->
-    inject ($rootScope, $compile, $injector, faberConfig)->
+    inject ($rootScope, $compile, $injector, $templateCache, faberConfig)->
+      $templateCache.put 'a-component', '<p>A component</p>'
+
       config = faberConfig
       config.expanded = false
 
@@ -55,6 +57,7 @@ describe 'Block Directive:', ()->
 
     it 'should have as many block directives as the number of child blocks', ->
       @scope.add { component: 'a-component' }
+      @scope.expanded = true
       @scope.$digest()
 
       expect(@scope.block.blocks.length).toBe 1
@@ -66,6 +69,7 @@ describe 'Block Directive:', ()->
           title: 'new title'
           body: 'new body'
         component: 'a-component'
+      @scope.expanded = true
       @scope.$digest()
 
       childElement = angular.element(@element.find('faber-block')[0])
@@ -81,6 +85,7 @@ describe 'Block Directive:', ()->
               title: 'new title'
               body: 'new body'
             component: 'a-component'
+          @scope.expanded = true
           @scope.$digest()
 
           @childElement = angular.element(@element.find('faber-block')[0])
@@ -94,6 +99,7 @@ describe 'Block Directive:', ()->
           inputs:
             title: 'top level'
           component: 'a-component'
+        @scope.expanded = true
         @scope.$digest()
 
         @childElement = angular.element(@element.find('faber-block')[0])
