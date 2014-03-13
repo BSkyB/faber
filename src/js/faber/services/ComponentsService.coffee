@@ -1,5 +1,5 @@
 faber.factory 'componentsService', ($filter, $log) ->
-  # Initalize components collection.
+  # Initalise components collection.
   components = []
 
   # Validates the component is valid.
@@ -43,6 +43,16 @@ faber.factory 'componentsService', ($filter, $log) ->
   #
   findTopLevelOnly: ->
     $filter('filter') components, topLevelOnly: true, true
+
+  # Find non-top-level-only components.
+  #
+  # @return [Array<FaberComponent>] the top level components.
+  #
+  findNonTopLevelOnly: ->
+    result = []
+    for comp in components
+      result.push(comp) unless comp.topLevelOnly
+    return result
 
   # Find components by template.
   #

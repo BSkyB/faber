@@ -1,0 +1,3 @@
+ul.faber-available-components
+  li.faber-component(ng-repeat="comp in components()")
+    button(ng-click="add({component: comp.template })") {{comp.name}}

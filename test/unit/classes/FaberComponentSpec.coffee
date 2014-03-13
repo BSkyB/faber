@@ -1,4 +1,4 @@
-describe 'FaberComponent: ', ->
+describe 'FaberComponent:', ->
   it 'should initialise element component correctly', ->
     elementComp = new FaberComponent
       name: 'Base component'

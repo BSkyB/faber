@@ -1,16 +1,13 @@
 describe 'Editor Directive:', ()->
   beforeEach module 'faber'
-  beforeEach module 'templates'
 
   beforeEach ->
-    inject ($compile, $rootScope, $injector)->
-      scope = $rootScope.$new()
-      @element = $compile('<faber-editor></faber-editor>')(scope)
-      scope.$digest()
-      @scope = @element.scope()
+    inject ($compile, $rootScope, $injector, $templateCache, faberConfig)->
+      $templateCache.put 'a-component', '<p>A component</p>'
+      $templateCache.put 'top-level-only-component', '<p>Top level component</p>'
 
-      @componentsService = $injector.get 'componentsService'
-      @componentsService.init [
+      @config = faberConfig
+      @config.components = [
         inputs:
           title: 'component title'
         template: 'a-component'
@@ -21,11 +18,21 @@ describe 'Editor Directive:', ()->
         topLevelOnly: true
       ]
 
-  describe 'when initialised', ->
-   it 'should be defined', ->
+      @componentsService = $injector.get 'componentsService'
+
+      scope = $rootScope.$new()
+      @element = $compile('<faber-editor></faber-editor>')(scope)
+      scope.$digest()
+      @scope = @element.scope()
+
+  describe 'when initialised,', ->
+    it 'should be defined', ->
       expect(@element).toBeDefined()
 
-  describe 'when a block is added', ->
+    it 'should show all available components including top level only components', ->
+      expect(@element.find('faber-components').find('li').length).toBe 2
+
+  describe 'when a block is added,', ->
     it 'can have top level only component', ->
       topLevelOnly =
         inputs:

@@ -1,2 +1,37 @@
 window.faber = angular.module('faber', [])
-  .constant('faberConfig', {})
+  .constant('faberConfig', {
+      # (boolean) Default expanded flag for child blocks
+      expanded: true
+
+      # (array) List of components to be imported and managed by components service
+      #
+      # name:         (optional) the name to be displayed for the component
+      # type:         (mandatory) either 'element' or 'group'
+      #               element type can not have children but group type can
+      # template:     (mandatory) path to the component's template. used as identifier as well
+      # topLevelOnly: (optional) specify if the component block can only be used on the top level block
+      #               and can not be a child of other block
+      components: [
+          name: 'Top Level Only Group',
+          type: 'group',
+          template: '/js/components/samples/top-level-only-group.html'
+          topLevelOnly: true
+        ,
+          name: 'Top Level Only Element',
+          type: 'element',
+          template: '/js/components/samples/top-level-only-element.html'
+          topLevelOnly: true
+        ,
+          name: 'Group',
+          type: 'group',
+          template: '/js/components/samples/group.html'
+        ,
+          name: 'Element 1',
+          type: 'element',
+          template: '/js/components/samples/element1.html'
+        ,
+          name: 'Element 2',
+          type: 'element',
+          template: '/js/components/samples/element2.html'
+      ]
+    })
