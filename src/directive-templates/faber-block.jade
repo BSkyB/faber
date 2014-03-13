@@ -1,9 +1,10 @@
-.heading {{$id}} ({{component.template}})
+label
+  input(type="checkbox", ng-model="expanded")
+  | {{$id}}
+  span(ng-if="expanded") ({{component.template}})
 
-ul.faber-available-components
-  li.faber-component(ng-repeat="comp in components()")
-    button(ng-click="add({component: comp.template })") {{comp.template}}
+faber-components
 
-ol
-  li(ng-repeat="data in block.blocks")
+ol.faber-blocks
+  li.faber-block(ng-repeat="data in block.blocks")
     faber-block(data-faber-block-content="data")

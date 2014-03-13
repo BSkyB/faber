@@ -45,10 +45,11 @@ describe 'EditorController', ->
 
       beforeEach ->
         inject ($injector, $rootScope, $controller)->
-          @scope = $rootScope.$new()
+          @scope = $rootScope
           spyOn @scope, '$broadcast'
 
           @controller = $controller('EditorController', $scope: @scope)
+          @scope.$digest()
 
       afterEach ->
         @config = {}

@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var coffee = require('gulp-coffee');
 var jade = require('gulp-jade');
+var sass = require('gulp-ruby-sass');
 var templateCache = require('gulp-angular-templatecache');
 var karma = require('gulp-karma');
 var bower = require('gulp-bower');
@@ -25,6 +26,15 @@ gulp.task('jade', function() {
     return gulp.src(['./src/**/*.jade', '!./src/directive-templates/**/*'])
         .pipe(jade())
         .pipe(gulp.dest(DEV_DIR))
+});
+
+gulp.task('sass', function() {
+    return gulp.src('./src/**/*.sass')
+        .pipe(sass({
+            compass: true,
+            noCache: true
+        }))
+        .pipe(gulp.dest(DEV_DIR));
 });
 
 gulp.task('bower', function() {
@@ -86,8 +96,9 @@ gulp.task('protractor', ['webdriver_update'], function() {
 gulp.task('watch', function() {
     gulp.watch(['./src/**/*.coffee', './test/**/*.coffee'], ['coffee']);
     gulp.watch(['./src/**/*.jade'], ['jade', 'templatecache']);
+    gulp.watch(['./src/**/*.sass'], ['sass']);
 });
 
-gulp.task('default', ['coffee', 'jade', 'bower', 'templatecache']);
-gulp.task('dev', ['coffee', 'jade', 'connect', 'templatecache', 'karma', 'watch']);
+gulp.task('default', ['coffee', 'jade', 'sass', 'bower', 'templatecache']);
+gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
 gulp.task('specs', ['coffee', 'jade', 'karma-specs']);

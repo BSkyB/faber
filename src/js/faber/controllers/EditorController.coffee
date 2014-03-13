@@ -1,12 +1,16 @@
 faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, contentService, componentsService, faberConfig) ->
   $controller('BlockController', {$scope: $scope})
 
+  $rootScope.$watch 'expanded', (newValue)->
+    $rootScope.$broadcast if $rootScope.expanded then 'ExpandAll' else 'CollapseAll'
+
   $scope.isTopLevel = true
 
   $scope.block.blocks = contentService.getAll()
-  $scope.expanded = faberConfig.expanded
 
-  $scope.$broadcast if $scope.expanded then 'ExpandAll' else 'CollapseAll'
+  $rootScope.expanded = faberConfig.expanded
+
+#  $scope.$broadcast if $scope.expanded then 'ExpandAll' else 'CollapseAll'
 
   componentsService.init(faberConfig.components or [])
 

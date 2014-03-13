@@ -3,14 +3,17 @@ faber.controller 'BlockController', ($scope, $log, componentsService) ->
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
 
+  $scope.expanded = true
   $scope.expandWatch =
     expanded: true
 
   $scope.$on 'CollapseAll', (evt) ->
     $scope.expandWatch.expanded = false
+    $scope.expanded = false
 
   $scope.$on 'ExpandAll', (evt) ->
     $scope.expandWatch.expanded = true
+    $scope.expanded = true
 
   $scope.components = ()->
     if $scope.isTopLevel

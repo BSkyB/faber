@@ -1,9 +1,10 @@
-ul
-  li: button import
-  li: button export
+div
+  button import
+  button export
+  input(type="checkbox", ng-model="expanded")
 
 faber-components
 
-ol
-  li(ng-repeat="data in block.blocks")
+ol.faber-blocks
+  li.faber-block(ng-repeat="data in block.blocks")
     faber-block(data-faber-block-content="data")
