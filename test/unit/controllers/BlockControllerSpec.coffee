@@ -87,3 +87,19 @@ describe 'BlockController:', ->
         expect(logs.length).toBe 1
         expect(logs).toContain ['cannot find a component of the given template': 'invalid']
 
+    it 'should be able to insert a block to the given index', ->
+      inject ($injector)->
+        @componentsService = $injector.get 'componentsService'
+        @componentsService.init [
+          template: 'insert-this-component'
+          type: 'element'
+        ]
+
+        block =
+          component: 'insert-this-component'
+        @scope.isTopLevel = true
+        @scope.block.blocks = [{}, {}, {}]
+        @scope.insert(2, block)
+
+        expect(@scope.block.blocks.length).toBe 4
+        expect(@scope.block.blocks[2].component).toBe 'insert-this-component'
