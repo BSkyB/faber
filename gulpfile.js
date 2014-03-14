@@ -24,7 +24,9 @@ gulp.task('coffee', function() {
 
 gulp.task('jade', function() {
     return gulp.src(['./src/**/*.jade', '!./src/directive-templates/**/*'])
-        .pipe(jade())
+        .pipe(jade().on('error', function(err) {
+            console.log(err);
+        }))
         .pipe(gulp.dest(DEV_DIR))
 });
 
@@ -32,7 +34,7 @@ gulp.task('sass', function() {
     return gulp.src('./src/**/*.sass')
         .pipe(sass({
             compass: true,
-            noCache: true
+            loadPath: './src/css'
         }))
         .pipe(gulp.dest(DEV_DIR));
 });
@@ -53,6 +55,7 @@ gulp.task('karma', function() {
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
         DEV_DIR + '/js/faber/classes/FaberComponent.js',
+        DEV_DIR + '/js/components/**/*.js',
         DEV_DIR + '/js/faber/faber.js',
         DEV_DIR + '/js/faber/**/*.js',
         './test/helpers/**/*.coffee',
@@ -98,4 +101,5 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['coffee', 'jade', 'sass', 'bower', 'templatecache']);
 gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
+//gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'watch']);
 gulp.task('specs', ['coffee', 'jade', 'templatecache', 'karma-specs']);

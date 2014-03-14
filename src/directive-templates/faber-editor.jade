@@ -1,11 +1,6 @@
-div
-  label
-    input(type="checkbox", ng-model="expanded")
-    span(ng-if="expanded") Collapse all
-    span(ng-if="!expanded") Expand all
-
 faber-components
 
-ol.faber-blocks
-  li.faber-block(ng-repeat="data in block.blocks")
+.faber-blocks
+  .faber-block-item(ng-repeat="data in block.blocks")
     faber-block(data-faber-block-content="data")
+    faber-components

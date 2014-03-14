@@ -1,13 +1,3 @@
-label
-  input(type="checkbox", ng-model="expanded", ng-if="component.type=='group'")
-  | {{$id}}
-  button(ng-click="removeSelf()") x
-
-div(ng-if="expanded")
-  faber-component-renderer
-
-  div(ng-if="component.type=='group'")
-    faber-components
-    ol.faber-blocks
-      li.faber-block(ng-repeat="data in block.blocks")
-        faber-block(data-faber-block-content="data")
+.faber-block-actions
+  button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
+faber-component-renderer

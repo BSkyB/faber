@@ -1,0 +1,24 @@
+.faber-blocks
+  list-style: none
+
+  faber-block
+    display: block
+    position: relative
+    padding: 1em
+    border: 2px solid transparent
+
+    &:hover
+      border-color: #eee
+
+    .faber-block-actions
+      position: absolute
+      right: 0.2em
+      top: 0.2em
+
+    button.faber-block-close
+      font-size: 1.2em
+      color: $blue
+      border: none
+      background: transparent
+
+      +appearance(none)

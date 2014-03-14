@@ -19,7 +19,7 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
 
   validateElementBlock = (block) ->
     if $scope.validateBlock block and block.blocks?.length > 0
-        block.blocks = validateImported block.blocks
+      block.blocks = validateImported block.blocks
     return block
 
   validateGroupBlock = (block) ->

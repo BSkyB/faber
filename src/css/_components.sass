@@ -1,0 +1,62 @@
+faber-components
+  display: block
+  background: #fff
+  text-align: center
+
+  +transition(background 0.3s)
+
+  &:hover
+    background: #eee
+    +transition(background 0.3s)
+
+    i
+      +opacity(1)
+      +transition(opacity 0.3s)
+
+  i
+    +opacity(0)
+    +transition(opacity 0.3s)
+
+    color: $blue
+    font-size: 1.2em
+    padding: 0.5em
+
+  label
+    display: block
+    min-height: 1.5em
+
+  input[type="radio"]
+    display: none
+
+  button
+    display: inline-block
+    margin-bottom: 0
+    font-weight: 500
+    text-align: center
+    vertical-align: middle
+    cursor: pointer
+    background-image: none
+    border: 1px solid transparent
+    white-space: nowrap
+    padding: 6px 12px
+    font-size: 15px
+    line-height: 1.428571429
+
+    color: $blue
+    background-color: rgba(0,0,0,0)
+    border-color: #6aa3d5
+
+    +border-radius(4px)
+
+  .faber-available-components
+    list-style: none
+    margin: 0
+    padding: 0
+    background: #eee
+
+    .faber-component
+      display: inline-block
+      padding: 1em
+
+      &:first-child
+        padding-right: 0

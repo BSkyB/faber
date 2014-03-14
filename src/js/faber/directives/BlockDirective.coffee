@@ -1,7 +1,7 @@
 faber.directive 'faberBlock', ($compile) ->
   scope:
     'block': '=faberBlockContent'
-  restrict: 'AE'
+  restrict: 'E'
   templateUrl: 'faber-block.html'
   controller: 'BlockController'
 
