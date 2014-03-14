@@ -34,7 +34,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     return ret
 
   # Check if the component of the block is valid component and the block has all necessary information
-  $scope.validateBlock = (block) ->
+  $scope.validateBlock = (block)->
     result = true
     if angular.isString(block.component)
       # if the block's component parameter is the path to the template
@@ -56,7 +56,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     result &= (!block.inputs or angular.isObject(block.inputs))
 
   # If it's valid block data then add to the blocks otherwise warn the user and do not add it to the list
-  $scope.add = (block) ->
+  $scope.add = (block)->
     if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
@@ -66,8 +66,13 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       return false
 
   # Remove a child block
-  $scope.remove = (block) ->
+  $scope.remove = (block)->
     $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
+
+  # Insert a child block to the given index
+  $scope.insert = (index, block)->
+    if $scope.validateBlock block
+      $scope.block.blocks.splice(index, 0, block)
 
   # Emit RemoveChildBlock event with itself so its parent block can remove it
   $scope.removeSelf = ()->
