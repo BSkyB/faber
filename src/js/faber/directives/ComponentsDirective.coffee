@@ -3,7 +3,7 @@ faber.directive 'faberComponents', ($rootScope) ->
   templateUrl: 'faber-components.html'
 
   link: ($scope, $element, attrs)->
-    $scope.showingComponents = false
+    $scope.showingComponents = angular.isUndefined $scope.$index
 
     $scope.$watch 'showingComponents', (newValue)->
       if newValue
