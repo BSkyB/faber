@@ -100,6 +100,6 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['coffee', 'jade', 'sass', 'bower', 'templatecache']);
-gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
-//gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'watch']);
+//gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
+gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'watch']);
 gulp.task('specs', ['coffee', 'jade', 'templatecache', 'karma-specs']);

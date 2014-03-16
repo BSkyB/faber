@@ -3,17 +3,23 @@ faber.directive 'faberComponents', ($rootScope) ->
   templateUrl: 'faber-components.html'
 
   link: ($scope, $element, attrs)->
-    $scope.componentsExpanded = true
+    $scope.showingComponents = false
 
-    $scope.$watch 'selectWatch', (newValue)->
-      if newValue is $scope.$id
-        $rootScope.expandedComponents = newValue
+    $scope.$watch 'showingComponents', (newValue)->
+      if newValue
+        $rootScope.$broadcast 'ShowComponents', $scope.$id
 
-    $rootScope.$watch 'expandedComponents', (newValue)->
-      $scope.componentsExpanded = !!newValue and newValue is $scope.$id
-      $scope.selectWatch = null
+    $scope.$on 'ShowComponents', (evt, id)->
+      unless id is $scope.$id
+        $scope.showingComponents = false
 
-    $scope.addBlock = (comp)->
-      $scope.add comp
-      $scope.componentsExpanded = false
-      $scope.selectWatch = null
+    $scope.insertBlock = (evt, comp)->
+      evt.stopPropagation()
+
+      $scope.showingComponents = false
+
+      insertTo = $scope.$index + 1 or 0
+      $scope.insert insertTo, comp
+
+    $scope.toggle = ()->
+      $scope.showingComponents = !$scope.showingComponents

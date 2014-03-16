@@ -1,6 +1,5 @@
-label
-  input(type="radio", name="faber-components", ng-model="selectWatch", ng-value="$id")
-  ul.faber-available-components(ng-if="componentsExpanded")
+div(ng-click="toggle()")
+  i.fa.fa-plus-square(ng-if="!showingComponents")
+  ul.faber-available-components(ng-if="showingComponents")
     li.faber-component(ng-repeat="comp in components()")
-      button(ng-click="addBlock({component: comp.template })") {{comp.name}}
-  i.fa.fa-plus-square(ng-if="!componentsExpanded")
+      button(ng-click="insertBlock($event, {component: comp.template })") {{comp.name}}

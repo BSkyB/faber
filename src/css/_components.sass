@@ -14,7 +14,7 @@ faber-components
       +transition(opacity 0.3s)
 
   i
-    +opacity(0)
+    +opacity(0.15)
     +transition(opacity 0.3s)
 
     color: $blue
@@ -23,9 +23,8 @@ faber-components
 
   label
     display: block
-    min-height: 1.5em
 
-  input[type="radio"]
+  input[type="checkbox"]
     display: none
 
   button
@@ -35,16 +34,14 @@ faber-components
     text-align: center
     vertical-align: middle
     cursor: pointer
-    background-image: none
-    border: 1px solid transparent
+    border: 1px solid #6aa3d5
     white-space: nowrap
-    padding: 6px 12px
+    padding: 0.5em 0.8em
     font-size: 15px
-    line-height: 1.428571429
+    line-height: 1.4em
 
     color: $blue
-    background-color: rgba(0,0,0,0)
-    border-color: #6aa3d5
+    background: transparent
 
     +border-radius(4px)
 
