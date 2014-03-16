@@ -24,4 +24,18 @@ describe 'Components Directive:', ->
       @scope = @element.scope()
 
   it 'should be able to show all of the given components', ->
+    @scope.showingComponents = true
+    @scope.$digest()
+
+    expect(@element.find('li').length).toBe 2
+
+  it 'should be able to toggle the appearance', ->
+    @scope.showingComponents = true
+
+    @scope.toggleComponents()
+    @scope.$digest()
+    expect(@element.find('li').length).toBe 0
+
+    @scope.toggleComponents()
+    @scope.$digest()
     expect(@element.find('li').length).toBe 2

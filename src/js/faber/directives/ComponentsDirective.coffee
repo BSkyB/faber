@@ -21,5 +21,5 @@ faber.directive 'faberComponents', ($rootScope) ->
       insertTo = $scope.$index + 1 or 0
       $scope.insert insertTo, comp
 
-    $scope.toggle = ()->
+    $scope.toggleComponents = ()->
       $scope.showingComponents = !$scope.showingComponents
