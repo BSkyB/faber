@@ -39,7 +39,10 @@ window.faber = angular.module('faber', []).constant('faberConfig', {
       name: 'Top Level Only Group Component',
       type: 'group',
       template: '/js/components/samples/top-level-only-group.html',
-      topLevelOnly: true
+      topLevelOnly: true,
+      init: function($element) {
+        //
+      }
     }, {
       name: 'Top Level Only Element Component',
       type: 'element',
@@ -48,7 +51,16 @@ window.faber = angular.module('faber', []).constant('faberConfig', {
     }, {
       name: 'Group Component',
       type: 'group',
-      template: '/js/components/samples/group.html'
+      template: '/js/components/samples/group.html',
+      init: function($element) {
+        //
+      },
+      selected: function($element) {
+        //
+      },
+      unselected: function($element) {
+
+      }
     }, {
       name: 'Element Component 1',
       type: 'element',
@@ -96,3 +108,21 @@ default: `true`
 > Specifies if the component block can only be used on the top level block and can not be a child of other block.
 
 default: `false`
+
+##### init (optional)
+
+> Callback function to be called when the component is rendered on the block list
+
+`$element`: The rendered DOM element passed from ComponentRendererDirective
+
+##### selected (optional)
+
+> Callback function to be called when the rendered component block is selected
+
+`$element`: The rendered DOM element passed from ComponentRendererDirective
+
+##### unselected (optional)
+
+> Callback function to be called when the rendered component block is unselected
+
+`$element`: The rendered DOM element passed from ComponentRendererDirective
