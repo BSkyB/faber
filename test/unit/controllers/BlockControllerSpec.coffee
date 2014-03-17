@@ -28,12 +28,21 @@ describe 'BlockController:', ->
         component: 'test-component'
       @scope.block.blocks = [{}, {}, @blockToRemove, {}]
 
-    describe 'if the given block is in the block list,', ->
-      it 'should be able to remove it from the list', ->
-        @scope.remove @blockToRemove
 
-        expect(@scope.block.blocks.length).toBe 3
-        expect(@scope.block.blocks.indexOf @blockToRemove).toBeLessThan 0
+    describe 'if the given block is in the block list,', ->
+      describe 'if confirmed', ->
+        it 'should be able to remove it from the list', ->
+          spyOn(window, 'confirm').andReturn true
+          @scope.remove @blockToRemove
+
+          expect(@scope.block.blocks.length).toBe 3
+          expect(@scope.block.blocks.indexOf @blockToRemove).toBeLessThan 0
+      describe 'if not confirmed', ->
+        it 'should not remove it from the list', ->
+          spyOn(window, 'confirm').andReturn false
+          @scope.remove @blockToRemove
+
+          expect(@scope.block.blocks.length).toBe 4
 
     describe 'if the given block is not in the block list,', ->
       it 'doesn\'t do anything', ->

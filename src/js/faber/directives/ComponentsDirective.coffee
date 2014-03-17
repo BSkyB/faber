@@ -11,7 +11,7 @@ faber.directive 'faberComponents', ($rootScope) ->
         $rootScope.$broadcast 'ShowComponents', $scope.$id
 
     $scope.$on 'ShowComponents', (evt, id)->
-      if !id or id is not $scope.$id
+      unless id is $scope.$id
         $scope.showingComponents = false
 
     $scope.$on 'SelectBlock', (evt, id)->
