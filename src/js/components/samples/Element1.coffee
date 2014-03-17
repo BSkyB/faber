@@ -3,5 +3,12 @@ class Element1
   type: 'element',
   template: '/js/components/samples/element1.html'
 
-  init: ($scope, $element)->
-    $element.find('input').focus()
+  init: ($element)->
+    $element.find('p').text('hello')
+
+  selected: ($element)->
+    $element.find('p').attr('contenteditable', true)
+    $element.find('p').focus()
+
+  unselected: ($element)->
+    $element.find('p').removeAttr('contenteditable')

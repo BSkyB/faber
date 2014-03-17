@@ -14,6 +14,9 @@ faber.directive 'faberComponents', ($rootScope) ->
       unless id is $scope.$id
         $scope.showingComponents = false
 
+    $scope.$on 'SelectBlock', (evt, id)->
+      $scope.showingComponents = false
+
     $scope.insertBlock = (evt, comp)->
       evt.stopPropagation()
 
