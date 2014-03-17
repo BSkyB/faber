@@ -14,6 +14,8 @@ window.faber = angular.module('faber', [])
       # topLevelOnly: (optional) specify if the component block can only be used on the top level block
       #               and can not be a child of other block
       components: [
+          new MediumEditorComponent()
+        ,
           new Element1()
         ,
           name: 'Element 2',
