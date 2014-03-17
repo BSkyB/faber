@@ -29,18 +29,22 @@ describe 'Editor Directive:', ()->
     it 'should be defined', ->
       expect(@element).toBeDefined()
 
-    it 'should show all available components including top level only components', ->
-      expect(@element.find('faber-components').find('li').length).toBe 2
+    it 'should have a set of components so you can add the first block', ->
+      expect(@element.find('faber-components').length).toBe 1
 
   describe 'when a block is added,', ->
-    it 'can have top level only component', ->
+    beforeEach ->
       topLevelOnly =
         inputs:
           title: 'top level only component set'
         component: 'top-level-only-component'
 
-      result = @scope.add topLevelOnly
+      @result = @scope.add topLevelOnly
       @scope.$digest()
 
-      expect(result).toBeTruthy()
+    it 'can have top level only components', ->
+      expect(@result).toBeTruthy()
       expect(@scope.block.blocks.length).toBe 1
+
+    it 'should have another set of component list so another block can be added using it', ->
+      expect(@element.find('faber-components').length).toBe 2

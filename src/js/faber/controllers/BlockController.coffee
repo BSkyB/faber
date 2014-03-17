@@ -2,6 +2,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   $scope.block or= {}
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
+  $scope.renderer or={}
 
   $scope.expanded = !!$rootScope.expanded
 

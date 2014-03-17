@@ -1,0 +1,59 @@
+faber-components
+  display: block
+  background: #fff
+  text-align: center
+
+  +transition(background 0.3s)
+
+  &:hover
+    background: #eee
+    +transition(background 0.3s)
+
+    i
+      +opacity(1)
+      +transition(opacity 0.3s)
+
+  i
+    +opacity(0.15)
+    +transition(opacity 0.3s)
+
+    color: $blue
+    font-size: 1.2em
+    padding: 0.5em
+
+  label
+    display: block
+
+  input[type="checkbox"]
+    display: none
+
+  button
+    display: inline-block
+    margin-bottom: 0
+    font-weight: 500
+    text-align: center
+    vertical-align: middle
+    cursor: pointer
+    border: 1px solid #6aa3d5
+    white-space: nowrap
+    padding: 0.5em 0.8em
+    font-size: 15px
+    line-height: 1.4em
+
+    color: $blue
+    background: transparent
+
+    +border-radius(4px)
+
+  .faber-available-components
+    list-style: none
+    margin: 0
+    padding: 0
+    background: #eee
+
+    .faber-component
+      display: inline-block
+      padding: 1em
+
+      &:first-child
+        padding-right: 0
