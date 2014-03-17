@@ -68,7 +68,8 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   # Remove a child block
   $scope.remove = (block)->
-    $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
+    if confirm 'Are you sure you want to permanently remove this block?\n\nYou can’t undo this action.'
+      $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
 
   # Insert a child block to the given index
   $scope.insert = (index, block)->
