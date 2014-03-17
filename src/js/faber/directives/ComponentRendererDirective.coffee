@@ -11,3 +11,4 @@ faber.directive 'faberComponentRenderer', ($http, $templateCache, $compile, $sce
           $element.append $component
 
           $scope.component.init($scope, $element) if $scope.component.init
+          $scope.component.select($scope, $element) if $scope.component.select
