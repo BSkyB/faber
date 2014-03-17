@@ -3,14 +3,20 @@
 
   faber-block
     display: block
-    position: relative
-    padding: 1em
-    border: 2px solid transparent
 
-    &:hover
-      border-color: #eee
+    .block
+      position: relative
+      border: 2px solid transparent
+
+      &:hover,
+      &.selected
+        border-color: #eee
+
+        .faber-block-actions
+          display: block
 
     .faber-block-actions
+      display: none
       position: absolute
       right: 0.2em
       top: 0.2em
@@ -22,3 +28,9 @@
       background: transparent
 
       +appearance(none)
+
+  faber-component-renderer
+    display: block
+
+    & > div
+      padding: 1em

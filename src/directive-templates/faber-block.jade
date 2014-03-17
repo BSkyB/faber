@@ -1,3 +1,4 @@
-.faber-block-actions(ng-if="renderer.isSelected")
-  button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
-faber-component-renderer
+.block(ng-class="{selected: renderer.isSelected}")
+  .faber-block-actions
+    button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
+  faber-component-renderer
