@@ -15,11 +15,5 @@ window.faber = angular.module('faber', [])
       #               and can not be a child of other block
       components: [
           new MediumEditorComponent()
-        ,
-          new Element1()
-        ,
-          name: 'Element 2',
-          type: 'element',
-          template: '/js/components/samples/element2.html'
       ]
     })
