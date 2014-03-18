@@ -8,8 +8,25 @@ var bower = require('gulp-bower');
 var connect = require('gulp-connect');
 var protractor = require("gulp-protractor").protractor;
 var webdriver_update = require("gulp-protractor").webdriver_update;
+var concat = require('gulp-concat');
+var minifyCss = require('gulp-minify-css');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 
 var DEV_DIR = './dev';
+var DIST_DIR = './dist';
+
+var SRC_FILES = [
+    DEV_DIR + '/js/lib/angular/angular.js',
+    DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+    DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
+    DEV_DIR + '/js/faber/classes/FaberComponent.js',
+    DEV_DIR + '/js/components/**/*.js',
+    DEV_DIR + '/js/faber/faber.js',
+    DEV_DIR + '/js/faber/**/*.js',
+    './test/helpers/**/*.coffee',
+    './test/unit/**/*.coffee'
+]
 
 gulp.task('connect', connect.server({
   root: ['dev'],
@@ -50,33 +67,31 @@ gulp.task('templatecache', function () {
         .pipe(gulp.dest(DEV_DIR + '/js/faber/directives'));
 });
 
+gulp.task('dist', function() {
+    gulp.src(['./dev/js/**/*.js'])
+        .pipe(concat('faber.js'))
+        .pipe(gulp.dest(DIST_DIR))
+        .pipe(uglify())
+        .pipe(rename('faber.min.js'))
+        .pipe(gulp.dest(DIST_DIR));
+
+    gulp.src('./dev/css/**/*.css')
+        .pipe(concat('faber.css'))
+        .pipe(gulp.dest(DIST_DIR))
+        .pipe(minifyCss())
+        .pipe(rename('faber.min.css'))
+        .pipe(gulp.dest(DIST_DIR));
+});
+
 gulp.task('karma', function() {
-    return gulp.src([
-        DEV_DIR + '/js/lib/angular/angular.js',
-        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-        DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
-        DEV_DIR + '/js/faber/classes/FaberComponent.js',
-        DEV_DIR + '/js/components/**/*.js',
-        DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js',
-        './test/helpers/**/*.coffee',
-        './test/unit/**/*.coffee'
-    ]).pipe(karma({
+    return gulp.src(SRC_FILES).pipe(karma({
         configFile: 'test/config/karma.conf.js',
         action: 'watch'
     }));
 });
 
 gulp.task('karma-specs', function() {
-    return gulp.src([
-        DEV_DIR + '/js/lib/angular/angular.js',
-        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-        DEV_DIR + '/js/faber/classes/FaberComponent.js',
-        DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js',
-        './test/helpers/**/*.coffee',
-        './test/unit/**/*.coffee'
-    ]).pipe(karma({
+    return gulp.src(SRC_FILES).pipe(karma({
         configFile: 'test/config/karma.conf.js'
     }));
 });
