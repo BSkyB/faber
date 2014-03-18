@@ -24,7 +24,7 @@ class MediumEditorComponent
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
 
-    new MediumEditorExtended $element.find('.medium-editor'), opts
+    new MediumEditorExtended $element[0].getElementsByClassName 'medium-editor', opts
 
   selected: ($element)->
 

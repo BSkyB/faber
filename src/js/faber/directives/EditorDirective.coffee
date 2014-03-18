@@ -5,7 +5,7 @@ faber.directive 'faberEditor', ($rootScope, $rootElement) ->
 
   link: ($scope, $element, attrs)->
     $rootElement[0].addEventListener 'click', (evt)->
-      if $element.get(0) is evt.target
+      if  $element[0] is evt.target
         evt.stopPropagation()
         $rootScope.$apply ()->
           $rootScope.$broadcast 'ShowComponents', null
