@@ -71,9 +71,8 @@ describe 'BlockController:', ->
   describe 'when a component is set for the block,', ->
     beforeEach ->
       inject ($injector)->
-        @componentsService = $injector.get 'componentsService'
-        @componentsService.init [
-          id: 'aaaaa-component'
+        componentsService = $injector.get 'componentsService'
+        componentsService.init [
           inputs:
             title: 'block title'
           type: 'element'
@@ -98,9 +97,9 @@ describe 'BlockController:', ->
 
     it 'should be able to insert a block to the given index', ->
       inject ($injector)->
-        @componentsService = $injector.get 'componentsService'
-        @componentsService.init [
-          id: 'insert-this-component'
+        componentsService = $injector.get 'componentsService'
+        componentsService.init [
+          template: 'insert-this-component'
           type: 'element'
         ]
 
@@ -112,3 +111,39 @@ describe 'BlockController:', ->
 
         expect(@scope.block.blocks.length).toBe 4
         expect(@scope.block.blocks[2].component).toBe 'insert-this-component'
+
+  describe 'when re-order a block,', ->
+    beforeEach ->
+      inject ($injector)->
+        componentsService = $injector.get 'componentsService'
+        componentsService.init [
+          template: 'component1'
+          type: 'element'
+        ,
+          template: 'component2'
+          type: 'element'
+        ,
+          template: 'component3'
+          type: 'element'
+        ]
+
+        @block1 = component: 'component1'
+        @block2 = component: 'component2'
+        @block3 = component: 'component3'
+
+        @scope.isTopLevel = true
+        @scope.block.blocks = [@block1, @block2, @block3]
+
+    it 'should be able to re-order the children using index', ->
+      @scope.move(2, 1)
+
+      expect(@scope.block.blocks[0]).toBe @block1
+      expect(@scope.block.blocks[1]).toBe @block3
+      expect(@scope.block.blocks[2]).toBe @block2
+
+    it 'should be able to re-order when MoveChildBlock event is recieved with a childblock and its destination', ->
+      @scope.$emit 'MoveChildBlock', @block3, 0
+
+      expect(@scope.block.blocks[0]).toBe @block3
+      expect(@scope.block.blocks[1]).toBe @block1
+      expect(@scope.block.blocks[2]).toBe @block2

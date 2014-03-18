@@ -1,4 +1,7 @@
-.block(ng-class="{selected: renderer.isSelected}")
+.block-item(ng-class="{selected: renderer.isSelected}")
   .faber-block-actions
+    //select(ng-model="currentIndex", ng-options="i as (i+1) for i in indexRange()")
+    select(ng-model="$parent.$index", ng-options="i as (i+1) for i in indexRange()", ng-change="onSelectChange()")
+      option(value="") Position
     button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
   faber-component-renderer

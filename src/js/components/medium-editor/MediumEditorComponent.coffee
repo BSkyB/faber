@@ -28,5 +28,6 @@ class MediumEditorComponent
     new MediumEditorExtended $element[0].getElementsByClassName 'medium-editor', opts
 
   selected: ($element)->
+    $element[0].getElementsByClassName('medium-editor')[0].focus()
 
   unselected: ($element)->
