@@ -4,7 +4,7 @@ faber.directive 'faberEditor', ($rootScope, $rootElement) ->
   controller: 'EditorController'
 
   link: ($scope, $element, attrs)->
-    $rootElement[0].addEventListener 'click', (evt)->
+    document.addEventListener 'click', (evt)->
       if  $element[0] is evt.target
         evt.stopPropagation()
         $rootScope.$apply ()->
