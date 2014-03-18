@@ -20,25 +20,25 @@ describe 'ComponentsService:', ()->
         @invalid = {test: "test copy"}
         @invalidInputs =
           inputs: 'invalid'
-          template: 'a-component'
+          id: 'a-component'
           type: 'element'
         @invalidTemplate =
           inputs:
             title: 'block title'
-          template: null
+          id: null
           type: 'group'
         @invalidType =
           inputs:
             title: 'block title'
-          template: 'a-component'
+          id: 'a-component'
           type: 'no idea what this is'
         @valid =
           inputs:
             title: 'block title'
-          template: 'a-component'
+          id: 'a-component'
           type: 'group'
         @validNoInputs =
-          template: 'a-component'
+          id: 'a-component'
           type: 'element'
 
         @componentsService.init [@invalid, @invalidInputs, @invalidTemplate, @invalidType, @valid, @validNoInputs]
@@ -65,19 +65,19 @@ describe 'ComponentsService:', ()->
 
     it 'should be able to find components of given type', ->
       @componentsService.init [
-        template: 'a-component'
+        id: 'a-component'
         type: 'element'
       ,
-        template: 'b-component'
+        id: 'b-component'
         type: 'element'
       ,
-        template: 'c-component'
+        id: 'c-component'
         type: 'element'
       ,
-        template: 'd-component'
+        id: 'd-component'
         type: 'group'
       ,
-        template: 'e-component'
+        id: 'e-component'
         type: 'group'
       ]
 
@@ -87,40 +87,40 @@ describe 'ComponentsService:', ()->
       expect(elements.length).toBe 3
       expect(groups.length).toBe 2
 
-    describe 'when finding a component using template/id,', ->
+    describe 'when finding a component using id,', ->
       beforeEach ->
         @input =
-          template: 'component1'
+          id: 'component1'
           type: 'element'
         @componentsService.init [ @input ]
 
-      it 'should be able to find component of given template/id', ->
-        component = @componentsService.findByTemplate 'component1'
+      it 'should be able to find component of given id', ->
+        component = @componentsService.findById 'component1'
         expect(component).toBe @input
 
       it 'should return null if it cannot find', ->
-        component = @componentsService.findByTemplate 'test component'
+        component = @componentsService.findById 'test component'
 
         expect(component).toBe null
 
     describe 'when finding components with top level only setting,', ->
       beforeEach ->
         @componentsService.init [
-          template: 'a-component'
+          id: 'a-component'
           type: 'element'
           topLevelOnly: true
         ,
-          template: 'b-component'
+          id: 'b-component'
           type: 'element'
         ,
-          template: 'c-component'
+          id: 'c-component'
           type: 'element'
         ,
-          template: 'd-component'
+          id: 'd-component'
           type: 'group'
           topLevelOnly: true
         ,
-          template: 'e-component'
+          id: 'e-component'
           type: 'group'
         ]
 

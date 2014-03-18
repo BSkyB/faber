@@ -16,10 +16,12 @@ describe 'EditorController:', ->
       @componentsService.init [
         inputs:
           title: 'component title'
-        template: 'a-component'
+        id: 'a-component'
+        name: 'Base component'
         type: 'element'
       ,
-        template: 'top-level-only-component'
+        id: 'top-level-only-component'
+        name: 'Base component'
         type: 'element'
         topLevelOnly: true
       ]
@@ -62,7 +64,7 @@ describe 'EditorController:', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
-          @elementComp = new FaberComponent({ name: 'Base component', type: 'element', template: 'template.html'})
+          @elementComp = new FaberComponent({ id: 'base-component', name: 'Base component', type: 'element', template: ''})
           @config.components = [ @elementComp ]
 
       beforeEach ->
@@ -84,7 +86,7 @@ describe 'EditorController:', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
-          @groupComp = new FaberComponent({ name: 'Base component', type: 'group', template: 'template.html'})
+          @groupComp = new FaberComponent({ id: 'base-component', name: 'Base component', type: 'group'})
           @config.components = [ @groupComp ]
 
       beforeEach ->
@@ -106,13 +108,13 @@ describe 'EditorController:', ->
     describe 'if all the block\'s have valid components,', ->
       it 'should add the blocks to the block list', ->
         @componentsService.init [
-          template: 'text'
+          id: 'text'
           type: 'element'
         ,
-          template: 'image'
+          id: 'image'
           type: 'element'
         ,
-          template: 'tabs'
+          id: 'tabs'
           type: 'group'
         ]
         @contentService.import sampleJson
@@ -124,10 +126,10 @@ describe 'EditorController:', ->
     describe 'if a block\'s component is not valid,', ->
       it 'should not add the block', ->
         @componentsService.init [
-          template: 'text'
+          id: 'text'
           type: 'element'
         ,
-          template: 'tabs'
+          id: 'tabs'
           type: 'group'
         ]
         @contentService.import '[
@@ -223,7 +225,7 @@ describe 'EditorController:', ->
 
         expect(@scope.block.blocks.length).toBe 2
         expect(logs.length).toBe 2
-        expect(logs).toContain ['cannot find a component of the given template': 'INVALID']
+        expect(logs).toContain ['cannot find a component with the given id': 'INVALID']
 
         expect(@scope.block.blocks[1].blocks.length).toBe 3
         expect(@scope.block.blocks[1].blocks[1].blocks.length).toBe 3

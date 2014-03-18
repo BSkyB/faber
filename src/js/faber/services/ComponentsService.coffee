@@ -8,7 +8,7 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Boolean] true when the component is valid.
   #
   validate = (component) ->
-    (angular.isObject(component.inputs) or !component.inputs) and angular.isString(component.template) and (component.type is 'element' or component.type is 'group')
+    (angular.isObject(component.inputs) or !component.inputs) and angular.isString(component.id) and (component.type is 'element' or component.type is 'group')
 
   # Initalizes the component service.
   #
@@ -54,12 +54,12 @@ faber.factory 'componentsService', ($filter, $log) ->
       result.push(comp) unless comp.topLevelOnly
     return result
 
-  # Find components by template.
+  # Find components by ID.
   #
-  # @param [string] template the template name to filter by.
-  # @return [Array<FaberComponent>] the components with the supploed template.
+  # @param [string] id the template id to filter by.
+  # @return [Array<FaberComponent>] the matching components.
   #
-  findByTemplate: (template) ->
-    res = $filter('filter') components, template: template, true
+  findById: (id) ->
+    res = $filter('filter') components, id: id, true
 
     return if res.length > 0 then res[0] else null

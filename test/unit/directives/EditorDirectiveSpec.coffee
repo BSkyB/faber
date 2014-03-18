@@ -10,10 +10,10 @@ describe 'Editor Directive:', ()->
       @config.components = [
         inputs:
           title: 'component title'
-        template: 'a-component'
+        id: 'a-component'
         type: 'element'
       ,
-        template: 'top-level-only-component'
+        id: 'top-level-only-component'
         type: 'element'
         topLevelOnly: true
       ]

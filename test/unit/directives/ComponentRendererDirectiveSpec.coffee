@@ -3,19 +3,18 @@ describe 'Component Renderer Directive:', ->
 
   beforeEach ->
     inject ($templateCache, $compile, $rootScope, $injector)->
-      $templateCache.put 'sample-component.html', '<p>Sample Component</p>'
-
       componentsService = $injector.get 'componentsService'
       @comp =
-        template: 'sample-component.html'
+        id: 'sample-component'
         type: 'element'
+        template: '<p>Sample Component</p>'
         init: ()->
         selected: ()->
         unselected: ()->
       componentsService.init [@comp]
 
       scope = $rootScope.$new()
-      scope.passedDownBlock = { component: 'sample-component.html' }
+      scope.passedDownBlock = { component: 'sample-component' }
       blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"><faber-component-renderer></faber-component-renderer></faber-block>')(scope)
       scope.$digest()
       blockScope = blockElement.isolateScope()

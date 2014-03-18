@@ -102,12 +102,11 @@ default: `true`
 
 ##### template (mandatory)
 
-> Path to the component's template. Used as the identifier by components service.
-
+> The component's template as a string.
 
 ##### name (optional)
 
-> The name to be displayed for the component.
+> The name to be displayed for the component. Used as the identifier by components service.
 
 ##### topLevelOnly (optional)
 

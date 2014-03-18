@@ -73,9 +73,9 @@ describe 'BlockController:', ->
       inject ($injector)->
         @componentsService = $injector.get 'componentsService'
         @componentsService.init [
+          id: 'aaaaa-component'
           inputs:
             title: 'block title'
-          template: 'aaaaa-component'
           type: 'element'
         ]
 
@@ -94,13 +94,13 @@ describe 'BlockController:', ->
         @scope.$digest()
 
         expect(logs.length).toBe 1
-        expect(logs).toContain ['cannot find a component of the given template': 'invalid']
+        expect(logs).toContain ['cannot find a component of the given name': 'invalid']
 
     it 'should be able to insert a block to the given index', ->
       inject ($injector)->
         @componentsService = $injector.get 'componentsService'
         @componentsService.init [
-          template: 'insert-this-component'
+          id: 'insert-this-component'
           type: 'element'
         ]
 

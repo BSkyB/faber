@@ -1,7 +1,8 @@
 class Element1
   name: 'Element 1',
+  id: 'element-1',
   type: 'element',
-  template: '/js/components/samples/element1.html'
+  template: '<span>[{{$id}}]</span><p contenteditable="contenteditable">Element 1</p>'
 
   init: ($element)->
     $element.find('p').text('hello')

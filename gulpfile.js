@@ -20,11 +20,14 @@ var DIST_DIR = './dist';
 var SRC_FILES = [
     DEV_DIR + '/js/lib/angular/angular.js',
     DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-    DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
     DEV_DIR + '/js/faber/classes/FaberComponent.js',
-    DEV_DIR + '/js/components/**/*.js',
     DEV_DIR + '/js/faber/faber.js',
     DEV_DIR + '/js/faber/**/*.js',
+];
+
+var BUILTIN_COMPONENTS = [
+    DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
+    DEV_DIR + '/js/components/**/*.js',
 ];
 
 var TEST_FILES = [
@@ -44,7 +47,7 @@ gulp.task('coffee', function() {
 });
 
 gulp.task('jade', function() {
-    return gulp.src(['./src/**/*.jade', '!./src/dist.jade', '!./src/directive-templates/**/*'])
+    return gulp.src(['.src/*.jade', './src/**/*.jade', '!./src/dist.jade', '!./src/directive-templates/**/*'])
         .pipe(jade().on('error', function(err) {
             console.log(err);
         }))
@@ -71,8 +74,8 @@ gulp.task('templatecache', function () {
         .pipe(gulp.dest(DEV_DIR + '/js/faber/directives'));
 });
 
-gulp.task('dist-build-js', function() {
-    return gulp.src(SRC_FILES)
+gulp.task('dist-build-js', ['build'], function() {
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES))
         .pipe(concat('faber.js'))
         .pipe(gulp.dest(DIST_DIR))
         .pipe(uglify({mangle: false}))
@@ -80,7 +83,7 @@ gulp.task('dist-build-js', function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build-css', function() {
+gulp.task('dist-build-css', ['build'], function() {
     return gulp.src('./dev/css/**/*.css')
         .pipe(concat('faber.css'))
         .pipe(gulp.dest(DIST_DIR))
@@ -89,13 +92,13 @@ gulp.task('dist-build-css', function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build-demo', function() {
+gulp.task('dist-build-demo', ['build'], function() {
     return gulp.src('./src/dist.jade')
         .pipe(jade())
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build', ['build', 'dist-build-js', 'dist-build-css', 'dist-build-demo']);
+gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo']);
 
 gulp.task('dist-test', ['dist-build'], function() {
     return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))
@@ -112,14 +115,14 @@ gulp.task('dist-min-test', ['dist-build'], function() {
 });
 
 gulp.task('karma', ['build'], function() {
-    return gulp.src(SRC_FILES.concat(TEST_FILES)).pipe(karma({
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES).concat(TEST_FILES)).pipe(karma({
         configFile: 'test/config/karma.conf.js',
         action: 'watch'
     }));
 });
 
 gulp.task('karma-specs', ['build'], function() {
-    return gulp.src(SRC_FILES.concat(TEST_FILES)).pipe(karma({
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES).concat(TEST_FILES)).pipe(karma({
         configFile: 'test/config/karma.conf.js'
     }));
 });
