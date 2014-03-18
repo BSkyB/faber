@@ -9,23 +9,29 @@ Block based content editor
 2.	Configurable Medium editor
 3.	Setup publish task
 
+## Usage
 
-## Getting started
+For use in the browser just use the files from `/dist`
+
+## Development
+
+Install dependencies and build
 
 ```
-sudo ./installs.sh
+npm install -g gulp
+npm install -g bower
+
 npm install
 gulp
 ```
 
-### To start dev environment
+Then start the live dev environment
 
 ```
 gulp dev
 ```
 
-This will run [Karma](http://karma-runner.github.io/ "Karma") [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
-
+This will run [Karma](http://karma-runner.github.io/) [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
 
 ## Faber configuration
 
