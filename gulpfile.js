@@ -54,6 +54,7 @@ gulp.task('karma', function() {
     return gulp.src([
         DEV_DIR + '/js/lib/angular/angular.js',
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+        DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
         DEV_DIR + '/js/faber/classes/FaberComponent.js',
         DEV_DIR + '/js/components/**/*.js',
         DEV_DIR + '/js/faber/faber.js',
