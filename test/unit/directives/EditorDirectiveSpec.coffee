@@ -48,3 +48,39 @@ describe 'Editor Directive:', ()->
 
     it 'should have another set of component list so another block can be added using it', ->
       expect(@element.find('faber-components').length).toBe 2
+
+  describe 'when it has child blocks,', ->
+    beforeEach ->
+      @block1 = component: 'a-component'
+      @block2 = component: 'a-component'
+      @block3 = component: 'a-component'
+
+      @scope.block.blocks = [@block1, @block2, @block3]
+
+      @scope.$digest()
+
+      @block1Element = angular.element @element.find('faber-block')[0]
+      @block1Scope = @block1Element.isolateScope()
+      @block2Element = angular.element @element.find('faber-block')[1]
+      @block2Scope = @block2Element.isolateScope()
+      @block3Element = angular.element @element.find('faber-block')[2]
+      @block3Scope = @block3Element.isolateScope()
+
+    it 'the children should know how many siblings it has', ->
+      # Total number of options are 4 as there is a 'choose the new position' guide option
+      expect(@block1Element.find('option').length).toBe 4
+      expect(@block2Element.find('option').length).toBe 4
+      expect(@block3Element.find('option').length).toBe 4
+
+      expect(@block1Element.find('select').val()).toBe '0'
+      expect(@block2Element.find('select').val()).toBe '1'
+      expect(@block3Element.find('select').val()).toBe '2'
+
+    it 'the children should update its current index when a sibling move to different position', ->
+      @block3Element.find('select').val('0')
+      @block3Scope.onSelectChange()
+      @scope.$digest()
+
+      expect(@block1Element.find('select').val()).toBe '1'
+      expect(@block2Element.find('select').val()).toBe '2'
+      expect(@block3Element.find('select').val()).toBe '0'
