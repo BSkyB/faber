@@ -44,7 +44,7 @@ gulp.task('coffee', function() {
 });
 
 gulp.task('jade', function() {
-    return gulp.src(['./src/**/*.jade', '!./src/directive-templates/**/*'])
+    return gulp.src(['./src/**/*.jade', '!./src/dist.jade', '!./src/directive-templates/**/*'])
         .pipe(jade().on('error', function(err) {
             console.log(err);
         }))
@@ -89,7 +89,13 @@ gulp.task('dist-build-css', function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build', ['build', 'dist-build-js', 'dist-build-css']);
+gulp.task('dist-build-demo', function() {
+    return gulp.src('./src/dist.jade')
+        .pipe(jade())
+        .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('dist-build', ['build', 'dist-build-js', 'dist-build-css', 'dist-build-demo']);
 
 gulp.task('dist-test', ['dist-build'], function() {
     return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))
