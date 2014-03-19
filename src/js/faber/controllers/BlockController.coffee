@@ -38,11 +38,11 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   $scope.validateBlock = (block)->
     result = true
     if angular.isString(block.component)
-      # if the block's component parameter is the path to the template
-      component = componentsService.findByTemplate block.component
-    else if angular.isObject(block.component) and angular.isString(block.component.template)
+      # if the block's component parameter is the name of the template
+      component = componentsService.findById block.component
+    else if angular.isObject(block.component) and angular.isString(block.component.id)
       # if the block's component is already set to a component object and has path to the template
-      component = componentsService.findByTemplate block.component.template
+      component = componentsService.findById block.component.id
 
     if component
       # if the component is top level only component but the block is not a top level block, it's invalid block
@@ -63,7 +63,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $scope.block.blocks.push block
       return true
     else
-      $log.warn 'cannot find a component of the given template': block.component
+      $log.warn 'cannot find a component of the given name': block.component
       return false
 
   # Remove a child block
@@ -82,9 +82,9 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   # if the block's component data changes, find the component object and set it to the block
   $scope.$watch 'block.component', (val) ->
-    component = componentsService.findByTemplate val
+    component = componentsService.findById val
 
     if !component and componentsService.getAll().length > 0
-      $log.warn 'cannot find a component of the given template': val
+      $log.warn 'cannot find a component of the given name': val
     else
       $scope.component = component or new FaberComponent()

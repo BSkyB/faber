@@ -8,8 +8,32 @@ var bower = require('gulp-bower');
 var connect = require('gulp-connect');
 var protractor = require("gulp-protractor").protractor;
 var webdriver_update = require("gulp-protractor").webdriver_update;
+var concat = require('gulp-concat');
+var minifyCss = require('gulp-minify-css');
+var ngmin = require('gulp-ngmin');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 
 var DEV_DIR = './dev';
+var DIST_DIR = './dist';
+
+var SRC_FILES = [
+    DEV_DIR + '/js/lib/angular/angular.js',
+    DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+    DEV_DIR + '/js/faber/classes/FaberComponent.js',
+    DEV_DIR + '/js/faber/faber.js',
+    DEV_DIR + '/js/faber/**/*.js',
+];
+
+var BUILTIN_COMPONENTS = [
+    DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
+    DEV_DIR + '/js/components/**/*.js',
+];
+
+var TEST_FILES = [
+    './test/helpers/**/*.coffee',
+    './test/unit/**/*.coffee'
+];
 
 gulp.task('connect', connect.server({
   root: ['dev'],
@@ -23,7 +47,7 @@ gulp.task('coffee', function() {
 });
 
 gulp.task('jade', function() {
-    return gulp.src(['./src/**/*.jade', '!./src/directive-templates/**/*'])
+    return gulp.src(['.src/*.jade', './src/**/*.jade', '!./src/dist.jade', '!./src/directive-templates/**/*'])
         .pipe(jade().on('error', function(err) {
             console.log(err);
         }))
@@ -40,43 +64,65 @@ gulp.task('sass', function() {
 });
 
 gulp.task('bower', function() {
-    bower();
+    return bower();
 });
 
 gulp.task('templatecache', function () {
-    gulp.src('./src/directive-templates/**/*.jade')
+    return gulp.src('./src/directive-templates/**/*.jade')
         .pipe(jade())
         .pipe(templateCache({ module: 'faber' }))
         .pipe(gulp.dest(DEV_DIR + '/js/faber/directives'));
 });
 
-gulp.task('karma', function() {
-    return gulp.src([
-        DEV_DIR + '/js/lib/angular/angular.js',
-        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-        DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
-        DEV_DIR + '/js/faber/classes/FaberComponent.js',
-        DEV_DIR + '/js/components/**/*.js',
-        DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js',
-        './test/helpers/**/*.coffee',
-        './test/unit/**/*.coffee'
-    ]).pipe(karma({
+gulp.task('dist-build-js', ['build'], function() {
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES))
+        .pipe(concat('faber.js'))
+        .pipe(gulp.dest(DIST_DIR))
+        .pipe(uglify({mangle: false}))
+        .pipe(rename('faber.min.js'))
+        .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('dist-build-css', ['build'], function() {
+    return gulp.src(['./dev/js/lib/medium-editor/dist/css/medium-editor.css', './dev/css/**/*.css'])
+        .pipe(concat('faber.css'))
+        .pipe(gulp.dest(DIST_DIR))
+        .pipe(minifyCss())
+        .pipe(rename('faber.min.css'))
+        .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('dist-build-demo', ['build'], function() {
+    return gulp.src('./src/dist.jade')
+        .pipe(jade())
+        .pipe(gulp.dest(DIST_DIR));
+});
+
+gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo']);
+
+gulp.task('dist-test', ['dist-build'], function() {
+    return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))
+        .pipe(karma({
+            configFile: 'test/config/karma.conf.js'
+    }));
+});
+
+gulp.task('dist-min-test', ['dist-build'], function() {
+    return gulp.src([DIST_DIR + '/faber.min.js'].concat(TEST_FILES))
+        .pipe(karma({
+            configFile: 'test/config/karma.conf.js'
+    }));
+});
+
+gulp.task('karma', ['build'], function() {
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES).concat(TEST_FILES)).pipe(karma({
         configFile: 'test/config/karma.conf.js',
         action: 'watch'
     }));
 });
 
-gulp.task('karma-specs', function() {
-    return gulp.src([
-        DEV_DIR + '/js/lib/angular/angular.js',
-        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-        DEV_DIR + '/js/faber/classes/FaberComponent.js',
-        DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js',
-        './test/helpers/**/*.coffee',
-        './test/unit/**/*.coffee'
-    ]).pipe(karma({
+gulp.task('karma-specs', ['build'], function() {
+    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES).concat(TEST_FILES)).pipe(karma({
         configFile: 'test/config/karma.conf.js'
     }));
 });
@@ -94,13 +140,18 @@ gulp.task('protractor', ['webdriver_update'], function() {
         .on('error', function(e) { throw e })
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', ['connect'], function() {
     gulp.watch(['./src/**/*.coffee', './test/**/*.coffee'], ['coffee']);
     gulp.watch(['./src/**/*.jade'], ['jade', 'templatecache']);
     gulp.watch(['./src/**/*.sass'], ['sass']);
 });
 
-gulp.task('default', ['coffee', 'jade', 'sass', 'bower', 'templatecache']);
-gulp.task('dev', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'watch']);
-gulp.task('devtest', ['coffee', 'jade', 'sass', 'connect', 'templatecache', 'karma', 'watch']);
-gulp.task('specs', ['coffee', 'jade', 'templatecache', 'karma-specs']);
+gulp.task('install', ['bower']);
+gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache']);
+
+gulp.task('dev', ['build', 'watch']);
+gulp.task('devtest', ['karma', 'watch']);
+gulp.task('specs', ['karma-specs']);
+gulp.task('dist', ['dist-test', 'dist-min-test']);
+
+gulp.task('default', ['install', 'build']);

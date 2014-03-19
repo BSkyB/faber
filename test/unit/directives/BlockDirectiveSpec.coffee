@@ -32,10 +32,10 @@ describe 'Block Directive:', ()->
   describe 'when initialised,', ->
     beforeEach ->
       componentsService.init [
-        template: 'a-component'
+        id: 'a-component'
         type: 'element'
       ,
-        template: 'group-component'
+        id: 'group-component'
         type: 'group'
       ]
 
@@ -49,7 +49,7 @@ describe 'Block Directive:', ()->
 
     describe 'if the component type is element,', ->
       beforeEach ->
-        @scope.component = componentsService.findByTemplate('a-component')
+        @scope.component = componentsService.findById('a-component')
         @scope.$digest()
 
       it 'cannot add any children to the block', ->

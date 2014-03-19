@@ -16,8 +16,9 @@ class MediumEditorExtended extends MediumEditor
 
 class MediumEditorComponent
   name: 'Medium Editor',
+  id: 'medium-editor',
   type: 'element',
-  template: '/js/components/medium-editor.html'
+  template: '<div class="medium-editor"></div>'
 
   init: ($element)->
     opts =

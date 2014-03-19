@@ -9,23 +9,29 @@ Block based content editor
 2.	Configurable Medium editor
 3.	Setup publish task
 
+## Usage
 
-## Getting started
+For use in the browser just use the files from `/dist`
+
+## Development
+
+Install dependencies and build
 
 ```
-sudo ./installs.sh
+npm install -g gulp
+npm install -g bower
+
 npm install
 gulp
 ```
 
-### To start dev environment
+Then start the live dev environment
 
 ```
 gulp dev
 ```
 
-This will run [Karma](http://karma-runner.github.io/ "Karma") [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
-
+This will run [Karma](http://karma-runner.github.io/) [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
 
 ## Faber configuration
 
@@ -96,12 +102,11 @@ default: `true`
 
 ##### template (mandatory)
 
-> Path to the component's template. Used as the identifier by components service.
-
+> The component's template as a string.
 
 ##### name (optional)
 
-> The name to be displayed for the component.
+> The name to be displayed for the component. Used as the identifier by components service.
 
 ##### topLevelOnly (optional)
 

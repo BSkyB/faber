@@ -35,14 +35,14 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
     validated = []
 
     for block in blocks
-      component = componentsService.findByTemplate block.component
+      component = componentsService.findById block.component
       if component
         if component.type is 'element'
           validated.push validateElementBlock(block)
         if component.type is 'group'
           validated.push validateGroupBlock(block)
       else
-        $log.warn 'cannot find a component of the given template': block.component
+        $log.warn 'cannot find a component with the given id': block.component
 
     return validated
 

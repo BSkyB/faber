@@ -2,4 +2,4 @@ div(ng-click="toggleComponents()")
   i.fa.fa-plus-square(ng-if="!showingComponents")
   ul.faber-available-components(ng-if="showingComponents")
     li.faber-component(ng-repeat="comp in components()")
-      button(ng-click="insertBlock($event, {component: comp.template })") {{comp.name}}
+      button(ng-click="insertBlock($event, {component: comp.id })") {{comp.name}}

@@ -1,10 +1,12 @@
 class FaberComponent
+  id: ''
   name: ''
   type: 'group'
   template: ''
   topLevelOnly: false
 
   constructor: (opts = []) ->
+    @id = opts.id or ''
     @name = opts.name or ''
     @type = opts.type or 'group'
     @template = opts.template or ''
