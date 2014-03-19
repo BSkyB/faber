@@ -1,4 +1,4 @@
-faber.directive 'faberBlock', ($rootScope, $compile) ->
+faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
   scope:
     'block': '=faberBlockContent'
   restrict: 'E'
@@ -34,4 +34,10 @@ faber.directive 'faberBlock', ($rootScope, $compile) ->
         to = $element.find('select').val()
         if to >= 0
           $rootScope.$broadcast 'SelectBlock', null
+
           $scope.moveSelf to
+
+          # Setting isMoving to true is wrapped inside of $timeout so it can be applied after false is set first
+          $scope.isMoving = false
+          $timeout ()->
+            $scope.isMoving = true

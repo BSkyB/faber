@@ -1,4 +1,4 @@
-window.faber = angular.module('faber', [])
+window.faber = angular.module('faber', ['ngAnimate'])
   .config ($sceProvider)->
       $sceProvider.enabled(false)
   .constant('faberConfig', {

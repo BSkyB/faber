@@ -67,10 +67,9 @@ describe 'Editor Directive:', ()->
       @block3Scope = @block3Element.isolateScope()
 
     it 'the children should know how many siblings it has', ->
-      # Total number of options are 4 as there is a 'choose the new position' guide option
-      expect(@block1Element.find('option').length).toBe 4
-      expect(@block2Element.find('option').length).toBe 4
-      expect(@block3Element.find('option').length).toBe 4
+      expect(@block1Element.find('option').length).toBe 3
+      expect(@block2Element.find('option').length).toBe 3
+      expect(@block3Element.find('option').length).toBe 3
 
       expect(@block1Element.find('select').val()).toBe '0'
       expect(@block2Element.find('select').val()).toBe '1'

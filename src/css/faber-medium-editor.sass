@@ -1,14 +1,5 @@
 @import compass
-
-=keyframes($name)
-  @-webkit-keyframes #{$name}
-    @content
-  @-moz-keyframes #{$name}
-    @content
-  @-o-keyframes #{$name}
-    @content
-  @keyframes #{$name}
-    @content
+@import mixins
 
 .clearfix:after
   display: block
