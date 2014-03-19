@@ -84,7 +84,7 @@ gulp.task('dist-build-js', ['build'], function() {
 });
 
 gulp.task('dist-build-css', ['build'], function() {
-    return gulp.src('./dev/css/**/*.css')
+    return gulp.src(['./dev/js/lib/medium-editor/dist/css/medium-editor.css', './dev/css/**/*.css'])
         .pipe(concat('faber.css'))
         .pipe(gulp.dest(DIST_DIR))
         .pipe(minifyCss())
