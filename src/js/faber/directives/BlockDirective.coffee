@@ -20,6 +20,17 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
     post: ($scope, $element, $attrs) ->
       $scope.currentIndex = $scope.$parent.$index
 
+      $scope.mouseover = ()->
+#        console.log 'mouseover'
+
+      $scope.mouseenter = ()->
+        $scope.isMouseHover = true
+#        console.log 'mouseenter'
+
+      $scope.mouseleave = ()->
+        $scope.isMouseHover = false
+#        console.log 'mouseleave'
+
       # Get available index range that can be used to move in the parent block's children
       # Used to create the select options
       $scope.indexRange = ()->
