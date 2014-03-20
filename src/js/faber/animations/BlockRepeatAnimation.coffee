@@ -18,7 +18,7 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
 
   move: ($element, done)->
     start = $window.pageYOffset
-    end = getEnd $element[0]
+    end = getEnd($element[0]) - 40
     distance = end - start
 
     # Disable mouse hover effects so when the scroll finished, none of the blocks has :hover
