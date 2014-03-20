@@ -21,11 +21,9 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
     end = getEnd $element[0]
     distance = end - start
 
-    # Remove the classes first and add again so it activates the transition again after it already moved once
-#    $element.removeClass 'faber-block-repeat-moving-prep'
-#    $element.removeClass 'faber-block-repeat-moving'
-
-#    $element.addClass 'faber-block-repeat-moving-prep'
+    # Disable mouse hover effects so when the scroll finished, none of the blocks has :hover
+    # Possibly increase animation performance as well
+    $document.find('body').css 'pointer-events', 'none'
 
     $interval.cancel $window.faberBlockRepeatAnimationWatch
 
@@ -36,7 +34,7 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
 
       if Math.abs(distance) <= 1
         $interval.cancel $window.faberBlockRepeatAnimationWatch
-#        $element.addClass 'faber-block-repeat-moving'
+        $document.find('body').css 'pointer-events', 'auto'
 
     , 50
 
