@@ -41,3 +41,6 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
           $scope.isMoving = false
           $timeout ()->
             $scope.isMoving = true
+
+      $scope.$on 'SelectBlock', ()->
+        $scope.isMoving = false
