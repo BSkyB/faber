@@ -10,12 +10,6 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
 
     return Math.max pos, 0
 
-  enter: ($element, done)->
-    return null
-
-  leave: ($element, done)->
-    return null
-
   move: ($element, done)->
     start = $window.pageYOffset
     end = getEnd($element[0]) - 40
@@ -39,15 +33,4 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
     , 50
 
     return null
-
-  beforeAddClass: ($element, className, done)->
-    return null
-
-  addClass: ($element, className, done)->
-    return null
-
-  beforeRemoveClass: ($element, className, done)->
-    return null
-
-  removeClass: ($element, className, done)->
-    return null
+    
