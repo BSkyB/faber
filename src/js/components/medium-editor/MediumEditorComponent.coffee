@@ -18,14 +18,14 @@ class MediumEditorComponent
   name: 'Medium Editor',
   id: 'medium-editor',
   type: 'element',
-  template: '<div class="medium-editor"></div>'
+  template: '<div class="medium-editor"><br/></div>'
 
   init: ($element)->
     opts =
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
 
-    new MediumEditorExtended $element[0].getElementsByClassName 'medium-editor', opts
+    new MediumEditorExtended $element[0].getElementsByClassName('medium-editor'), opts
 
   selected: ($element)->
     $element[0].getElementsByClassName('medium-editor')[0].focus()

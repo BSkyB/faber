@@ -5,8 +5,6 @@ faber.directive 'faberEditor', ($rootScope, $document) ->
 
   link: ($scope, $element, attrs)->
     $document[0].addEventListener 'click', (evt)->
-#      console.log  $document.find('body')[0], $element[0], evt.target, evt
-
       isInside = false
       el = evt.target
 
@@ -18,7 +16,6 @@ faber.directive 'faberEditor', ($rootScope, $document) ->
           el = el.parentNode
 
       unless isInside
-        evt.stopPropagation()
         $rootScope.$apply ()->
           $rootScope.$broadcast 'ShowComponents', null
           $rootScope.$broadcast 'SelectBlock', null
