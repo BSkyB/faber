@@ -17,7 +17,16 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
 
     # Disable mouse hover effects so when the scroll finished, none of the blocks has :hover
     # Possibly increase animation performance as well
-    $document.find('body').css 'pointer-events', 'none'
+    body = $document.find('body')
+    mouseBlocker = $document[0].createElement 'div'
+    mouseBlocker.style.position = 'absolute'
+    mouseBlocker.style.top = 0
+    mouseBlocker.style.left = 0
+    mouseBlocker.style.background = 'transparent'
+    mouseBlocker.style.width = "#{$window.innerWidth}px"
+    mouseBlocker.style.height = "#{$window.innerHeight}px"
+    body.append mouseBlocker
+    $rootElement.find('body').css 'pointer-events', 'none'
 
     $interval.cancel $window.faberBlockRepeatAnimationWatch
 
@@ -28,7 +37,8 @@ faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $inter
 
       if Math.abs(distance) <= 1
         $interval.cancel $window.faberBlockRepeatAnimationWatch
-        $document.find('body').css 'pointer-events', 'auto'
+#        mouseBlocker.remove()
+        $rootElement.find('body').css 'pointer-events', 'auto'
 
     , 50
 
