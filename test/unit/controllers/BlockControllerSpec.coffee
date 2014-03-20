@@ -73,6 +73,7 @@ describe 'BlockController:', ->
       inject ($injector)->
         componentsService = $injector.get 'componentsService'
         componentsService.init [
+          id: 'aaaaa-component'
           inputs:
             title: 'block title'
           type: 'element'
@@ -99,7 +100,7 @@ describe 'BlockController:', ->
       inject ($injector)->
         componentsService = $injector.get 'componentsService'
         componentsService.init [
-          template: 'insert-this-component'
+          id: 'insert-this-component'
           type: 'element'
         ]
 
