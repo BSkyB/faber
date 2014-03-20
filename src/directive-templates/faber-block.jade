@@ -1,4 +1,8 @@
-.block(ng-class="{selected: renderer.isSelected}")
+.faber-block-item(ng-class="{'faber-block-selected': renderer.isSelected, 'faber-block-moving': isMoving}")
   .faber-block-actions
+    label.faber-block-position(ng-click="positionSelect()")
+      | Position:&nbsp;
+      span {{$parent.$index+1}} / {{$parent.block.blocks.length}}
+        select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
     button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
   faber-component-renderer

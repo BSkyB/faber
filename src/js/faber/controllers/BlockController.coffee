@@ -16,9 +16,17 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   # the parent block will pick the event and stop it to propagate more
   # and remove the child block from its children
   $scope.$on 'RemoveChildBlock', (evt, block)->
-    unless evt.targetScope is $scope
+    if $scope.block.blocks.indexOf(block) >= 0
       evt.stopPropagation()
       $scope.remove(block)
+
+  # When a child block fire this event with itself and destination index as arbuments,
+  # the parent block will pick the event and stop it to propagate more
+  # and mobe the child block to the destination to re-order its children
+  $scope.$on 'MoveChildBlock', (evt, block, to)->
+    if $scope.block.blocks.indexOf(block) >= 0
+      evt.stopPropagation()
+      $scope.move $scope.block.blocks.indexOf(block), to
 
   # retrieve available component list for the current block
   $scope.components = ()->
@@ -76,11 +84,22 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if $scope.validateBlock block
       $scope.block.blocks.splice(index, 0, block)
 
+  # Move a child block at from index to to index
+  $scope.move = (from, to)->
+    max = $scope.block.blocks.length
+    if from >= 0 and from < max and to >= 0 and to < max
+      $scope.block.blocks.splice to, 0, $scope.block.blocks.splice(from, 1)[0]
+      $scope.$broadcast 'BlockMoved'
+
   # Emit RemoveChildBlock event with itself so its parent block can remove it
   $scope.removeSelf = ()->
     $scope.$emit 'RemoveChildBlock', $scope.block
 
-  # if the block's component data changes, find the component object and set it to the block
+  # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
+  $scope.moveSelf = (to)->
+    $scope.$emit 'MoveChildBlock', $scope.block, to
+
+  # If the block's component data changes, find the component object and set it to the block
   $scope.$watch 'block.component', (val) ->
     component = componentsService.findById val
 
