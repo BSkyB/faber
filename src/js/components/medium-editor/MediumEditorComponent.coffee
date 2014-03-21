@@ -26,7 +26,7 @@ class MediumEditorComponent
       placeholder: 'Type your text'
 
     editor = $element[0].getElementsByClassName('medium-editor')[0]
-    editor.innerHTML = contentModel
+    editor.innerHTML = contentModel or ''
 
     new MediumEditorExtended editor, opts
 
