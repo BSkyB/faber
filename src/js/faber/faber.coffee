@@ -1,6 +1,6 @@
 window.faber = angular.module('faber', ['ngAnimate'])
-  .config ($sceProvider)->
-      $sceProvider.enabled(false)
+#  .config ($sceProvider)->
+#      $sceProvider.enabled(false)
   .constant('faberConfig', {
       # (boolean) Default expanded flag for child blocks
       expanded: true
@@ -18,3 +18,6 @@ window.faber = angular.module('faber', ['ngAnimate'])
           new MediumEditorComponent()
       ]
     })
+  .run (contentService)->
+    faber.import = contentService.import
+    faber.export = contentService.export

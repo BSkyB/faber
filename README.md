@@ -6,8 +6,6 @@ Block based content editor
 ## TODOs
 
 1.	Pluggable themes
-2.	Configurable Medium editor
-3.	Setup publish task
 
 ## Usage
 
@@ -33,6 +31,43 @@ gulp dev
 
 This will run [Karma](http://karma-runner.github.io/) [Jasmine](http://jasmine.github.io/) unit test in the background while watching file changes
 
+## Faber Services
+
+Faber has exposed the following services functions so they can be used outside of the module.
+
+
+### faber.import(JSON)
+
+```
+var json = '[
+  {
+    "content": "content data for the first component-a block",
+    "component": "component-a"
+  },
+  {
+    "content": "content data for the second component-a block",
+    "component": "component-a"
+  },
+  {
+    "content": "content data for the component-b block",
+    "component": "component-b"
+  }
+]';
+faber.import(json);
+```
+
+Exposed import function of ContenService.
+
+It takes a JSON format string as an argument and populate the blocks after validating it.
+
+
+### faber.export()
+
+Exposed export function of ContentService.
+
+It will return JSON formatted blocks
+
+
 ## Faber configuration
 
 The configuration can be done using `faberConfig` constant when faber is initialised.
@@ -41,41 +76,8 @@ The configuration can be done using `faberConfig` constant when faber is initial
 window.faber = angular.module('faber', []).constant('faberConfig', {
   expanded: true,
   components: [
-    {
-      name: 'Top Level Only Group Component',
-      type: 'group',
-      template: '/js/components/samples/top-level-only-group.html',
-      topLevelOnly: true,
-      init: function($element) {
-        //
-      }
-    }, {
-      name: 'Top Level Only Element Component',
-      type: 'element',
-      template: '/js/components/samples/top-level-only-element.html',
-      topLevelOnly: true
-    }, {
-      name: 'Group Component',
-      type: 'group',
-      template: '/js/components/samples/group.html',
-      init: function($element) {
-        //
-      },
-      selected: function($element) {
-        //
-      },
-      unselected: function($element) {
-
-      }
-    }, {
-      name: 'Element Component 1',
-      type: 'element',
-      template: '/js/components/samples/element1.html'
-    }, {
-      name: 'Element Component 2',
-      type: 'element',
-      template: '/js/components/samples/element2.html'
-    }
+    new FaberComponent(),
+    new MediumEditorComponent()
   ]
 });
 
@@ -91,6 +93,8 @@ default: `true`
 ### components
 
 > List of components to be imported and managed by components service.
+
+Components typically have the following parameters
 
 ##### type (mandatory)
 
