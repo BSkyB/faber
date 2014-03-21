@@ -148,6 +148,10 @@ default: `false`
 
 `$element`: The rendered DOM element passed from ComponentRendererDirective
 
+`initialContent`: Usually content passed to the block when Faber imported block data.
+The format depends on how the component pass its data to `update` when it saves it.
+For example, MediumEditorComponent sends a string of html format.
+
 `update`: To be called whenever the component wants to update and save the content changes
 
 ##### selected (optional)
@@ -156,8 +160,12 @@ default: `false`
 
 `$element`: The rendered DOM element passed from ComponentRendererDirective
 
+`update`: To be called whenever the component wants to update and save the content changes
+
 ##### unselected (optional)
 
 > Callback function to be called when the rendered component block is unselected
 
 `$element`: The rendered DOM element passed from ComponentRendererDirective
+
+`update`: To be called whenever the component wants to update and save the content changes
