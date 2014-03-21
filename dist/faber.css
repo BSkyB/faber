@@ -255,6 +255,14 @@
 .medium-editor-anchor-preview i {
   margin: 5px; }
 
+[ng-if="showingComponents"].ng-enter, [ng-if="showingComponents"].ng-leave,
+[ng-if="!showingComponents"].ng-enter,
+[ng-if="!showingComponents"].ng-leave {
+  -webkit-transition: 0s;
+  -moz-transition: 0s;
+  -o-transition: 0s;
+  transition: 0s; }
+
 faber-editor {
   display: block;
   width: 100%;
@@ -323,22 +331,97 @@ faber-components {
       faber-components .faber-available-components .faber-component:first-child {
         padding-left: 0; }
 
+@-webkit-keyframes faber-block-moving {
+  0% {
+    border-color: #80b2ff; }
+
+  60% {
+    border-color: #80b2ff; }
+
+  100% {
+    border-color: #eeeeee; } }
+
+@-moz-keyframes faber-block-moving {
+  0% {
+    border-color: #80b2ff; }
+
+  60% {
+    border-color: #80b2ff; }
+
+  100% {
+    border-color: #eeeeee; } }
+
+@-o-keyframes faber-block-moving {
+  0% {
+    border-color: #80b2ff; }
+
+  60% {
+    border-color: #80b2ff; }
+
+  100% {
+    border-color: #eeeeee; } }
+
+@keyframes faber-block-moving {
+  0% {
+    border-color: #80b2ff; }
+
+  60% {
+    border-color: #80b2ff; }
+
+  100% {
+    border-color: #eeeeee; } }
+
 .faber-blocks {
   list-style: none; }
   .faber-blocks faber-block {
     display: block; }
-    .faber-blocks faber-block .block {
+    .faber-blocks faber-block .faber-block-item {
       position: relative;
       border: 2px solid transparent; }
-      .faber-blocks faber-block .block:hover, .faber-blocks faber-block .block.selected {
+      .faber-blocks faber-block .faber-block-item.faber-block-hover, .faber-blocks faber-block .faber-block-item.faber-block-selected {
         border-color: #eeeeee; }
-        .faber-blocks faber-block .block:hover .faber-block-actions, .faber-blocks faber-block .block.selected .faber-block-actions {
+        .faber-blocks faber-block .faber-block-item.faber-block-hover .faber-block-actions, .faber-blocks faber-block .faber-block-item.faber-block-selected .faber-block-actions {
           display: block; }
+      .faber-blocks faber-block .faber-block-item.faber-block-moving {
+        -webkit-animation: faber-block-moving 1s;
+        -moz-animation: faber-block-moving 1s;
+        -o-animation: faber-block-moving 1s;
+        animation: faber-block-moving 1s; }
     .faber-blocks faber-block .faber-block-actions {
       display: none;
       position: absolute;
       right: 0.2em;
       top: 0.2em; }
+    .faber-blocks faber-block .faber-block-position {
+      font-size: 1em;
+      color: #cccccc;
+      margin-right: 0.5em; }
+      .faber-blocks faber-block .faber-block-position span {
+        color: #428bca;
+        display: inline-block;
+        position: relative; }
+      .faber-blocks faber-block .faber-block-position select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        -ms-border-radius: 0;
+        -o-border-radius: 0;
+        border-radius: 0;
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        border: none;
+        font: inherit;
+        font-size: 1em;
+        color: #428bca;
+        background: transparent;
+        cursor: pointer; }
     .faber-blocks faber-block button.faber-block-close {
       font-size: 1.2em;
       color: #428bca;
@@ -356,16 +439,14 @@ faber-components {
 html, body {
   display: block;
   padding: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%; }
+  margin: 0; }
 
 body {
+  font-face: Helvetica, Arial, sans-serif;
   font-size: 16px;
   color: #333333; }
 
 #faber {
   max-width: 1170px;
   width: 100%;
-  height: 100%;
   margin: auto; }
