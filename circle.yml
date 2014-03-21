@@ -6,7 +6,7 @@ machine:
 dependencies:
   override:
     - 'npm install gulp -g && npm install bower -g && npm install'
-    - 'gem install sass'
+    - 'gem install sass -v=3.2.14'
 test:
   override:
     - 'gulp bower'
