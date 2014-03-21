@@ -11,13 +11,13 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         if evt
           evt.stopPropagation()
 
-        $scope.component.selected($element) if $scope.component.selected
+        $scope.component.selected($element, @update) if $scope.component.selected
         $rootScope.$broadcast 'SelectBlock', $scope.$id
 
         @isSelected = true
 
       unselect: ()->
-        $scope.component.unselected($element) if $scope.component.unselected
+        $scope.component.unselected($element, @update) if $scope.component.unselected
         @isSelected = false
 
       update: (content)->
