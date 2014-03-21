@@ -11,3 +11,10 @@ test:
   override:
     - 'gulp install'
     - 'gulp specs'
+    - 'gulp dist'
+
+deployment:
+  artifact:
+    branch: master
+    commands:
+      - 'cp -R dist $CIRCLE_ARTIFACTS'
