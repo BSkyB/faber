@@ -12,7 +12,7 @@ class FaberComponent
     @template = opts.template or ''
     @topLevelOnly = opts.type is 'group' and (opts.topLevelOnly is true or opts.topLevelOnly is undefined)
 
-  init: ($element)->
+  init: ($element, update)->
 
   selected: ($element)->
 

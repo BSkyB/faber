@@ -20,12 +20,16 @@ class MediumEditorComponent
   type: 'element',
   template: '<div class="medium-editor"><br/></div>'
 
-  init: ($element)->
+  init: ($element, update)->
     opts =
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
 
-    new MediumEditorExtended $element[0].getElementsByClassName('medium-editor'), opts
+    editor = $element[0].getElementsByClassName('medium-editor')[0]
+    new MediumEditorExtended editor, opts
+
+    $element.on 'keyup', ()->
+      update editor.innerHTML
 
   selected: ($element)->
     $element[0].getElementsByClassName('medium-editor')[0].focus()

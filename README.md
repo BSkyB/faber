@@ -38,7 +38,7 @@ Faber has exposed the following services functions so they can be used outside o
 
 ### faber.import(JSON)
 
-```
+```javascript
 var json = '[
   {
     "content": "content data for the first component-a block",
@@ -94,6 +94,30 @@ default: `true`
 
 > List of components to be imported and managed by components service.
 
+``` javascript
+var FaberComponent = function() {
+  return {
+    id: '',
+    name: '',
+    type: 'group',
+    template: '<div></div>',
+    topLevelOnly: false,
+
+    init: function($element, update) {
+      // Initialise the component
+    },
+
+    selected: function($element) {
+      // Do something when the component block is selected
+    },
+
+    unselected: function($element) {
+      // Do something when the component block is unselected
+    },
+  }
+}
+```
+
 Components typically have the following parameters
 
 ##### type (mandatory)
@@ -123,6 +147,8 @@ default: `false`
 > Callback function to be called when the component is rendered on the block list
 
 `$element`: The rendered DOM element passed from ComponentRendererDirective
+
+`update`: To be called whenever the component wants to update and save the content changes
 
 ##### selected (optional)
 

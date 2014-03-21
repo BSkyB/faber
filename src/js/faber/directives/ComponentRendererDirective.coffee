@@ -20,6 +20,9 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         $scope.component.unselected($element) if $scope.component.unselected
         @isSelected = false
 
+      update: (content)->
+        $scope.block.content = content
+
     $scope.$watch 'component', ()->
       # retrieve the component's template and append it to the block
       if $scope.component and $scope.component.template
@@ -27,7 +30,7 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         $component = $compile(template)($scope)
         $element.find('div').append $component
 
-        $scope.component.init($element) if $scope.component.init
+        $scope.component.init($element, $scope.renderer.update) if $scope.component.init
         $scope.renderer.select()
 
     $scope.$on 'SelectBlock', (evt, id)->

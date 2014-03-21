@@ -43,3 +43,9 @@ describe 'Component Renderer Directive:', ->
       @scope.renderer.unselect()
 
       expect(@scope.component.unselected).toHaveBeenCalled()
+
+  describe 'when update is called with content data', ->
+    it 'shoud update the block\'s content data', ->
+      @scope.renderer.update('<p>Lorem ipsum</p>')
+
+      expect(@scope.block.content).toBe '<p>Lorem ipsum</p>'
