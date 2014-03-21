@@ -48,4 +48,5 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
 
   $scope.$on 'imported', (evt, blocks) ->
     $scope.block.blocks = validateImported blocks
+    $scope.$apply()
 

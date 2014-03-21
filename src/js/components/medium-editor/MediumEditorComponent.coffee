@@ -18,17 +18,19 @@ class MediumEditorComponent
   name: 'Medium Editor',
   id: 'medium-editor',
   type: 'element',
-  template: '<div class="medium-editor"><br/></div>'
+  template: '<div class="medium-editor" data-tust-html><br/></div>'
 
-  init: ($element, update)->
+  init: ($element, contentModel, update)->
     opts =
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
 
     editor = $element[0].getElementsByClassName('medium-editor')[0]
+    editor.innerHTML = contentModel
+
     new MediumEditorExtended editor, opts
 
-    $element.on 'keyup', ()->
+    editor.addEventListener 'keyup', ()->
       update editor.innerHTML
 
   selected: ($element)->
