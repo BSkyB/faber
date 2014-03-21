@@ -1,8 +1,14 @@
+machine:
+  ruby:
+    version: 1.9.3-p0-falcon
+  node:
+    version: 0.10.22
 dependencies:
   override:
-    - 'nvm use 0.10.22 && npm install gulp -g && npm install bower -g && npm install'
+    - 'npm install gulp -g && npm install bower -g && npm install'
+    - 'gem install sass'
 test:
   override:
-    - 'nvm use 0.10.22 && gulp bower'
-    - 'nvm use 0.10.22 && gulp templatecache'
-    - 'nvm use 0.10.22 && gulp specs'
+    - 'gulp bower'
+    - 'gulp templatecache'
+    - 'gulp specs'
