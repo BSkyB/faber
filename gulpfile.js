@@ -93,13 +93,21 @@ gulp.task('dist-build-css', ['build'], function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
+gulp.task('dist-copy-fontawesome', ['build'], function() {
+    return gulp.src([
+            './dev/js/lib/components-font-awesome/css/font-awesome.min.css',
+            './dev/js/lib/components-font-awesome/fonts/*'
+        ])
+        .pipe(gulp.dest(DIST_DIR));
+});
+
 gulp.task('dist-build-demo', ['build'], function() {
     return gulp.src('./src/dist.jade')
         .pipe(jade())
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo']);
+gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo', 'dist-copy-fontawesome']);
 
 gulp.task('dist-test', ['dist-build'], function() {
     return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))

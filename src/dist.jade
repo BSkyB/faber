@@ -3,9 +3,19 @@ html(lang="en")
   head
     title Faber
 
+    link(href="font-awesome.min.css", type="text/css", rel="stylesheet")
+    style.
+      @font-face {
+        font-family: 'FontAwesome';
+        src: url('fontawesome-webfont.eot?v=4.0.3');
+        src: url('fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('fontawesome-webfont.woff?v=4.0.3') format('woff'), url('fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+        font-weight: normal;
+        font-style: normal;
+      }
+
     link(href="faber.css", type="text/css", rel="stylesheet")
     script(src="faber.js")
-    
+
   body
     #faber(ng-app="faber")
       faber-editor
