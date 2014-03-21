@@ -1,4 +1,4 @@
-.faber-block-item(ng-class="{'faber-block-selected': renderer.isSelected, 'faber-block-moving': isMoving}")
+.faber-block-item(ng-class="{'faber-block-hover': isMouseHover, 'faber-block-selected': renderer.isSelected, 'faber-block-moving': isMoving}", ng-mouseover="mouseover()", ng-mouseenter="mouseenter()", ng-mouseleave="mouseleave()")
   .faber-block-actions
     label.faber-block-position(ng-click="positionSelect()")
       | Position:&nbsp;
