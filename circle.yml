@@ -6,8 +6,8 @@ machine:
 dependencies:
   override:
     - 'npm install gulp -g && npm install bower -g && npm install'
-    - 'gem install compass -v=0.12.2'
-    - 'gem install sass -v=3.2.17'
+    - 'gem install compass -v 0.12.2'
+    - 'gem install sass -v 3.2.17'
 test:
   override:
     - 'gulp install'
