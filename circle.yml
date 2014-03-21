@@ -1,6 +1,6 @@
 machine:
   ruby:
-    version: 1.9.3-p0-falcon
+    version: 2.1.0p0
   node:
     version: 0.10.22
 dependencies:
