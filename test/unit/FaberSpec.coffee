@@ -18,6 +18,7 @@ describe 'Faber Spec:', ->
       expect(importResult).toBe true
       expect(@contentService.getAll().length).toBe 4
       expect(@rootScope.$broadcast).toHaveBeenCalled()
+      expect(@rootScope.$broadcast.mostRecentCall.args[0]).toBe 'imported'
 
   describe 'to export to a JSON', ->
     it 'should have export function', ->
@@ -29,3 +30,5 @@ describe 'Faber Spec:', ->
       exported = faber.export()
 
       expect(exported).toBe sampleJson
+      expect(@rootScope.$broadcast).toHaveBeenCalled()
+      expect(@rootScope.$broadcast.mostRecentCall.args[0]).toBe 'exported'
