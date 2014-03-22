@@ -3,8 +3,10 @@ describe 'ContentService:', ()->
   beforeEach module 'faber'
 
   beforeEach ->
-    inject ($injector)->
+    inject ($injector, $cookieStore, faberConfig)->
       @contentService = $injector.get 'contentService'
+      @cookieStore = $cookieStore
+      @config = faberConfig
 
   describe 'when initialised', ->
     it 'should be defined', ->
@@ -30,3 +32,9 @@ describe 'ContentService:', ()->
     @contentService.clear()
 
     expect(@contentService.getAll().length).toBe 0
+
+  it 'should be able to save the data to cookie', ->
+    @contentService.import sampleJson
+    @contentService.save()
+
+    expect(@cookieStore.get "#{@config.prefix}.data").toBe sampleJson

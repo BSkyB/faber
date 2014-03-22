@@ -1,4 +1,4 @@
-faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService) ->
+faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
@@ -107,3 +107,12 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $log.warn 'cannot find a component of the given name': val
     else
       $scope.component = component or new FaberComponent()
+
+  # If block's content changes save it
+  $scope.$watch 'block.content', (val)->
+    contentService.save() if val
+
+  # If a child block is added or removed save the changes
+  $scope.$watch 'block.blocks', ()->
+    contentService.save()
+

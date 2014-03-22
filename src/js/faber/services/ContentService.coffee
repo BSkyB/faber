@@ -1,4 +1,4 @@
-faber.factory 'contentService', ($rootScope) ->
+faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
   # Initialise blocks collection
   blocks = []
 
@@ -34,3 +34,10 @@ faber.factory 'contentService', ($rootScope) ->
     json = angular.toJson blocks
     $rootScope.$broadcast 'exported', json
     return json
+
+  # Save the exported JSON to cookie using ngCookies
+  save: ()->
+    $cookieStore.put faberConfig.prefix + '.data', @export()
+
+  load: ()->
+    $cookieStore.get faberConfig.prefix + '.data'

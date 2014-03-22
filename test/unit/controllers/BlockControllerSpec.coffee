@@ -68,6 +68,35 @@ describe 'BlockController:', ->
     it 'should be expanded', ->
       expect(@scope.expanded).toBe true
 
+  describe 'when block data changes', ->
+    beforeEach ->
+      inject ($injector, $cookieStore, faberConfig)->
+        componentsService = $injector.get 'componentsService'
+        componentsService.init [
+          id: 'text'
+          type: 'element'
+        ]
+
+        @contentService = $injector.get 'contentService'
+        @cookieStore = $cookieStore
+        @config = faberConfig
+
+    it 'should save the changed data to cookie when content changes', ->
+      spyOn @contentService, 'save'
+      @scope.block.content = 'hello'
+      @scope.$digest()
+
+      expect(@contentService.save).toHaveBeenCalled()
+
+    it 'should save the changed children blocks to cookie when a child block is added', ->
+      spyOn @contentService, 'save'
+      @scope.add
+        content: 'hello'
+        component: 'text'
+      @scope.$digest()
+
+      expect(@contentService.save).toHaveBeenCalled()
+
   describe 'when a component is set for the block,', ->
     beforeEach ->
       inject ($injector)->

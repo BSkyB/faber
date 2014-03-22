@@ -1,9 +1,12 @@
-window.faber = angular.module('faber', ['ngAnimate'])
+window.faber = angular.module('faber', ['ngAnimate', 'ngCookies'])
 #  .config ($sceProvider)->
 #      $sceProvider.enabled(false)
   .constant('faberConfig', {
       # (boolean) Default expanded flag for child blocks
       expanded: true
+
+      # (string) Prefix to be used when save the content to cookie
+      prefix: 'faber'
 
       # (array) List of components to be imported and managed by components service
       #

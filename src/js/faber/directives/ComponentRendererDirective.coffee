@@ -1,4 +1,4 @@
-faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $compile, $sce)->
+faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $compile, contentService)->
   require: '^faberBlock'
   restrict: 'AE'
   template: '<div ng-click="renderer.select($event)"></div>'
