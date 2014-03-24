@@ -68,25 +68,6 @@ faber.import(json);
 > It will return JSON formatted blocks
 
 
-### faber.save()
-
-> Save the JSON formatted content to cookie using ngCookies
-
-
-### faber.load()
-
-> Load and import the saved JSON format data from cookie using ngCookies
-
-> It will return JSON formatted blocks
-
-
-### faber.removeSavedData()
-
-> Remove the saved JSON format data from cookie using ngCookies
-
-> It only removes the data related to the Faber instance using the prefix given
-
-
 ## Faber configuration
 
 The configuration can be done using `faberConfig` constant when faber is initialised.

@@ -17,29 +17,36 @@ describe 'ComponentsService:', ()->
           $log.reset()
           @log = $log
 
-        @invalid = {test: "test copy"}
+        @invalid =
+          ()->
+            test: "test copy"
         @invalidInputs =
-          inputs: 'invalid'
-          id: 'a-component'
-          type: 'element'
+          ()->
+            inputs: 'invalid'
+            id: 'a-component'
+            type: 'element'
         @invalidTemplate =
-          inputs:
-            title: 'block title'
-          id: null
-          type: 'group'
+          ()->
+            inputs:
+              title: 'block title'
+            id: null
+            type: 'group'
         @invalidType =
-          inputs:
-            title: 'block title'
-          id: 'a-component'
-          type: 'no idea what this is'
+          ()->
+            inputs:
+              title: 'block title'
+            id: 'a-component'
+            type: 'no idea what this is'
         @valid =
-          inputs:
-            title: 'block title'
-          id: 'a-component'
-          type: 'group'
+          ()->
+            inputs:
+              title: 'block title'
+            id: 'a-component'
+            type: 'group'
         @validNoInputs =
-          id: 'a-component'
-          type: 'element'
+          ()->
+            id: 'a-component'
+            type: 'element'
 
         @componentsService.init [@invalid, @invalidInputs, @invalidTemplate, @invalidType, @valid, @validNoInputs]
 
@@ -60,25 +67,30 @@ describe 'ComponentsService:', ()->
         components = @componentsService.getAll()
 
         expect(components.length).toBe 2
-        expect(components).toContain @valid
-        expect(components).toContain @validNoInputs
+        expect(components).toContain new @valid()
+        expect(components).toContain new @validNoInputs()
 
     it 'should be able to find components of given type', ->
       @componentsService.init [
-        id: 'a-component'
-        type: 'element'
+        ()->
+          id: 'a-component'
+          type: 'element'
       ,
-        id: 'b-component'
-        type: 'element'
+        ()->
+          id: 'b-component'
+          type: 'element'
       ,
-        id: 'c-component'
-        type: 'element'
+        ()->
+          id: 'c-component'
+          type: 'element'
       ,
-        id: 'd-component'
-        type: 'group'
+        ()->
+          id: 'd-component'
+          type: 'group'
       ,
-        id: 'e-component'
-        type: 'group'
+        ()->
+          id: 'e-component'
+          type: 'group'
       ]
 
       elements = @componentsService.findByType 'element'
@@ -90,13 +102,14 @@ describe 'ComponentsService:', ()->
     describe 'when finding a component using id,', ->
       beforeEach ->
         @input =
-          id: 'component1'
-          type: 'element'
+          ()->
+            id: 'component1'
+            type: 'element'
         @componentsService.init [ @input ]
 
       it 'should be able to find component of given id', ->
         component = @componentsService.findById 'component1'
-        expect(component).toBe @input
+        expect(component).toEqual new @input()
 
       it 'should return null if it cannot find', ->
         component = @componentsService.findById 'test component'
@@ -106,22 +119,27 @@ describe 'ComponentsService:', ()->
     describe 'when finding components with top level only setting,', ->
       beforeEach ->
         @componentsService.init [
-          id: 'a-component'
-          type: 'element'
-          topLevelOnly: true
+          ()->
+            id: 'a-component'
+            type: 'element'
+            topLevelOnly: true
         ,
-          id: 'b-component'
-          type: 'element'
+          ()->
+            id: 'b-component'
+            type: 'element'
         ,
-          id: 'c-component'
-          type: 'element'
+          ()->
+            id: 'c-component'
+            type: 'element'
         ,
-          id: 'd-component'
-          type: 'group'
-          topLevelOnly: true
+          ()->
+            id: 'd-component'
+            type: 'group'
+            topLevelOnly: true
         ,
-          id: 'e-component'
-          type: 'group'
+          ()->
+            id: 'e-component'
+            type: 'group'
         ]
 
       it 'should be able to find all top level only components', ->

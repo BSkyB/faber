@@ -32,11 +32,13 @@ describe 'Block Directive:', ()->
   describe 'when initialised,', ->
     beforeEach ->
       componentsService.init [
-        id: 'a-component'
-        type: 'element'
+        ()->
+          id: 'a-component'
+          type: 'element'
       ,
-        id: 'group-component'
-        type: 'group'
+        ()->
+          id: 'group-component'
+          type: 'group'
       ]
 
       @element = createDirective()

@@ -9,7 +9,8 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
   # a flag to tell this is the top level block so it can have top level only components available
   $scope.isTopLevel = true
 
-  $scope.block.blocks = contentService.getAll()
+  $scope.block.blocks = []
+  contentService.init $scope.block
 
   # inherit from faberConfig if it is set when faber is initialised otherwise true by default
   $rootScope.expanded = if angular.isDefined faberConfig.expanded then faberConfig.expanded else true
@@ -47,6 +48,11 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
     return validated
 
   $scope.$on 'imported', (evt, blocks) ->
-    $scope.block.blocks = validateImported blocks
-    $scope.$apply()
+#    $scope.block.blocks = validateImported blocks
+#    console.log $scope.block.blocks
+    $scope.$apply ()->
+#      $scope.block.blocks = blocks
+      $scope.block.blocks = validateImported blocks
 
+  # retrieve available component list for the current block
+  $scope.components = componentsService.getAll()

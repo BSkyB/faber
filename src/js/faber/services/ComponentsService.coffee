@@ -1,6 +1,6 @@
 faber.factory 'componentsService', ($filter, $log) ->
   # Initalise components collection.
-  components = []
+  raws = []
 
   # Validates the component is valid.
   #
@@ -8,17 +8,18 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Boolean] true when the component is valid.
   #
   validate = (component) ->
-    (angular.isObject(component.inputs) or !component.inputs) and angular.isString(component.id) and (component.type is 'element' or component.type is 'group')
+    comp = new component()
+    (angular.isObject(comp.inputs) or !comp.inputs) and angular.isString(comp.id) and (comp.type is 'element' or comp.type is 'group')
 
   # Initalizes the component service.
   #
   # @param [Array] list of components the faber will support.
   #
   init: (list) ->
-    components = []
+    raws = []
     for comp in list
       if validate comp
-        components.push comp
+        raws.push comp
       else
         $log.warn 'invalid': comp
 
@@ -27,7 +28,11 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Array<FaberComponent>] all of the available components.
   #
   getAll: ->
-    components
+    res = []
+    for comp in raws
+      res.push(new comp())
+
+    return res
 
   # Find components by their type.
   #
@@ -35,14 +40,14 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Array<FaberComponent>] the filtered components.
   #
   findByType: (type) ->
-    $filter('filter') components, type: type, true
+    $filter('filter') @getAll(), type: type, true
 
   # Find top level only components.
   #
   # @return [Array<FaberComponent>] the top level components.
   #
   findTopLevelOnly: ->
-    $filter('filter') components, topLevelOnly: true, true
+    $filter('filter') @getAll(), topLevelOnly: true, true
 
   # Find non-top-level-only components.
   #
@@ -50,7 +55,7 @@ faber.factory 'componentsService', ($filter, $log) ->
   #
   findNonTopLevelOnly: ->
     result = []
-    for comp in components
+    for comp in @getAll()
       result.push(comp) unless comp.topLevelOnly
     return result
 
@@ -60,6 +65,7 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Array<FaberComponent>] the matching components.
   #
   findById: (id) ->
-    res = $filter('filter') components, id: id, true
+    all = @getAll()
+    res = $filter('filter') all, id: id, true
 
     return if res.length > 0 then res[0] else null

@@ -4,14 +4,14 @@ describe 'Component Renderer Directive:', ->
   beforeEach ->
     inject ($templateCache, $compile, $rootScope, $injector)->
       componentsService = $injector.get 'componentsService'
-      @comp =
+      comp = ()->
         id: 'sample-component'
         type: 'element'
         template: '<p>Sample Component</p>'
         init: ()->
         selected: ()->
         unselected: ()->
-      componentsService.init [@comp]
+      componentsService.init [comp]
 
       scope = $rootScope.$new()
       scope.passedDownBlock = { component: 'sample-component' }
@@ -20,6 +20,8 @@ describe 'Component Renderer Directive:', ->
       blockScope = blockElement.isolateScope()
       @element = $compile(angular.element(blockElement.find('faber-component-renderer')))(blockScope)
       @scope = @element.scope()
+
+      @comp = @scope.component
 
       spyOn @comp, 'init'
       spyOn @comp, 'selected'

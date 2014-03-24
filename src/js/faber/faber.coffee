@@ -8,12 +8,13 @@ window.faber = angular.module('faber', ['ngAnimate', 'ngCookies'])
 
       # (array) List of components to be imported and managed by components service
       components: [
-          new MediumEditorComponent()
+#          new MediumEditorComponent()
+          MediumEditorComponent
       ]
     })
   .run (contentService)->
     faber.import = contentService.import
     faber.export = contentService.export
-    faber.save = contentService.save
+
+    # Added only to make test easier
     faber.load = contentService.load
-    faber.removeSavedData = contentService.removeSavedData

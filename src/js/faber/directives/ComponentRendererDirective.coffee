@@ -21,7 +21,8 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         @isSelected = false
 
       update: (content)->
-        $scope.block.content = content
+        if content
+          $scope.block.content = content
 
     $scope.$watch 'component', ()->
       # retrieve the component's template and append it to the block

@@ -1,18 +1,22 @@
 faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
   # Initialise blocks collection
-  blocks = []
+  content =
+    blocks: []
+
+  init: (initial)->
+    content = initial
 
   # Clear out the existing blocks
   #
   # @return [Array] cleared and empty blocks
   clear: () ->
-    blocks = []
+    content.blocks = []
 
   # Retrieve all the blocks
   #
   # @return [Array] all the blocks saved in the collection
   getAll: () ->
-    blocks
+    content.blocks
 
   # Import and create blocks collection from the json and broadcast 'imported' event with the imported blocks
   #
@@ -21,8 +25,8 @@ faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
     imported = angular.fromJson json
 
     if angular.isArray imported
-      blocks = imported
-      $rootScope.$broadcast 'imported', blocks
+      content.blocks = imported
+      $rootScope.$broadcast 'imported', content.blocks
       return true
     else
       return false
@@ -31,17 +35,17 @@ faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
   #
   # @return [string] JSON format of the exported blocks
   export: () ->
-    json = angular.toJson blocks
+    json = angular.toJson content.blocks
     $rootScope.$broadcast 'exported', json
     return json
 
   # Save the JSON formatted content to cookie using ngCookies
   save: ()->
-    $cookieStore.put (faberConfig.prefix or 'faber') + '.data', @export()
+    $cookieStore.put (faberConfig.prefix or 'faber') + '.data', content.blocks
 
   # Load and import the saved JSON format data from cookie using ngCookies
   load: ()->
-    json = $cookieStore.get (faberConfig.prefix or 'faber') + '.data'
+    json = angular.toJson($cookieStore.get (faberConfig.prefix or 'faber') + '.data')
     @import(json)
     return json
 

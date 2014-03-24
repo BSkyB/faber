@@ -7,14 +7,16 @@ describe 'Components Directive:', ->
 
       scope = $rootScope.$new()
       faberConfig.components = [
-        inputs:
-          title: 'component title'
-        id: 'a-component'
-        type: 'element'
+        ()->
+          inputs:
+            title: 'component title'
+          id: 'a-component'
+          type: 'element'
       ,
-        id: 'top-level-only-component'
-        type: 'element'
-        topLevelOnly: true
+        ()->
+          id: 'top-level-only-component'
+          type: 'element'
+          topLevelOnly: true
       ]
 
       editorElement = $compile('<faber-editor><faber-components></faber-components></faber-editor>')(scope)
