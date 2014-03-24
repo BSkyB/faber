@@ -33,7 +33,7 @@ This will run [Karma](http://karma-runner.github.io/) [Jasmine](http://jasmine.g
 
 ## Faber Services
 
-Faber has exposed the following services functions so they can be used outside of the module.
+Faber has exposed the following services so they can be used outside of the module.
 
 
 ### faber.import(JSON)
@@ -56,16 +56,35 @@ var json = '[
 faber.import(json);
 ```
 
-Exposed import function of ContenService.
+> Exposed `import` function of ContenService.
 
-It takes a JSON format string as an argument and populate the blocks after validating it.
+> It takes a JSON format string as an argument and populate the blocks after validating it.
 
 
 ### faber.export()
 
-Exposed export function of ContentService.
+> Exposed `export` function of ContentService.
 
-It will return JSON formatted blocks
+> It will return JSON formatted blocks
+
+
+### faber.save()
+
+> Save the JSON formatted content to cookie using ngCookies
+
+
+### faber.load()
+
+> Load and import the saved JSON format data from cookie using ngCookies
+
+> It will return JSON formatted blocks
+
+
+### faber.removeSavedData()
+
+> Remove the saved JSON format data from cookie using ngCookies
+
+> It only removes the data related to the Faber instance using the prefix given
 
 
 ## Faber configuration
@@ -75,6 +94,7 @@ The configuration can be done using `faberConfig` constant when faber is initial
 ```javascript
 window.faber = angular.module('faber', []).constant('faberConfig', {
   expanded: true,
+  prefix: 'faber',
   components: [
     new FaberComponent(),
     new MediumEditorComponent()
@@ -87,6 +107,14 @@ window.faber = angular.module('faber', []).constant('faberConfig', {
 > Default 'expanded' flag for child blocks.
 
 default: `true`
+
+---
+
+### prefix
+
+> Prefix to be used when save the content to cookie
+
+Default: 'faber'
 
 ---
 
@@ -120,7 +148,9 @@ var FaberComponent = function() {
 
 Components typically have the following parameters
 
-##### type (mandatory)
+##### type
+
+> Mandatory
 
 > Either `element` or `group`.
 
@@ -128,21 +158,29 @@ Components typically have the following parameters
 
 `group` type can have children
 
-##### template (mandatory)
+##### template
+
+> Mandatory
 
 > The component's template as a string.
 
-##### name (optional)
+##### name
+
+> Optional
 
 > The name to be displayed for the component. Used as the identifier by components service.
 
-##### topLevelOnly (optional)
+##### topLevelOnly
+
+> Optional
 
 > Specifies if the component block can only be used on the top level block and can not be a child of other block.
 
-default: `false`
+Default: `false`
 
-##### init (optional)
+##### init($element, initialContent)
+
+> Optional
 
 > Callback function to be called when the component is rendered on the block list
 
@@ -154,7 +192,9 @@ For example, MediumEditorComponent sends a string of html format.
 
 `update`: To be called whenever the component wants to update and save the content changes
 
-##### selected (optional)
+##### selected ($element, update)
+
+> Optional
 
 > Callback function to be called when the rendered component block is selected
 
@@ -162,7 +202,9 @@ For example, MediumEditorComponent sends a string of html format.
 
 `update`: To be called whenever the component wants to update and save the content changes
 
-##### unselected (optional)
+##### unselected ($element, update)
+
+> Optional
 
 > Callback function to be called when the rendered component block is unselected
 

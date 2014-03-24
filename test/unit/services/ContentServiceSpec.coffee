@@ -33,8 +33,41 @@ describe 'ContentService:', ()->
 
     expect(@contentService.getAll().length).toBe 0
 
-  it 'should be able to save the data to cookie', ->
+  describe 'when save content,', ->
+    it 'should use \'faber\' as prefix if the prefix is not defined on the config', ->
+      @contentService.import sampleJson
+      @contentService.save()
+
+      expect(@cookieStore.get 'faber.data').toBe sampleJson
+
+    it 'should be able to save the data to cookie', ->
+      @config.prefix = 'prefix-test'
+      @contentService.import sampleJson
+      @contentService.save()
+
+      expect(@cookieStore.get 'faber.data').toBeUndefined()
+      expect(@cookieStore.get 'prefix-test.data').toBe sampleJson
+
+  describe 'when load content,', ->
+    beforeEach ->
+      @contentService.import sampleJson
+      @contentService.save()
+
+    it 'should be able to load the saved content', ->
+      expect(@contentService.load 'faber.data').toBe sampleJson
+
+    it 'should import the loaded content to the content service', ->
+      spyOn @contentService, 'import'
+      json = @contentService.load 'faber.data'
+
+      expect(@contentService.import).toHaveBeenCalledWith json
+
+  it 'should be able to remove the saved content', ->
     @contentService.import sampleJson
     @contentService.save()
 
-    expect(@cookieStore.get "#{@config.prefix}.data").toBe sampleJson
+    expect(@contentService.load 'faber.data').toBe sampleJson
+
+    @contentService.removeSavedData()
+
+    expect(@contentService.load 'faber.data').toBeUndefined

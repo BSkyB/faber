@@ -35,9 +35,17 @@ faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
     $rootScope.$broadcast 'exported', json
     return json
 
-  # Save the exported JSON to cookie using ngCookies
+  # Save the JSON formatted content to cookie using ngCookies
   save: ()->
-    $cookieStore.put faberConfig.prefix + '.data', @export()
+    $cookieStore.put (faberConfig.prefix or 'faber') + '.data', @export()
 
+  # Load and import the saved JSON format data from cookie using ngCookies
   load: ()->
-    $cookieStore.get faberConfig.prefix + '.data'
+    json = $cookieStore.get (faberConfig.prefix or 'faber') + '.data'
+    @import(json)
+    return json
+
+  # Remove the saved JSON format data from cookie using ngCookies
+  # It only removes the data related to the Faber instance using the prefix given
+  removeSavedData: ()->
+    $cookieStore.remove (faberConfig.prefix or 'faber') + '.data'
