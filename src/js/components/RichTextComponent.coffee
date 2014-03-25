@@ -15,10 +15,10 @@ class MediumEditorExtended extends MediumEditor
     super(btnType) or buttonTemplates[btnType]
 
 class MediumEditorComponent
-  name: 'Medium Editor',
-  id: 'medium-editor',
+  name: 'Rich Text',
+  id: 'rich-text',
   type: 'element',
-  template: '<div class="medium-editor" data-tust-html><br/></div>'
+  template: '<div class="rich-text" data-tust-html><br/></div>'
 
   editor: null
 
@@ -27,7 +27,7 @@ class MediumEditorComponent
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
 
-    @editor = $element[0].getElementsByClassName('medium-editor')[0]
+    @editor = $element[0].getElementsByClassName('rich-text')[0]
     @editor.innerHTML = initialContent or ''
 
     new MediumEditorExtended @editor, opts
@@ -36,7 +36,7 @@ class MediumEditorComponent
       update @editor.innerHTML
 
   selected: ($element, update)->
-    $element[0].getElementsByClassName('medium-editor')[0].focus()
+    $element[0].getElementsByClassName('rich-text')[0].focus()
 
   unselected: ($element, update)->
     update @editor.innerHTML

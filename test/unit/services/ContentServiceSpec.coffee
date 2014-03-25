@@ -88,4 +88,4 @@ describe 'ContentService:', ()->
 
     @contentService.removeSavedData()
 
-    expect(@contentService.load 'faber.data').toBeUndefined
+    expect(@contentService.load 'faber.data').toEqual []

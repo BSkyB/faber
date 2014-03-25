@@ -56,4 +56,4 @@ faber.factory 'contentService', ($rootScope, faberConfig) ->
   # Remove the saved JSON format data from local storage
   # It only removes the data related to the Faber instance using the prefix given
   removeSavedData: ()->
-    localStorage.removeItem "#{(faberConfig.prefix or 'faber')}.data'"
+    localStorage.removeItem "#{(faberConfig.prefix or 'faber')}.data"
