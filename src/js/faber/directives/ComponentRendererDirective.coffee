@@ -1,4 +1,4 @@
-faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $compile, $sce)->
+faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $compile, contentService)->
   require: '^faberBlock'
   restrict: 'AE'
   template: '<div ng-click="renderer.select($event)"></div>'
@@ -11,14 +11,18 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         if evt
           evt.stopPropagation()
 
-        $scope.component.selected($element) if $scope.component.selected
+        $scope.component.selected($element, @update) if $scope.component.selected
         $rootScope.$broadcast 'SelectBlock', $scope.$id
 
         @isSelected = true
 
       unselect: ()->
-        $scope.component.unselected($element) if $scope.component.unselected
+        $scope.component.unselected($element, @update) if $scope.component.unselected
         @isSelected = false
+
+      update: (content)->
+        if content
+          $scope.block.content = content
 
     $scope.$watch 'component', ()->
       # retrieve the component's template and append it to the block
@@ -27,9 +31,10 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         $component = $compile(template)($scope)
         $element.find('div').append $component
 
-        $scope.component.init($element) if $scope.component.init
+        $scope.component.init($element, $scope.block.content, $scope.renderer.update) if $scope.component.init
         $scope.renderer.select()
 
     $scope.$on 'SelectBlock', (evt, id)->
       unless id is $scope.$id
         $scope.renderer.unselect()
+

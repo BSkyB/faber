@@ -14,16 +14,18 @@ describe 'EditorController:', ->
 
       @componentsService = $injector.get 'componentsService'
       @componentsService.init [
-        inputs:
-          title: 'component title'
-        id: 'a-component'
-        name: 'Base component'
-        type: 'element'
+        ()->
+          inputs:
+            title: 'component title'
+          id: 'a-component'
+          name: 'Base component'
+          type: 'element'
       ,
-        id: 'top-level-only-component'
-        name: 'Base component'
-        type: 'element'
-        topLevelOnly: true
+        ()->
+          id: 'top-level-only-component'
+          name: 'Base component'
+          type: 'element'
+          topLevelOnly: true
       ]
 
       @log = $log
@@ -64,7 +66,11 @@ describe 'EditorController:', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
-          @elementComp = new FaberComponent({ id: 'base-component', name: 'Base component', type: 'element', template: ''})
+          @elementComp = ()->
+            id: 'base-component'
+            name: 'Base component'
+            type: 'element'
+            template: ''
           @config.components = [ @elementComp ]
 
       beforeEach ->
@@ -80,13 +86,16 @@ describe 'EditorController:', ->
         allComponents = @componentsService.getAll()
 
         expect(allComponents.length).toBe 1
-        expect(allComponents[0]).toBe @elementComp
+        expect(allComponents[0]).toEqual new @elementComp()
 
     describe 'if given an group component,', ->
       beforeEach ->
         inject (faberConfig)->
           @config = faberConfig
-          @groupComp = new FaberComponent({ id: 'base-component', name: 'Base component', type: 'group'})
+          @groupComp = ()->
+            id: 'base-component'
+            name: 'Base component'
+            type: 'group'
           @config.components = [ @groupComp ]
 
       beforeEach ->
@@ -102,20 +111,23 @@ describe 'EditorController:', ->
         allComponents = @componentsService.getAll()
 
         expect(allComponents.length).toBe 1
-        expect(allComponents[0]).toBe @groupComp
+        expect(allComponents[0]).toEqual new @groupComp()
 
-  describe 'if the content is imported,', ->
+  describe 'if content is imported,', ->
     describe 'if all the block\'s have valid components,', ->
       it 'should add the blocks to the block list', ->
         @componentsService.init [
-          id: 'text'
-          type: 'element'
+          ()->
+            id: 'text'
+            type: 'element'
         ,
-          id: 'image'
-          type: 'element'
+          ()->
+            id: 'image'
+            type: 'element'
         ,
-          id: 'tabs'
-          type: 'group'
+          ()->
+            id: 'tabs'
+            type: 'group'
         ]
         @contentService.import sampleJson
 
@@ -126,11 +138,13 @@ describe 'EditorController:', ->
     describe 'if a block\'s component is not valid,', ->
       it 'should not add the block', ->
         @componentsService.init [
-          id: 'text'
-          type: 'element'
+          ()->
+            id: 'text'
+            type: 'element'
         ,
-          id: 'tabs'
-          type: 'group'
+          ()->
+            id: 'tabs'
+            type: 'group'
         ]
         @contentService.import '[
           {

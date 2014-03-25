@@ -1,4 +1,4 @@
-faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService) ->
+faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
   $scope.block.blocks or= []
   $scope.component or= new FaberComponent()
@@ -29,18 +29,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $scope.move $scope.block.blocks.indexOf(block), to
 
   # retrieve available component list for the current block
-  $scope.components = ()->
-    ret = []
-
-    if $scope.isTopLevel
-      # if the block is top level block (editor level) it can use all the components
-      ret = componentsService.getAll()
-    else
-      # if it is not a top lebel block and 'element' component block, it can not have any component block as a child
-      # but if it is a 'group' block, it can have non top level only component block as a child
-      ret = if $scope.component.type is 'element' then [] else componentsService.findNonTopLevelOnly()
-
-    return ret
+  $scope.components = if $scope.component.type is 'element' then [] else componentsService.findNonTopLevelOnly()
 
   # Check if the component of the block is valid component and the block has all necessary information
   $scope.validateBlock = (block)->
@@ -69,6 +58,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
+#      contentService.save()
       return true
     else
       $log.warn 'cannot find a component of the given name': block.component
@@ -76,8 +66,9 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   # Remove a child block
   $scope.remove = (block)->
-    if confirm 'Are you sure you want to permanently remove this block?\n\nYou can’t undo this action.'
+    if confirm 'Are you sure you want to permanently remove this block?\n\nYou can\'t undo this action.'
       $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
+      contentService.save()
 
   # Insert a child block to the given index
   $scope.insert = (index, block)->
@@ -90,6 +81,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if from >= 0 and from < max and to >= 0 and to < max
       $scope.block.blocks.splice to, 0, $scope.block.blocks.splice(from, 1)[0]
       $scope.$broadcast 'BlockMoved'
+      contentService.save()
 
   # Emit RemoveChildBlock event with itself so its parent block can remove it
   $scope.removeSelf = ()->
@@ -107,3 +99,13 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $log.warn 'cannot find a component of the given name': val
     else
       $scope.component = component or new FaberComponent()
+      contentService.save()
+
+  # If block's content changes save it
+  $scope.$watch 'block.content', ()->
+    contentService.save()
+
+  # If a child block is added or removed save the changes
+  $scope.$watch 'block.blocks', ()->
+    contentService.save()
+
