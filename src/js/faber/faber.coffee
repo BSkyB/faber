@@ -1,4 +1,4 @@
-window.faber = angular.module('faber', ['ngAnimate', 'ngCookies'])
+window.faber = angular.module('faber', ['ngAnimate'])
   .constant('faberConfig', {
       # (boolean) Default expanded flag for child blocks
       expanded: true
@@ -8,7 +8,6 @@ window.faber = angular.module('faber', ['ngAnimate', 'ngCookies'])
 
       # (array) List of components to be imported and managed by components service
       components: [
-#          new MediumEditorComponent()
           MediumEditorComponent
       ]
     })
@@ -16,5 +15,5 @@ window.faber = angular.module('faber', ['ngAnimate', 'ngCookies'])
     faber.import = contentService.import
     faber.export = contentService.export
 
-    # Added only to make test easier
     faber.load = contentService.load
+    faber.removeSavedData = contentService.removeSavedData

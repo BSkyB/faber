@@ -3,10 +3,12 @@ describe 'ContentService:', ()->
   beforeEach module 'faber'
 
   beforeEach ->
-    inject ($injector, $cookieStore, faberConfig)->
+    inject ($injector, faberConfig)->
       @contentService = $injector.get 'contentService'
-      @cookieStore = $cookieStore
       @config = faberConfig
+
+  afterEach ->
+    localStorage.clear()
 
   describe 'when initialised', ->
     it 'should be defined', ->
@@ -44,39 +46,39 @@ describe 'ContentService:', ()->
       @contentService.save()
 
       sample = angular.fromJson sampleJson
-      saved = angular.fromJson @cookieStore.get('faber.data')
+      saved = angular.fromJson localStorage.getItem('faber.data')
 
-      expect(saved.length).toBe sample.length
-      expect(angular.toJson(saved)).toBe angular.toJson(sample)
+      expect(localStorage.getItem('faber.data')).toBe sampleJson
 
-    it 'should be able to save the data to cookie', ->
+    it 'should be able to save the data to local storage', ->
       @config.prefix = 'prefix-test'
       @contentService.import sampleJson
       @contentService.save()
 
       sample = angular.fromJson sampleJson
-      saved = angular.fromJson @cookieStore.get('prefix-test.data')
+      saved = angular.fromJson localStorage.getItem('prefix-test.data')
 
-      expect(@cookieStore.get 'faber.data').toBeUndefined()
+      expect(localStorage.getItem 'faber.data').toBe null
       expect(saved.length).toBe sample.length
-      expect(angular.toJson(saved)).toBe angular.toJson(sample)
+      expect(localStorage.getItem('prefix-test.data')).toBe sampleJson
 
   describe 'when load content,', ->
     beforeEach ->
+      @config.prefix = 'faber'
       @contentService.import sampleJson
       @contentService.save()
 
-      @sample = angular.fromJson sampleJson
-      @saved = angular.fromJson @cookieStore.get('prefix-test.data')
+    afterEach ->
+      localStorage.clear()
 
     it 'should be able to load the saved content', ->
-      expect(angular.toJson(@saved)).toBe angular.toJson(@sample)
+      expect(localStorage['faber.data']).toBe sampleJson
 
     it 'should import the loaded content to the content service', ->
       spyOn @contentService, 'import'
       json = @contentService.load 'faber.data'
 
-      expect(@contentService.import).toHaveBeenCalledWith angular.toJson(@saved)
+      expect(@contentService.import).toHaveBeenCalledWith json
 
   it 'should be able to remove the saved content', ->
     @contentService.import sampleJson

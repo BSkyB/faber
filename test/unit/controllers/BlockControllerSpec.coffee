@@ -76,11 +76,10 @@ describe 'BlockController:', ->
 
   describe 'when block data changes', ->
     contentService = null
-    cookieStore = null
     config = null
 
     beforeEach ->
-      inject ($injector, $cookieStore, faberConfig)->
+      inject ($injector, faberConfig)->
         componentsService = $injector.get 'componentsService'
         componentsService.init [
           ()->
@@ -89,17 +88,16 @@ describe 'BlockController:', ->
         ]
 
         contentService = $injector.get 'contentService'
-        cookieStore = $cookieStore
         config = faberConfig
 
-    it 'should save the changed data to cookie when content changes', ->
+    it 'should save the changed data to local storage when content changes', ->
       spyOn contentService, 'save'
       scope.block.content = 'hello'
       scope.$digest()
 
       expect(contentService.save).toHaveBeenCalled()
 
-    it 'should save the changed children blocks to cookie when a child block is added', ->
+    it 'should save the changed children blocks to local storage when a child block is added', ->
       spyOn contentService, 'save'
       scope.add
         content: 'hello'

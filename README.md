@@ -73,7 +73,7 @@ faber.import(json);
 The configuration can be done using `faberConfig` constant when faber is initialised.
 
 ```javascript
-window.faber = angular.module('faber', ['ngAnimate', 'ngCookies']).constant('faberConfig', {
+window.faber = angular.module('faber', ['ngAnimate']).constant('faberConfig', {
   expanded: true,
   prefix: 'faber',
   components: [
@@ -93,7 +93,7 @@ default: `true`
 
 ### prefix
 
-> Prefix to be used when save the content to cookie
+> Prefix to be used when save the content to local storage
 
 Default: 'faber'
 

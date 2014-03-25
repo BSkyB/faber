@@ -1,4 +1,4 @@
-faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
+faber.factory 'contentService', ($rootScope, faberConfig) ->
   # Initialise blocks collection
   content =
     blocks: []
@@ -39,17 +39,21 @@ faber.factory 'contentService', ($rootScope, $cookieStore, faberConfig) ->
     $rootScope.$broadcast 'exported', json
     return json
 
-  # Save the JSON formatted content to cookie using ngCookies
+  # Save the JSON formatted content to local storage
   save: ()->
-    $cookieStore.put (faberConfig.prefix or 'faber') + '.data', content.blocks
+    if angular.isDefined Storage
+      localStorage.setItem "#{(faberConfig.prefix or 'faber')}.data", angular.toJson content.blocks
 
-  # Load and import the saved JSON format data from cookie using ngCookies
+  # Load and import the saved JSON format data from local storage
   load: ()->
-    json = angular.toJson($cookieStore.get (faberConfig.prefix or 'faber') + '.data')
-    @import(json)
-    return json
+    if angular.isDefined Storage
+      json = localStorage.getItem("#{(faberConfig.prefix or 'faber')}.data") or []
+      @import(json)
+      return json
+    else
+      return []
 
-  # Remove the saved JSON format data from cookie using ngCookies
+  # Remove the saved JSON format data from local storage
   # It only removes the data related to the Faber instance using the prefix given
   removeSavedData: ()->
-    $cookieStore.remove (faberConfig.prefix or 'faber') + '.data'
+    localStorage.removeItem "#{(faberConfig.prefix or 'faber')}.data'"

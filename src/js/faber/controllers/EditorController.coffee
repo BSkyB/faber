@@ -48,10 +48,7 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
     return validated
 
   $scope.$on 'imported', (evt, blocks) ->
-#    $scope.block.blocks = validateImported blocks
-#    console.log $scope.block.blocks
     $scope.$apply ()->
-#      $scope.block.blocks = blocks
       $scope.block.blocks = validateImported blocks
 
   # retrieve available component list for the current block

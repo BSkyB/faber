@@ -20,7 +20,6 @@ var DIST_DIR = './dist';
 var SRC_FILES = [
     DEV_DIR + '/js/lib/angular/angular.js',
     DEV_DIR + '/js/lib/angular-animate/angular-animate.js',
-    DEV_DIR + '/js/lib/angular-cookies/angular-cookies.js',
     DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
     DEV_DIR + '/js/faber/classes/FaberComponent.js',
     DEV_DIR + '/js/faber/faber.js',
