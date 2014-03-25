@@ -1,4 +1,4 @@
-describe 'Editor Directive:', ()->
+describe 'EditorDirective:', ()->
   config = null
   componentsService = null
   contentService = null
@@ -30,6 +30,24 @@ describe 'Editor Directive:', ()->
           id: 'top-level-only-component'
           type: 'element'
           topLevelOnly: true
+      ,
+        ()->
+          name: 'Group Component 1'
+          id: 'group-component-1'
+          type: 'group'
+          template: '<ul></ul>'
+      ,
+        ()->
+          name: 'Group Component 2'
+          id: 'group-component-2'
+          type: 'group'
+          template: '<ol></ol>'
+      ,
+        ()->
+          name: 'Group Component 3'
+          id: 'group-component-3'
+          type: 'group'
+          template: '<dl></dl>'
       ]
 
       componentsService = $injector.get 'componentsService'
@@ -116,3 +134,20 @@ describe 'Editor Directive:', ()->
       expect(block1Element.find('select').val()).toBe '1'
       expect(block2Element.find('select').val()).toBe '2'
       expect(block3Element.find('select').val()).toBe '0'
+
+  describe 'when it has group child blocks,', ->
+    groupBlock1 = component: 'group-component-1'
+    groupBlock2 = component: 'group-component-2'
+    groupBlock3 = component: 'group-component-3'
+    elementBlock1 = component: 'a-component'
+    elementBlock2 = component: 'b-component'
+
+    beforeEach ->
+      scope.block.blocks = [elementBlock1, groupBlock1, groupBlock2, groupBlock3, elementBlock2]
+      scope.$digest()
+
+    it 'should have correct number of children and their components', ->
+      expect(scope.block.blocks.length).toBe 5
+      expect(element.find('faber-block').length).toBe 5
+      expect(element.find('faber-group-block').length).toBe 3
+      expect(element.find('faber-component-renderer').length).toBe 2

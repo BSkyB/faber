@@ -29,7 +29,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $scope.move $scope.block.blocks.indexOf(block), to
 
   # retrieve available component list for the current block
-  $scope.components = if $scope.component.type is 'element' then [] else componentsService.findNonTopLevelOnly()
+  $scope.components = componentsService.getAll()
 
   # Check if the component of the block is valid component and the block has all necessary information
   $scope.validateBlock = (block)->

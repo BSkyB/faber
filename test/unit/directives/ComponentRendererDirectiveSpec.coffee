@@ -1,31 +1,39 @@
 describe 'Component Renderer Directive:', ->
+
+  callbacks =
+    initCallback: ()->
+    selectedCallback: ()->
+    unselectedCallback: ()->
+
   beforeEach module 'faber'
 
   beforeEach ->
+
     inject ($templateCache, $compile, $rootScope, $injector)->
+
+      spyOn callbacks, 'initCallback'
+      spyOn callbacks, 'selectedCallback'
+      spyOn callbacks, 'unselectedCallback'
+
       componentsService = $injector.get 'componentsService'
       comp = ()->
         id: 'sample-component'
         type: 'element'
         template: '<p>Sample Component</p>'
         init: ()->
+          callbacks.initCallback()
         selected: ()->
+          callbacks.selectedCallback()
         unselected: ()->
+          callbacks.unselectedCallback()
       componentsService.init [comp]
 
       scope = $rootScope.$new()
-      scope.passedDownBlock = { component: 'sample-component' }
-      blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"><faber-component-renderer></faber-component-renderer></faber-block>')(scope)
+      scope.passedDownBlock = component: 'sample-component'
+      blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
       scope.$digest()
-      blockScope = blockElement.isolateScope()
-      @element = $compile(angular.element(blockElement.find('faber-component-renderer')))(blockScope)
-      @scope = @element.scope()
-
-      @comp = @scope.component
-
-      spyOn @comp, 'init'
-      spyOn @comp, 'selected'
-      spyOn @comp, 'unselected'
+      @element = blockElement.find('faber-component-renderer')
+      @scope = @element.isolateScope()
 
       @scope.$digest()
 
@@ -34,20 +42,20 @@ describe 'Component Renderer Directive:', ->
       expect(@element.text()).toBe 'Sample Component'
 
     it 'should be able to call init callback of the component', ->
-      expect(@scope.component.init).toHaveBeenCalled()
+      expect(callbacks.initCallback).toHaveBeenCalled()
 
   describe 'when selected the rendered block', ->
     it 'should be able to call selected callback of the component', ->
-      expect(@scope.component.selected).toHaveBeenCalled()
+      expect(callbacks.selectedCallback).toHaveBeenCalled()
 
   describe 'when unselected the rendered block', ->
     it 'should be able to call unselected callback of the component', ->
-      @scope.renderer.unselect()
+      @scope.unselect()
 
-      expect(@scope.component.unselected).toHaveBeenCalled()
+      expect(callbacks.unselectedCallback).toHaveBeenCalled()
 
   describe 'when update is called with content data', ->
     it 'shoud update the block\'s content data', ->
-      @scope.renderer.update('<p>Lorem ipsum</p>')
+      @scope.update('<p>Lorem ipsum</p>')
 
       expect(@scope.block.content).toBe '<p>Lorem ipsum</p>'
