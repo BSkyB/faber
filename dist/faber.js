@@ -1012,89 +1012,46 @@ MediumEditorExtended = (function(_super) {
 MediumEditorComponent = (function() {
   function MediumEditorComponent() {}
 
-  MediumEditorComponent.prototype.name = 'Medium Editor';
+  MediumEditorComponent.prototype.name = 'Rich Text';
 
-  MediumEditorComponent.prototype.id = 'medium-editor';
+  MediumEditorComponent.prototype.id = 'rich-text';
 
   MediumEditorComponent.prototype.type = 'element';
 
-  MediumEditorComponent.prototype.template = '<div class="medium-editor"><br/></div>';
+  MediumEditorComponent.prototype.template = '<div class="rich-text" data-tust-html><br/></div>';
 
-  MediumEditorComponent.prototype.init = function($element) {
+  MediumEditorComponent.prototype.editor = null;
+
+  MediumEditorComponent.prototype.init = function($element, initialContent, update) {
     var opts;
     opts = {
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote'],
       placeholder: 'Type your text'
     };
-    return new MediumEditorExtended($element[0].getElementsByClassName('medium-editor'), opts);
+    this.editor = $element[0].getElementsByClassName('rich-text')[0];
+    this.editor.innerHTML = initialContent || '';
+    new MediumEditorExtended(this.editor, opts);
+    return this.editor.addEventListener('keyup', (function(_this) {
+      return function() {
+        return update(_this.editor.innerHTML);
+      };
+    })(this));
   };
 
-  MediumEditorComponent.prototype.selected = function($element) {
-    return $element[0].getElementsByClassName('medium-editor')[0].focus();
+  MediumEditorComponent.prototype.selected = function($element, update) {
+    return $element[0].getElementsByClassName('rich-text')[0].focus();
   };
 
-  MediumEditorComponent.prototype.unselected = function($element) {};
+  MediumEditorComponent.prototype.unselected = function($element, update) {
+    return update(this.editor.innerHTML);
+  };
 
   return MediumEditorComponent;
 
 })();
 
-var Element1;
-
-Element1 = (function() {
-  function Element1() {}
-
-  Element1.prototype.name = 'Element 1';
-
-  Element1.prototype.id = 'element-1';
-
-  Element1.prototype.type = 'element';
-
-  Element1.prototype.template = '<span>[{{$id}}]</span><p contenteditable="contenteditable">Element 1</p>';
-
-  Element1.prototype.init = function($element) {
-    return $element.find('p').text('hello');
-  };
-
-  Element1.prototype.selected = function($element) {
-    $element.find('p').attr('contenteditable', true);
-    return $element.find('p').focus();
-  };
-
-  Element1.prototype.unselected = function($element) {
-    return $element.find('p').removeAttr('contenteditable');
-  };
-
-  return Element1;
-
-})();
-
-function template(locals) {
-var buf = [];
-var jade_mixins = {};
-
-buf.push("<input type=\"text\" value=\"[{{$id}}] Element 2\"/>");;return buf.join("");
-}
-function template(locals) {
-var buf = [];
-var jade_mixins = {};
-
-buf.push("<p>Group</p>");;return buf.join("");
-}
-function template(locals) {
-var buf = [];
-var jade_mixins = {};
-
-buf.push("<p>Top Level Only Element</p>");;return buf.join("");
-}
-function template(locals) {
-var buf = [];
-var jade_mixins = {};
-
-buf.push("<p>Top Level Only Group</p>");;return buf.join("");
-}
 /**
- * @license AngularJS v1.2.15-build.2399+sha.ca4ddfa
+ * @license AngularJS v1.2.16-build.31+sha.7cccb8b
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -1163,7 +1120,7 @@ function minErr(module) {
       return match;
     });
 
-    message = message + '\nhttp://errors.angularjs.org/1.2.15-build.2399+sha.ca4ddfa/' +
+    message = message + '\nhttp://errors.angularjs.org/1.2.16-build.31+sha.7cccb8b/' +
       (module ? module + '/' : '') + code;
     for (i = 2; i < arguments.length; i++) {
       message = message + (i == 2 ? '?' : '&') + 'p' + (i-2) + '=' +
@@ -1219,6 +1176,7 @@ function minErr(module) {
     -isWindow,
     -isScope,
     -isFile,
+    -isBlob,
     -isBoolean,
     -trim,
     -isElement,
@@ -1737,6 +1695,11 @@ function isScope(obj) {
 
 function isFile(obj) {
   return toString.call(obj) === '[object File]';
+}
+
+
+function isBlob(obj) {
+  return toString.call(obj) === '[object Blob]';
 }
 
 
@@ -2409,6 +2372,41 @@ function angularInit(element, bootstrap) {
  * Note that ngScenario-based end-to-end tests cannot use this function to bootstrap manually.
  * They must use {@link ng.directive:ngApp ngApp}.
  *
+ * Angular will detect if it has been loaded into the browser more than once and only allow the
+ * first loaded script to be bootstrapped and will report a warning to the browser console for
+ * each of the subsequent scripts.   This prevents strange results in applications, where otherwise
+ * multiple instances of Angular try to work on the DOM.
+ *
+ * <example name="multi-bootstrap" module="multi-bootstrap">
+ * <file name="index.html">
+ * <script src="../../../angular.js"></script>
+ * <div ng-controller="BrokenTable">
+ *   <table>
+ *   <tr>
+ *     <th ng-repeat="heading in headings">{{heading}}</th>
+ *   </tr>
+ *   <tr ng-repeat="filling in fillings">
+ *     <td ng-repeat="fill in filling">{{fill}}</td>
+ *   </tr>
+ * </table>
+ * </div>
+ * </file>
+ * <file name="controller.js">
+ * var app = angular.module('multi-bootstrap', [])
+ *
+ * .controller('BrokenTable', function($scope) {
+ *     $scope.headings = ['One', 'Two', 'Three'];
+ *     $scope.fillings = [[1, 2, 3], ['A', 'B', 'C'], [7, 8, 9]];
+ * });
+ * </file>
+ * <file name="protractor.js" type="protractor">
+ * it('should only insert one table cell for each item in $scope.fillings', function() {
+ *  expect(element.all(by.css('td')).count())
+ *      .toBe(9);
+ * });
+ * </file>
+ * </example>
+ *
  * @param {Element} element DOM element which is the root of angular application.
  * @param {Array<String|Function|Array>=} modules an array of modules to load into the application.
  *     Each item in the array should be the name of a predefined module or a (DI annotated)
@@ -2626,10 +2624,10 @@ function setupModuleLoader(window) {
      * myModule.value('appName', 'MyCoolApp');
      *
      * // configure existing services inside initialization blocks.
-     * myModule.config(function($locationProvider) {
+     * myModule.config(['$locationProvider', function($locationProvider) {
      *   // Configure existing providers
      *   $locationProvider.hashPrefix('!');
-     * });
+     * }]);
      * ```
      *
      * Then you can create an injector and load your modules like this:
@@ -2973,10 +2971,10 @@ function setupModuleLoader(window) {
  * - `codeName` – `{string}` – Code name of the release, such as "jiggling-armfat".
  */
 var version = {
-  full: '1.2.15-build.2399+sha.ca4ddfa',    // all of these placeholder strings will be replaced by grunt's
+  full: '1.2.16-build.31+sha.7cccb8b',    // all of these placeholder strings will be replaced by grunt's
   major: 1,    // package task
   minor: 2,
-  dot: 15,
+  dot: 16,
   codeName: 'snapshot'
 };
 
@@ -3465,11 +3463,15 @@ function jqLiteInheritedData(element, name, value) {
   var names = isArray(name) ? name : [name];
 
   while (element.length) {
-
+    var node = element[0];
     for (var i = 0, ii = names.length; i < ii; i++) {
       if ((value = element.data(names[i])) !== undefined) return value;
     }
-    element = element.parent();
+
+    // If dealing with a document fragment node with a host element, and no parent, use the host
+    // element as the parent. This enables directives within a Shadow DOM or polyfilled Shadow DOM
+    // to lookup parent controllers.
+    element = jqLite(node.parentNode || (node.nodeType === 11 && node.host));
   }
 }
 
@@ -5828,15 +5830,11 @@ function $CacheFactoryProvider() {
  * `$templateCache` service directly.
  *
  * Adding via the `script` tag:
+ *
  * ```html
- * <html ng-app>
- * <head>
- * <script type="text/ng-template" id="templateId.html">
- *   This is the content of the template
- * </script>
- * </head>
- *   ...
- * </html>
+ *   <script type="text/ng-template" id="templateId.html">
+ *     <p>This is the content of the template</p>
+ *   </script>
  * ```
  *
  * **Note:** the `script` tag containing the template does not need to be included in the `head` of
@@ -7997,6 +7995,22 @@ function $ControllerProvider() {
  *
  * @description
  * A {@link angular.element jQuery or jqLite} wrapper for the browser's `window.document` object.
+ *
+ * @example
+   <example>
+     <file name="index.html">
+       <div ng-controller="MainCtrl">
+         <p>$document title: <b ng-bind="title"></b></p>
+         <p>window.document title: <b ng-bind="windowTitle"></b></p>
+       </div>
+     </file>
+     <file name="script.js">
+       function MainCtrl($scope, $document) {
+         $scope.title = $document[0].title;
+         $scope.windowTitle = angular.element(window.document)[0].title;
+       }
+     </file>
+   </example>
  */
 function $DocumentProvider(){
   this.$get = ['$window', function(window){
@@ -8147,7 +8161,7 @@ function $HttpProvider() {
 
     // transform outgoing request data
     transformRequest: [function(d) {
-      return isObject(d) && !isFile(d) ? toJson(d) : d;
+      return isObject(d) && !isFile(d) && !isBlob(d) ? toJson(d) : d;
     }],
 
     // default headers
@@ -8280,9 +8294,8 @@ function $HttpProvider() {
      *
      * # Shortcut methods
      *
-     * Since all invocations of the $http service require passing in an HTTP method and URL, and
-     * POST/PUT requests require request data to be provided as well, shortcut methods
-     * were created:
+     * Shortcut methods are also available. All shortcut methods require passing in the URL, and
+     * request data must be passed in for POST/PUT requests.
      *
      * ```js
      *   $http.get('/someUrl').success(successCallback);
@@ -8322,7 +8335,7 @@ function $HttpProvider() {
      *
      * ```
      * module.run(function($http) {
-     *   $http.defaults.headers.common.Authentication = 'Basic YmVlcDpib29w'
+     *   $http.defaults.headers.common.Authorization = 'Basic YmVlcDpib29w'
      * });
      * ```
      *
@@ -9223,9 +9236,11 @@ function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDoc
       jsonpDone = xhr = null;
 
       // fix status code when it is 0 (0 status is undocumented).
-      // Occurs when accessing file resources.
-      // On Android 4.1 stock browser it occurs while retrieving files from application cache.
-      status = (status === 0) ? (response ? 200 : 404) : status;
+      // Occurs when accessing file resources or on Android 4.1 stock browser
+      // while retrieving files from application cache.
+      if (status === 0) {
+        status = response ? 200 : urlResolve(url).protocol == 'file' ? 404 : 0;
+      }
 
       // normalize IE bug (http://bugs.jquery.com/ticket/1450)
       status = status == 1223 ? 204 : status;
@@ -11995,7 +12010,7 @@ function $ParseProvider() {
  *
  *   Because `finally` is a reserved word in JavaScript and reserved keywords are not supported as
  *   property names by ES3, you'll need to invoke the method like `promise['finally'](callback)` to
- *   make your code IE8 compatible.
+ *   make your code IE8 and Android 2.x compatible.
  *
  * # Chaining promises
  *
@@ -12408,21 +12423,32 @@ function qFactory(nextTick, exceptionHandler) {
 }
 
 function $$RAFProvider(){ //rAF
-  this.$get = ['$window', function($window) {
+  this.$get = ['$window', '$timeout', function($window, $timeout) {
     var requestAnimationFrame = $window.requestAnimationFrame ||
-                                $window.webkitRequestAnimationFrame;
+                                $window.webkitRequestAnimationFrame ||
+                                $window.mozRequestAnimationFrame;
 
     var cancelAnimationFrame = $window.cancelAnimationFrame ||
-                               $window.webkitCancelAnimationFrame;
+                               $window.webkitCancelAnimationFrame ||
+                               $window.mozCancelAnimationFrame ||
+                               $window.webkitCancelRequestAnimationFrame;
 
-    var raf = function(fn) {
-      var id = requestAnimationFrame(fn);
-      return function() {
-        cancelAnimationFrame(id);
-      };
-    };
+    var rafSupported = !!requestAnimationFrame;
+    var raf = rafSupported
+      ? function(fn) {
+          var id = requestAnimationFrame(fn);
+          return function() {
+            cancelAnimationFrame(id);
+          };
+        }
+      : function(fn) {
+          var timer = $timeout(fn, 16.66, false); // 1000 / 60 = 16.666
+          return function() {
+            $timeout.cancel(timer);
+          };
+        };
 
-    raf.supported = !!requestAnimationFrame;
+    raf.supported = rafSupported;
 
     return raf;
   }];
@@ -12826,30 +12852,40 @@ function $RootScopeProvider(){
        *    {@link ng.$rootScope.Scope#$digest $digest} cycle. Any shallow change within the
        *    collection will trigger a call to the `listener`.
        *
-       * @param {function(newCollection, oldCollection, scope)} listener a callback function that is
-       *    fired with both the `newCollection` and `oldCollection` as parameters.
-       *    The `newCollection` object is the newly modified data obtained from the `obj` expression
-       *    and the `oldCollection` object is a copy of the former collection data.
-       *    The `scope` refers to the current scope.
+       * @param {function(newCollection, oldCollection, scope)} listener a callback function called
+       *    when a change is detected.
+       *    - The `newCollection` object is the newly modified data obtained from the `obj` expression
+       *    - The `oldCollection` object is a copy of the former collection data.
+       *      Due to performance considerations, the`oldCollection` value is computed only if the
+       *      `listener` function declares two or more arguments.
+       *    - The `scope` argument refers to the current scope.
        *
        * @returns {function()} Returns a de-registration function for this listener. When the
        *    de-registration function is executed, the internal watch operation is terminated.
        */
       $watchCollection: function(obj, listener) {
         var self = this;
-        var oldValue;
+        // the current value, updated on each dirty-check run
         var newValue;
+        // a shallow copy of the newValue from the last dirty-check run,
+        // updated to match newValue during dirty-check run
+        var oldValue;
+        // a shallow copy of the newValue from when the last change happened
+        var veryOldValue;
+        // only track veryOldValue if the listener is asking for it
+        var trackVeryOldValue = (listener.length > 1);
         var changeDetected = 0;
         var objGetter = $parse(obj);
         var internalArray = [];
         var internalObject = {};
+        var initRun = true;
         var oldLength = 0;
 
         function $watchCollectionWatch() {
           newValue = objGetter(self);
           var newLength, key;
 
-          if (!isObject(newValue)) {
+          if (!isObject(newValue)) { // if primitive
             if (oldValue !== newValue) {
               oldValue = newValue;
               changeDetected++;
@@ -12871,7 +12907,9 @@ function $RootScopeProvider(){
             }
             // copy the items to oldValue and look for changes.
             for (var i = 0; i < newLength; i++) {
-              if (oldValue[i] !== newValue[i]) {
+              var bothNaN = (oldValue[i] !== oldValue[i]) &&
+                  (newValue[i] !== newValue[i]);
+              if (!bothNaN && (oldValue[i] !== newValue[i])) {
                 changeDetected++;
                 oldValue[i] = newValue[i];
               }
@@ -12915,7 +12953,32 @@ function $RootScopeProvider(){
         }
 
         function $watchCollectionAction() {
-          listener(newValue, oldValue, self);
+          if (initRun) {
+            initRun = false;
+            listener(newValue, newValue, self);
+          } else {
+            listener(newValue, veryOldValue, self);
+          }
+
+          // make a copy for the next time a collection is changed
+          if (trackVeryOldValue) {
+            if (!isObject(newValue)) {
+              //primitive
+              veryOldValue = newValue;
+            } else if (isArrayLike(newValue)) {
+              veryOldValue = new Array(newValue.length);
+              for (var i = 0; i < newValue.length; i++) {
+                veryOldValue[i] = newValue[i];
+              }
+            } else { // if object
+              veryOldValue = {};
+              for (var key in newValue) {
+                if (hasOwnProperty.call(newValue, key)) {
+                  veryOldValue[key] = newValue[key];
+                }
+              }
+            }
+          }
         }
 
         return this.$watch($watchCollectionWatch, $watchCollectionAction);
@@ -15538,32 +15601,6 @@ function timeZoneGetter(date) {
   return paddedZone;
 }
 
-function getFirstThursdayOfYear(year) {
-    // 0 = index of January
-    var dayOfWeekOnFirst = (new Date(year, 0, 1)).getDay();
-    // 4 = index of Thursday (+1 to account for 1st = 5)
-    // 11 = index of *next* Thursday (+1 account for 1st = 12)
-    return new Date(year, 0, ((dayOfWeekOnFirst <= 4) ? 5 : 12) - dayOfWeekOnFirst);
-}
-
-function getThursdayThisWeek(datetime) {
-    return new Date(datetime.getFullYear(), datetime.getMonth(),
-      // 4 = index of Thursday
-      datetime.getDate() + (4 - datetime.getDay()));
-}
-
-function weekGetter(size) {
-   return function(date) {
-      var firstThurs = getFirstThursdayOfYear(date.getFullYear()),
-         thisThurs = getThursdayThisWeek(date);
-
-      var diff = +thisThurs - +firstThurs,
-         result = 1 + Math.round(diff / 6.048e8); // 6.048e8 ms per week
-
-      return padNumber(result, size);
-   };
-}
-
 function ampmGetter(date, formats) {
   return date.getHours() < 12 ? formats.AMPMS[0] : formats.AMPMS[1];
 }
@@ -15592,12 +15629,10 @@ var DATE_FORMATS = {
   EEEE: dateStrGetter('Day'),
    EEE: dateStrGetter('Day', true),
      a: ampmGetter,
-     Z: timeZoneGetter,
-    ww: weekGetter(2),
-     w: weekGetter(1)
+     Z: timeZoneGetter
 };
 
-var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZEw']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+|H+|h+|m+|s+|a|Z|w+))(.*)/,
+var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZE']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d+|H+|h+|m+|s+|a|Z))(.*)/,
     NUMBER_STRING = /^\-?\d+$/;
 
 /**
@@ -15632,8 +15667,6 @@ var DATE_FORMATS_SPLIT = /((?:[^yMdHhmsaZEw']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|d
  *   * `'.sss' or ',sss'`: Millisecond in second, padded (000-999)
  *   * `'a'`: am/pm marker
  *   * `'Z'`: 4 digit (+sign) representation of the timezone offset (-1200-+1200)
- *   * `'ww'`: ISO-8601 week of year (00-53)
- *   * `'w'`: ISO-8601 week of year (0-53)
  *
  *   `format` string can also be one of the following predefined
  *   {@link guide/i18n localizable formats}:
@@ -15998,6 +16031,12 @@ function orderByFilter($parse){
           predicate = predicate.substring(1);
         }
         get = $parse(predicate);
+        if (get.constant) {
+          var key = get();
+          return reverseComparator(function(a,b) {
+            return compare(a[key], b[key]);
+          }, descending);
+        }
       }
       return reverseComparator(function(a,b){
         return compare(get(a),get(b));
@@ -16371,7 +16410,7 @@ var htmlAnchorDirective = valueFn({
  * such as selected. (Their presence means true and their absence means false.)
  * If we put an Angular interpolation expression into such an attribute then the
  * binding information would be lost when the browser removes the attribute.
- * The `ngSelected` directive solves this problem for the `selected` atttribute.
+ * The `ngSelected` directive solves this problem for the `selected` attribute.
  * This complementary directive is not removed by the browser and so provides
  * a permanent reliable place to store the binding information.
  *
@@ -16850,8 +16889,6 @@ function FormController(element, attrs, $scope, $animate) {
       </file>
     </example>
  *
- * @param {string=} name Name of the form. If specified, the form controller will be published into
- *                       related scope, under this name.
  */
 var formDirectiveFactory = function(isNgForm) {
   return ['$timeout', function($timeout) {
@@ -16924,11 +16961,6 @@ var ngFormDirective = formDirectiveFactory(true);
 var URL_REGEXP = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
 var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/i;
 var NUMBER_REGEXP = /^\s*(\-|\+)?(\d+|(\d*(\.\d*)))\s*$/;
-var DATE_REGEXP = /^(\d{4})-(\d{2})-(\d{2})$/;
-var DATETIMELOCAL_REGEXP = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)$/;
-var WEEK_REGEXP = /^(\d{4})-W(\d\d)$/;
-var MONTH_REGEXP = /^(\d{4})-(\d\d)$/;
-var TIME_REGEXP = /^(\d\d):(\d\d)$/;
 
 var inputType = {
 
@@ -17009,425 +17041,6 @@ var inputType = {
    */
   'text': textInputType,
 
-    /**
-     * @ngdoc input
-     * @name input[date]
-     *
-     * @description
-     * Input with date validation and transformation. In browsers that do not yet support
-     * the HTML5 date input, a text element will be used. In that case, text must be entered in a valid ISO-8601
-     * date format (yyyy-MM-dd), for example: `2009-01-06`. The model must always be a Date object.
-     *
-     * @param {string} ngModel Assignable angular expression to data-bind to.
-     * @param {string=} name Property name of the form under which the control is published.
-     * @param {string=} min Sets the `min` validation error key if the value entered is less than `min`. This must be a
-     * valid ISO date string (yyyy-MM-dd).
-     * @param {string=} max Sets the `max` validation error key if the value entered is greater than `max`. This must be
-     * a valid ISO date string (yyyy-MM-dd).
-     * @param {string=} required Sets `required` validation error key if the value is not entered.
-     * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-     *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-     *    `required` when you want to data-bind to the `required` attribute.
-     * @param {string=} ngChange Angular expression to be executed when input changes due to user
-     *    interaction with the input element.
-     *
-     * @example
-     <example name="date-input-directive">
-     <file name="index.html">
-       <script>
-          function Ctrl($scope) {
-            $scope.value = new Date(2013, 9, 22);
-          }
-       </script>
-       <form name="myForm" ng-controller="Ctrl as dateCtrl">
-          Pick a date between in 2013:
-          <input type="date" id="exampleInput" name="input" ng-model="value"
-              placeholder="yyyy-MM-dd" min="2013-01-01" max="2013-12-31" required />
-          <span class="error" ng-show="myForm.input.$error.required">
-              Required!</span>
-          <span class="error" ng-show="myForm.input.$error.date">
-              Not a valid date!</span>
-           <tt>value = {{value | date: "yyyy-MM-dd"}}</tt><br/>
-           <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-           <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-           <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-           <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
-       </form>
-     </file>
-     <file name="protractor.js" type="protractor">
-        var value = element(by.binding('value | date: "yyyy-MM-dd"'));
-        var valid = element(by.binding('myForm.input.$valid'));
-        var input = element(by.model('value'));
-
-        // currently protractor/webdriver does not support
-        // sending keys to all known HTML5 input controls
-        // for various browsers (see https://github.com/angular/protractor/issues/562).
-        function setInput(val) {
-          // set the value of the element and force validation.
-          var scr = "var ipt = document.getElementById('exampleInput'); " +
-          "ipt.value = '" + val + "';" +
-          "angular.element(ipt).scope().$apply(function(s) { s.myForm[ipt.name].$setViewValue('" + val + "'); });";
-          browser.executeScript(scr);
-        }
-
-        it('should initialize to model', function() {
-          expect(value.getText()).toContain('2013-10-22');
-          expect(valid.getText()).toContain('myForm.input.$valid = true');
-        });
-
-        it('should be invalid if empty', function() {
-          setInput('');
-          expect(value.getText()).toEqual('value =');
-          expect(valid.getText()).toContain('myForm.input.$valid = false');
-        });
-
-        it('should be invalid if over max', function() {
-          setInput('2015-01-01');
-          expect(value.getText()).toContain('');
-          expect(valid.getText()).toContain('myForm.input.$valid = false');
-        });
-     </file>
-     </example>f
-     */
-  'date': createDateInputType('date', DATE_REGEXP,
-         createDateParser(DATE_REGEXP, ['yyyy', 'MM', 'dd']),
-         'yyyy-MM-dd'),
-
-   /**
-    * @ngdoc input
-    * @name input[dateTimeLocal]
-    *
-    * @description
-    * Input with datetime validation and transformation. In browsers that do not yet support
-    * the HTML5 date input, a text element will be used. In that case, the text must be entered in a valid ISO-8601
-    * local datetime format (yyyy-MM-ddTHH:mm), for example: `2010-12-28T14:57`. The model must be a Date object.
-    *
-    * @param {string} ngModel Assignable angular expression to data-bind to.
-    * @param {string=} name Property name of the form under which the control is published.
-    * @param {string=} min Sets the `min` validation error key if the value entered is less than `min`. This must be a
-    * valid ISO datetime format (yyyy-MM-ddTHH:mm).
-    * @param {string=} max Sets the `max` validation error key if the value entered is greater than `max`. This must be
-    * a valid ISO datetime format (yyyy-MM-ddTHH:mm).
-    * @param {string=} required Sets `required` validation error key if the value is not entered.
-    * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-    *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-    *    `required` when you want to data-bind to the `required` attribute.
-    * @param {string=} ngChange Angular expression to be executed when input changes due to user
-    *    interaction with the input element.
-    *
-    * @example
-    <example name="datetimelocal-input-directive">
-    <file name="index.html">
-      <script>
-        function Ctrl($scope) {
-          $scope.value = new Date(2010, 11, 28, 14, 57);
-        }
-      </script>
-      <form name="myForm" ng-controller="Ctrl as dateCtrl">
-        Pick a date between in 2013:
-        <input type="datetime-local" id="exampleInput" name="input" ng-model="value"
-            placeholder="yyyy-MM-ddTHH:mm" min="2001-01-01T00:00" max="2013-12-31T00:00" required />
-        <span class="error" ng-show="myForm.input.$error.required">
-            Required!</span>
-        <span class="error" ng-show="myForm.input.$error.datetimelocal">
-            Not a valid date!</span>
-        <tt>value = {{value | date: "yyyy-MM-ddTHH:mm"}}</tt><br/>
-        <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-        <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-        <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-        <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
-      </form>
-    </file>
-    <file name="protractor.js" type="protractor">
-      var value = element(by.binding('value | date: "yyyy-MM-ddTHH:mm"'));
-      var valid = element(by.binding('myForm.input.$valid'));
-      var input = element(by.model('value'));
-
-      // currently protractor/webdriver does not support
-      // sending keys to all known HTML5 input controls
-      // for various browsers (https://github.com/angular/protractor/issues/562).
-      function setInput(val) {
-        // set the value of the element and force validation.
-        var scr = "var ipt = document.getElementById('exampleInput'); " +
-        "ipt.value = '" + val + "';" +
-        "angular.element(ipt).scope().$apply(function(s) { s.myForm[ipt.name].$setViewValue('" + val + "'); });";
-        browser.executeScript(scr);
-      }
-
-      it('should initialize to model', function() {
-        expect(value.getText()).toContain('2010-12-28T14:57');
-        expect(valid.getText()).toContain('myForm.input.$valid = true');
-      });
-
-      it('should be invalid if empty', function() {
-        setInput('');
-        expect(value.getText()).toEqual('value =');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-
-      it('should be invalid if over max', function() {
-        setInput('2015-01-01T23:59');
-        expect(value.getText()).toContain('');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-    </file>
-    </example>
-    */
-  'datetime-local': createDateInputType('datetimelocal', DATETIMELOCAL_REGEXP,
-      createDateParser(DATETIMELOCAL_REGEXP, ['yyyy', 'MM', 'dd', 'HH', 'mm']),
-      'yyyy-MM-ddTHH:mm'),
-
-  /**
-   * @ngdoc input
-   * @name input[time]
-   *
-   * @description
-   * Input with time validation and transformation. In browsers that do not yet support
-   * the HTML5 date input, a text element will be used. In that case, the text must be entered in a valid ISO-8601
-   * local time format (HH:mm), for example: `14:57`. Model must be a Date object. This binding will always output a
-   * Date object to the model of January 1, 1900, or local date `new Date(0, 0, 1, HH, mm)`.
-   *
-   * @param {string} ngModel Assignable angular expression to data-bind to.
-   * @param {string=} name Property name of the form under which the control is published.
-   * @param {string=} min Sets the `min` validation error key if the value entered is less than `min`. This must be a
-   * valid ISO time format (HH:mm).
-   * @param {string=} max Sets the `max` validation error key if the value entered is greater than `max`. This must be a
-   * valid ISO time format (HH:mm).
-   * @param {string=} required Sets `required` validation error key if the value is not entered.
-   * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-   *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-   *    `required` when you want to data-bind to the `required` attribute.
-   * @param {string=} ngChange Angular expression to be executed when input changes due to user
-   *    interaction with the input element.
-   *
-   * @example
-   <example name="time-input-directive">
-   <file name="index.html">
-     <script>
-      function Ctrl($scope) {
-        $scope.value = new Date(0, 0, 1, 14, 57);
-      }
-     </script>
-     <form name="myForm" ng-controller="Ctrl as dateCtrl">
-        Pick a between 8am and 5pm:
-        <input type="time" id="exampleInput" name="input" ng-model="value"
-            placeholder="HH:mm" min="08:00" max="17:00" required />
-        <span class="error" ng-show="myForm.input.$error.required">
-            Required!</span>
-        <span class="error" ng-show="myForm.input.$error.time">
-            Not a valid date!</span>
-        <tt>value = {{value | date: "HH:mm"}}</tt><br/>
-        <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-        <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-        <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-        <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
-     </form>
-   </file>
-   <file name="protractor.js" type="protractor">
-      var value = element(by.binding('value | date: "HH:mm"'));
-      var valid = element(by.binding('myForm.input.$valid'));
-      var input = element(by.model('value'));
-
-      // currently protractor/webdriver does not support
-      // sending keys to all known HTML5 input controls
-      // for various browsers (https://github.com/angular/protractor/issues/562).
-      function setInput(val) {
-        // set the value of the element and force validation.
-        var scr = "var ipt = document.getElementById('exampleInput'); " +
-        "ipt.value = '" + val + "';" +
-        "angular.element(ipt).scope().$apply(function(s) { s.myForm[ipt.name].$setViewValue('" + val + "'); });";
-        browser.executeScript(scr);
-      }
-
-      it('should initialize to model', function() {
-        expect(value.getText()).toContain('14:57');
-        expect(valid.getText()).toContain('myForm.input.$valid = true');
-      });
-
-      it('should be invalid if empty', function() {
-        setInput('');
-        expect(value.getText()).toEqual('value =');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-
-      it('should be invalid if over max', function() {
-        setInput('23:59');
-        expect(value.getText()).toContain('');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-   </file>
-   </example>
-   */
-  'time': createDateInputType('time', TIME_REGEXP,
-      createDateParser(TIME_REGEXP, ['HH', 'mm']),
-     'HH:mm'),
-
-   /**
-    * @ngdoc input
-    * @name input[week]
-    *
-    * @description
-    * Input with week-of-the-year validation and transformation to Date. In browsers that do not yet support
-    * the HTML5 week input, a text element will be used. In that case, the text must be entered in a valid ISO-8601
-    * week format (yyyy-W##), for example: `2013-W02`. The model must always be a Date object.
-    *
-    * @param {string} ngModel Assignable angular expression to data-bind to.
-    * @param {string=} name Property name of the form under which the control is published.
-    * @param {string=} min Sets the `min` validation error key if the value entered is less than `min`. This must be a
-    * valid ISO week format (yyyy-W##).
-    * @param {string=} max Sets the `max` validation error key if the value entered is greater than `max`. This must be
-    * a valid ISO week format (yyyy-W##).
-    * @param {string=} required Sets `required` validation error key if the value is not entered.
-    * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-    *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-    *    `required` when you want to data-bind to the `required` attribute.
-    * @param {string=} ngChange Angular expression to be executed when input changes due to user
-    *    interaction with the input element.
-    *
-    * @example
-    <example name="week-input-directive">
-    <file name="index.html">
-      <script>
-      function Ctrl($scope) {
-        $scope.value = new Date(2013, 0, 3);
-      }
-      </script>
-      <form name="myForm" ng-controller="Ctrl as dateCtrl">
-        Pick a date between in 2013:
-        <input id="exampleInput" type="week" name="input" ng-model="value"
-            placeholder="YYYY-W##" min="2012-W32" max="2013-W52" required />
-        <span class="error" ng-show="myForm.input.$error.required">
-            Required!</span>
-        <span class="error" ng-show="myForm.input.$error.week">
-            Not a valid date!</span>
-        <tt>value = {{value | date: "yyyy-Www"}}</tt><br/>
-        <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-        <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-        <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-        <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
-      </form>
-    </file>
-    <file name="protractor.js" type="protractor">
-      var value = element(by.binding('value | date: "yyyy-Www"'));
-      var valid = element(by.binding('myForm.input.$valid'));
-      var input = element(by.model('value'));
-
-      // currently protractor/webdriver does not support
-      // sending keys to all known HTML5 input controls
-      // for various browsers (https://github.com/angular/protractor/issues/562).
-      function setInput(val) {
-        // set the value of the element and force validation.
-        var scr = "var ipt = document.getElementById('exampleInput'); " +
-        "ipt.value = '" + val + "';" +
-        "angular.element(ipt).scope().$apply(function(s) { s.myForm[ipt.name].$setViewValue('" + val + "'); });";
-        browser.executeScript(scr);
-      }
-
-      it('should initialize to model', function() {
-        expect(value.getText()).toContain('2013-W01');
-        expect(valid.getText()).toContain('myForm.input.$valid = true');
-      });
-
-      it('should be invalid if empty', function() {
-        setInput('');
-        expect(value.getText()).toEqual('value =');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-
-      it('should be invalid if over max', function() {
-        setInput('2015-W01');
-        expect(value.getText()).toContain('');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-    </file>
-    </example>
-    */
-  'week': createDateInputType('week', WEEK_REGEXP, weekParser, 'yyyy-Www'),
-
-  /**
-   * @ngdoc input
-   * @name input[month]
-   *
-   * @description
-   * Input with month validation and transformation. In browsers that do not yet support
-   * the HTML5 month input, a text element will be used. In that case, the text must be entered in a valid ISO-8601
-   * month format (yyyy-MM), for example: `2009-01`. The model must always be a Date object. In the event the model is
-   * not set to the first of the month, the first of that model's month is assumed.
-   *
-   * @param {string} ngModel Assignable angular expression to data-bind to.
-   * @param {string=} name Property name of the form under which the control is published.
-   * @param {string=} min Sets the `min` validation error key if the value entered is less than `min`. This must be
-   * a valid ISO month format (yyyy-MM).
-   * @param {string=} max Sets the `max` validation error key if the value entered is greater than `max`. This must
-   * be a valid ISO month format (yyyy-MM).
-   * @param {string=} required Sets `required` validation error key if the value is not entered.
-   * @param {string=} ngRequired Adds `required` attribute and `required` validation constraint to
-   *    the element when the ngRequired expression evaluates to true. Use `ngRequired` instead of
-   *    `required` when you want to data-bind to the `required` attribute.
-   * @param {string=} ngChange Angular expression to be executed when input changes due to user
-   *    interaction with the input element.
-   *
-   * @example
-   <example name="month-input-directive">
-   <file name="index.html">
-     <script>
-      function Ctrl($scope) {
-        $scope.value = new Date(2013, 9, 1);
-      }
-     </script>
-     <form name="myForm" ng-controller="Ctrl as dateCtrl">
-       Pick a month int 2013:
-       <input id="exampleInput" type="month" name="input" ng-model="value"
-          placeholder="yyyy-MM" min="2013-01" max="2013-12" required />
-       <span class="error" ng-show="myForm.input.$error.required">
-          Required!</span>
-       <span class="error" ng-show="myForm.input.$error.month">
-          Not a valid month!</span>
-       <tt>value = {{value | date: "yyyy-MM"}}</tt><br/>
-       <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
-       <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
-       <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
-       <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
-     </form>
-   </file>
-   <file name="protractor.js" type="protractor">
-      var value = element(by.binding('value | date: "yyyy-MM"'));
-      var valid = element(by.binding('myForm.input.$valid'));
-      var input = element(by.model('value'));
-
-      // currently protractor/webdriver does not support
-      // sending keys to all known HTML5 input controls
-      // for various browsers (https://github.com/angular/protractor/issues/562).
-      function setInput(val) {
-        // set the value of the element and force validation.
-        var scr = "var ipt = document.getElementById('exampleInput'); " +
-        "ipt.value = '" + val + "';" +
-        "angular.element(ipt).scope().$apply(function(s) { s.myForm[ipt.name].$setViewValue('" + val + "'); });";
-        browser.executeScript(scr);
-      }
-
-      it('should initialize to model', function() {
-        expect(value.getText()).toContain('2013-10');
-        expect(valid.getText()).toContain('myForm.input.$valid = true');
-      });
-
-      it('should be invalid if empty', function() {
-        setInput('');
-        expect(value.getText()).toEqual('value =');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-
-      it('should be invalid if over max', function() {
-        setInput('2015-01');
-        expect(value.getText()).toContain('');
-        expect(valid.getText()).toContain('myForm.input.$valid = false');
-      });
-   </file>
-   </example>
-   */
-  'month': createDateInputType('month', MONTH_REGEXP,
-     createDateParser(MONTH_REGEXP, ['yyyy', 'MM']),
-     'yyyy-MM'),
 
   /**
    * @ngdoc input
@@ -17787,7 +17400,6 @@ function addNativeHtml5Validators(ctrl, validatorName, element) {
       return value;
     };
     ctrl.$parsers.push(validator);
-    ctrl.$formatters.push(validator);
   }
 }
 
@@ -17928,108 +17540,6 @@ function textInputType(scope, element, attr, ctrl, $sniffer, $browser) {
     ctrl.$parsers.push(maxLengthValidator);
     ctrl.$formatters.push(maxLengthValidator);
   }
-}
-
-function weekParser(isoWeek) {
-   if(isDate(isoWeek)) {
-      return isoWeek;
-   }
-
-   if(isString(isoWeek)) {
-      WEEK_REGEXP.lastIndex = 0;
-      var parts = WEEK_REGEXP.exec(isoWeek);
-      if(parts) {
-         var year = +parts[1],
-            week = +parts[2],
-            firstThurs = getFirstThursdayOfYear(year),
-            addDays = (week - 1) * 7;
-         return new Date(year, 0, firstThurs.getDate() + addDays);
-      }
-   }
-
-   return NaN;
-}
-
-function createDateParser(regexp, mapping) {
-   return function(iso) {
-      var parts, map;
-
-      if(isDate(iso)) {
-         return iso;
-      }
-
-      if(isString(iso)) {
-         regexp.lastIndex = 0;
-         parts = regexp.exec(iso);
-
-         if(parts) {
-            parts.shift();
-            map = { yyyy: 0, MM: 1, dd: 1, HH: 0, mm: 0 };
-
-            forEach(parts, function(part, index) {
-               if(index < mapping.length) {
-                  map[mapping[index]] = +part;
-               }
-            });
-
-            return new Date(map.yyyy, map.MM - 1, map.dd, map.HH, map.mm);
-         }
-      }
-
-      return NaN;
-   };
-}
-
-function createDateInputType(type, regexp, parseDate, format) {
-   return function dynamicDateInputType(scope, element, attr, ctrl, $sniffer, $browser, $filter) {
-      textInputType(scope, element, attr, ctrl, $sniffer, $browser);
-
-      ctrl.$parsers.push(function(value) {
-         if(ctrl.$isEmpty(value)) {
-            ctrl.$setValidity(type, true);
-            return null;
-         }
-
-         if(regexp.test(value)) {
-            ctrl.$setValidity(type, true);
-            return parseDate(value);
-         }
-
-         ctrl.$setValidity(type, false);
-         return undefined;
-      });
-
-      ctrl.$formatters.push(function(value) {
-         if(isDate(value)) {
-            return $filter('date')(value, format);
-         }
-         return '';
-      });
-
-      if(attr.min) {
-         var minValidator = function(value) {
-            var valid = ctrl.$isEmpty(value) ||
-               (parseDate(value) >= parseDate(attr.min));
-            ctrl.$setValidity('min', valid);
-            return valid ? value : undefined;
-         };
-
-         ctrl.$parsers.push(minValidator);
-         ctrl.$formatters.push(minValidator);
-      }
-
-      if(attr.max) {
-         var maxValidator = function(value) {
-            var valid = ctrl.$isEmpty(value) ||
-               (parseDate(value) <= parseDate(attr.max));
-            ctrl.$setValidity('max', valid);
-            return valid ? value : undefined;
-         };
-
-         ctrl.$parsers.push(maxValidator);
-         ctrl.$formatters.push(maxValidator);
-      }
-   };
 }
 
 function numberInputType(scope, element, attr, ctrl, $sniffer, $browser) {
@@ -18291,14 +17801,14 @@ function checkboxInputType(scope, element, attr, ctrl) {
       </file>
     </example>
  */
-var inputDirective = ['$browser', '$sniffer', '$filter', function($browser, $sniffer, $filter) {
+var inputDirective = ['$browser', '$sniffer', function($browser, $sniffer) {
   return {
     restrict: 'E',
     require: '?ngModel',
     link: function(scope, element, attr, ctrl) {
       if (ctrl) {
         (inputType[lowercase(attr.type)] || inputType.text)(scope, element, attr, ctrl, $sniffer,
-                                                            $browser, $filter);
+                                                            $browser);
       }
     }
   };
@@ -18686,11 +18196,6 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
  *    - {@link input[number] number}
  *    - {@link input[email] email}
  *    - {@link input[url] url}
- *    - {@link input[date] date}
- *    - {@link input[dateTimeLocal] dateTimeLocal}
- *    - {@link input[time] time}
- *    - {@link input[month] month}
- *    - {@link input[week] week}
  *  - {@link ng.directive:select select}
  *  - {@link ng.directive:textarea textarea}
  *
@@ -20422,7 +19927,7 @@ var ngIfDirective = ['$animate', function($animate) {
  * @priority 400
  *
  * @param {string} ngInclude|src angular expression evaluating to URL. If the source is a string constant,
- *                 make sure you wrap it in quotes, e.g. `src="'myPartialTemplate.html'"`.
+ *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
  * @param {string=} onload Expression to evaluate when a new partial is loaded.
  *
  * @param {string=} autoscroll Whether `ngInclude` should call {@link ng.$anchorScroll
@@ -21031,9 +20536,11 @@ var ngPluralizeDirective = ['$locale', '$interpolate', function($locale, $interp
  * as **data-ng-repeat-start**, **x-ng-repeat-start** and **ng:repeat-start**).
  *
  * @animations
- * enter - when a new item is added to the list or when an item is revealed after a filter
- * leave - when an item is removed from the list or when an item is filtered out
- * move - when an adjacent item is filtered out causing a reorder or when the item contents are reordered
+ * **.enter** - when a new item is added to the list or when an item is revealed after a filter
+ *
+ * **.leave** - when an item is removed from the list or when an item is filtered out
+ *
+ * **.move** - when an adjacent item is filtered out causing a reorder or when the item contents are reordered
  *
  * @element ANY
  * @scope
@@ -22444,6 +21951,12 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                   value = valueFn(scope, locals);
                 }
               }
+              // Update the null option's selected property here so $render cleans it up correctly
+              if (optionGroupsCache[0].length > 1) {
+                if (optionGroupsCache[0][1].id !== key) {
+                  optionGroupsCache[0][1].selected = false;
+                }
+              }
             }
             ctrl.$setViewValue(value);
           });
@@ -22581,7 +22094,7 @@ var selectDirective = ['$compile', '$parse', function($compile,   $parse) {
                   lastElement.val(existingOption.id = option.id);
                 }
                 // lastElement.prop('selected') provided by jQuery has side-effects
-                if (lastElement[0].selected !== option.selected) {
+                if (existingOption.selected !== option.selected) {
                   lastElement.prop('selected', (existingOption.selected = option.selected));
                 }
               } else {
@@ -22682,8 +22195,14 @@ var optionDirective = ['$interpolate', function($interpolate) {
 
 var styleDirective = valueFn({
   restrict: 'E',
-  terminal: false
+  terminal: true
 });
+
+  if (window.angular.bootstrap) {
+    //AngularJS is already loaded, so we can return here...
+    console.log('WARNING: Tried to load angular more than once.');
+    return;
+  }
 
   //try to bind to jquery now so that one can write angular.element().read()
   //but we will rebind on bootstrap again.
@@ -22699,7 +22218,7 @@ var styleDirective = valueFn({
 
 !angular.$$csp() && angular.element(document).find('head').prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide{display:none !important;}ng\\:form{display:block;}.ng-animate-block-transitions{transition:0s all!important;-webkit-transition:0s all!important;}</style>');
 /**
- * @license AngularJS v1.2.15-build.2399+sha.ca4ddfa
+ * @license AngularJS v1.2.16-build.31+sha.7cccb8b
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -22812,11 +22331,11 @@ var styleDirective = valueFn({
  *   -webkit-animation: enter_sequence 1s linear; /&#42; Safari/Chrome &#42;/
  *   animation: enter_sequence 1s linear; /&#42; IE10+ and Future Browsers &#42;/
  * }
- * &#64-webkit-keyframes enter_sequence {
+ * @-webkit-keyframes enter_sequence {
  *   from { opacity:0; }
  *   to { opacity:1; }
  * }
- * &#64keyframes enter_sequence {
+ * @keyframes enter_sequence {
  *   from { opacity:0; }
  *   to { opacity:1; }
  * }
@@ -23476,7 +22995,7 @@ angular.module('ngAnimate', ['ng'])
           fireDOMOperation();
           fireBeforeCallbackAsync();
           fireAfterCallbackAsync();
-          fireDoneCallbackAsync();
+          closeAnimation();
           return;
         }
 
@@ -23655,7 +23174,7 @@ angular.module('ngAnimate', ['ng'])
                  animation, but class-based animations don't. An example of this
                  failing would be when a parent HTML tag has a ng-class attribute
                  causing ALL directives below to skip animations during the digest */
-              if(runner.isClassBased) {
+              if(runner && runner.isClassBased) {
                 cleanup(element, className);
               } else {
                 $$asyncCallback(function() {
@@ -24313,7 +23832,7 @@ angular.module('ngAnimate', ['ng'])
 })(window, window.angular);
 
 /**
- * @license AngularJS v1.2.15-build.2399+sha.ca4ddfa
+ * @license AngularJS v1.2.16-build.31+sha.7cccb8b
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -26142,8 +25661,8 @@ angular.module('ngMockE2E', ['ng']).config(['$provide', function($provide) {
  *    an array containing response status (number), response data (string) and response headers
  *    (Object).
  *  - passThrough – `{function()}` – Any request matching a backend definition with `passThrough`
- *    handler, will be pass through to the real backend (an XHR request will be made to the
- *    server.
+ *    handler will be passed through to the real backend (an XHR request will be made to the
+ *    server.)
  */
 
 /**
@@ -26496,7 +26015,7 @@ FaberComponent = (function() {
     this.topLevelOnly = opts.type === 'group' && (opts.topLevelOnly === true || opts.topLevelOnly === void 0);
   }
 
-  FaberComponent.prototype.init = function($element) {};
+  FaberComponent.prototype.init = function($element, update) {};
 
   FaberComponent.prototype.selected = function($element) {};
 
@@ -26506,11 +26025,15 @@ FaberComponent = (function() {
 
 })();
 
-window.faber = angular.module('faber', ['ngAnimate']).config(function($sceProvider) {
-  return $sceProvider.enabled(false);
-}).constant('faberConfig', {
+window.faber = angular.module('faber', ['ngAnimate']).constant('faberConfig', {
   expanded: true,
-  components: [new MediumEditorComponent()]
+  prefix: 'faber',
+  components: [MediumEditorComponent]
+}).run(function(contentService) {
+  faber["import"] = contentService["import"];
+  faber["export"] = contentService["export"];
+  faber.load = contentService.load;
+  return faber.removeSavedData = contentService.removeSavedData;
 });
 
 faber.animation('.faber-block-repeat', function($window, $document, $rootElement, $interval) {
@@ -26548,7 +26071,7 @@ faber.animation('.faber-block-repeat', function($window, $document, $rootElement
   };
 });
 
-faber.controller('BlockController', function($rootScope, $scope, $log, componentsService) {
+faber.controller('BlockController', function($rootScope, $scope, $log, componentsService, contentService) {
   var _base;
   $scope.block || ($scope.block = {});
   (_base = $scope.block).blocks || (_base.blocks = []);
@@ -26573,16 +26096,7 @@ faber.controller('BlockController', function($rootScope, $scope, $log, component
       return $scope.move($scope.block.blocks.indexOf(block), to);
     }
   });
-  $scope.components = function() {
-    var ret;
-    ret = [];
-    if ($scope.isTopLevel) {
-      ret = componentsService.getAll();
-    } else {
-      ret = $scope.component.type === 'element' ? [] : componentsService.findNonTopLevelOnly();
-    }
-    return ret;
-  };
+  $scope.components = $scope.component.type === 'element' ? [] : componentsService.findNonTopLevelOnly();
   $scope.validateBlock = function(block) {
     var component, isTopLevelScope, result;
     result = true;
@@ -26613,8 +26127,9 @@ faber.controller('BlockController', function($rootScope, $scope, $log, component
     }
   };
   $scope.remove = function(block) {
-    if (confirm('Are you sure you want to permanently remove this block?\n\nYou can’t undo this action.')) {
-      return $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1);
+    if (confirm('Are you sure you want to permanently remove this block?\n\nYou can\'t undo this action.')) {
+      $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1);
+      return contentService.save();
     }
   };
   $scope.insert = function(index, block) {
@@ -26627,7 +26142,8 @@ faber.controller('BlockController', function($rootScope, $scope, $log, component
     max = $scope.block.blocks.length;
     if (from >= 0 && from < max && to >= 0 && to < max) {
       $scope.block.blocks.splice(to, 0, $scope.block.blocks.splice(from, 1)[0]);
-      return $scope.$broadcast('BlockMoved');
+      $scope.$broadcast('BlockMoved');
+      return contentService.save();
     }
   };
   $scope.removeSelf = function() {
@@ -26636,7 +26152,7 @@ faber.controller('BlockController', function($rootScope, $scope, $log, component
   $scope.moveSelf = function(to) {
     return $scope.$emit('MoveChildBlock', $scope.block, to);
   };
-  return $scope.$watch('block.component', function(val) {
+  $scope.$watch('block.component', function(val) {
     var component;
     component = componentsService.findById(val);
     if (!component && componentsService.getAll().length > 0) {
@@ -26644,8 +26160,15 @@ faber.controller('BlockController', function($rootScope, $scope, $log, component
         'cannot find a component of the given name': val
       });
     } else {
-      return $scope.component = component || new FaberComponent();
+      $scope.component = component || new FaberComponent();
+      return contentService.save();
     }
+  });
+  $scope.$watch('block.content', function() {
+    return contentService.save();
+  });
+  return $scope.$watch('block.blocks', function() {
+    return contentService.save();
   });
 });
 
@@ -26658,7 +26181,8 @@ faber.controller('EditorController', function($rootScope, $scope, $controller, $
     return $rootScope.$broadcast($rootScope.expanded ? 'ExpandAll' : 'CollapseAll');
   });
   $scope.isTopLevel = true;
-  $scope.block.blocks = contentService.getAll();
+  $scope.block.blocks = [];
+  contentService.init($scope.block);
   $rootScope.expanded = angular.isDefined(faberConfig.expanded) ? faberConfig.expanded : true;
   componentsService.init(faberConfig.components || []);
   validateElementBlock = function(block) {
@@ -26702,9 +26226,12 @@ faber.controller('EditorController', function($rootScope, $scope, $controller, $
     }
     return validated;
   };
-  return $scope.$on('imported', function(evt, blocks) {
-    return $scope.block.blocks = validateImported(blocks);
+  $scope.$on('imported', function(evt, blocks) {
+    return $scope.$apply(function() {
+      return $scope.block.blocks = validateImported(blocks);
+    });
   });
+  return $scope.components = componentsService.getAll();
 });
 
 faber.directive('faberBlock', function($rootScope, $compile, $timeout) {
@@ -26768,7 +26295,7 @@ faber.directive('faberBlock', function($rootScope, $compile, $timeout) {
   };
 });
 
-faber.directive('faberComponentRenderer', function($rootScope, $http, $templateCache, $compile, $sce) {
+faber.directive('faberComponentRenderer', function($rootScope, $http, $templateCache, $compile, contentService) {
   return {
     require: '^faberBlock',
     restrict: 'AE',
@@ -26781,16 +26308,21 @@ faber.directive('faberComponentRenderer', function($rootScope, $http, $templateC
             evt.stopPropagation();
           }
           if ($scope.component.selected) {
-            $scope.component.selected($element);
+            $scope.component.selected($element, this.update);
           }
           $rootScope.$broadcast('SelectBlock', $scope.$id);
           return this.isSelected = true;
         },
         unselect: function() {
           if ($scope.component.unselected) {
-            $scope.component.unselected($element);
+            $scope.component.unselected($element, this.update);
           }
           return this.isSelected = false;
+        },
+        update: function(content) {
+          if (content) {
+            return $scope.block.content = content;
+          }
         }
       };
       $scope.$watch('component', function() {
@@ -26800,7 +26332,7 @@ faber.directive('faberComponentRenderer', function($rootScope, $http, $templateC
           $component = $compile(template)($scope);
           $element.find('div').append($component);
           if ($scope.component.init) {
-            $scope.component.init($element);
+            $scope.component.init($element, $scope.block.content, $scope.renderer.update);
           }
           return $scope.renderer.select();
         }
@@ -26877,24 +26409,41 @@ faber.directive('faberEditor', function($rootScope, $document) {
   };
 });
 
+faber.directive('trustHtml', function($sce) {
+  return {
+    replace: true,
+    restrict: 'M',
+    template: '<div ng-bind-html="trustedHtml"></div>',
+    link: function($scope, $element, attrs) {
+      return $scope.$watch(attrs.trustHtml, function(newValue, oldValue) {
+        if ((newValue != null) !== oldValue) {
+          return $scope.trustedHtml = $sce.trustAsHtml(newValue);
+        }
+      });
+    }
+  };
+});
+
 angular.module("faber").run(["$templateCache", function($templateCache) {$templateCache.put("faber-block.html","<div ng-class=\"{\'faber-block-hover\': isMouseHover, \'faber-block-selected\': renderer.isSelected, \'faber-block-moving\': isMoving}\" ng-mouseover=\"mouseover()\" ng-mouseenter=\"mouseenter()\" ng-mouseleave=\"mouseleave()\" class=\"faber-block-item\"><div class=\"faber-block-actions\"><label ng-click=\"positionSelect()\" class=\"faber-block-position\">Position:&nbsp;<span>{{$parent.$index+1}} / {{$parent.block.blocks.length}}<select ng-model=\"$parent.$index\" ng-options=\"i as (i == $parent.$index ? (i+1)+\' (current)\' : i+1) for i in indexRange()\" ng-change=\"onSelectChange()\"></select></span></label><button ng-click=\"removeSelf()\" class=\"faber-block-close fa fa-trash-o\"></button></div><faber-component-renderer></faber-component-renderer></div>");
-$templateCache.put("faber-components.html","<div ng-click=\"toggleComponents()\"><i ng-if=\"!showingComponents\" class=\"fa fa-plus-square\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components()\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li></ul></div>");
+$templateCache.put("faber-components.html","<div ng-click=\"toggleComponents()\"><i ng-if=\"!showingComponents\" class=\"fa fa-plus-square\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li></ul></div>");
 $templateCache.put("faber-editor.html","<faber-components></faber-components><div class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");}]);
 faber.factory('componentsService', function($filter, $log) {
-  var components, validate;
-  components = [];
+  var raws, validate;
+  raws = [];
   validate = function(component) {
-    return (angular.isObject(component.inputs) || !component.inputs) && angular.isString(component.id) && (component.type === 'element' || component.type === 'group');
+    var comp;
+    comp = new component();
+    return (angular.isObject(comp.inputs) || !comp.inputs) && angular.isString(comp.id) && (comp.type === 'element' || comp.type === 'group');
   };
   return {
     init: function(list) {
       var comp, _i, _len, _results;
-      components = [];
+      raws = [];
       _results = [];
       for (_i = 0, _len = list.length; _i < _len; _i++) {
         comp = list[_i];
         if (validate(comp)) {
-          _results.push(components.push(comp));
+          _results.push(raws.push(comp));
         } else {
           _results.push($log.warn({
             'invalid': comp
@@ -26904,23 +26453,30 @@ faber.factory('componentsService', function($filter, $log) {
       return _results;
     },
     getAll: function() {
-      return components;
+      var comp, res, _i, _len;
+      res = [];
+      for (_i = 0, _len = raws.length; _i < _len; _i++) {
+        comp = raws[_i];
+        res.push(new comp());
+      }
+      return res;
     },
     findByType: function(type) {
-      return $filter('filter')(components, {
+      return $filter('filter')(this.getAll(), {
         type: type
       }, true);
     },
     findTopLevelOnly: function() {
-      return $filter('filter')(components, {
+      return $filter('filter')(this.getAll(), {
         topLevelOnly: true
       }, true);
     },
     findNonTopLevelOnly: function() {
-      var comp, result, _i, _len;
+      var comp, result, _i, _len, _ref;
       result = [];
-      for (_i = 0, _len = components.length; _i < _len; _i++) {
-        comp = components[_i];
+      _ref = this.getAll();
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        comp = _ref[_i];
         if (!comp.topLevelOnly) {
           result.push(comp);
         }
@@ -26928,8 +26484,9 @@ faber.factory('componentsService', function($filter, $log) {
       return result;
     },
     findById: function(id) {
-      var res;
-      res = $filter('filter')(components, {
+      var all, res;
+      all = this.getAll();
+      res = $filter('filter')(all, {
         id: id
       }, true);
       if (res.length > 0) {
@@ -26941,22 +26498,27 @@ faber.factory('componentsService', function($filter, $log) {
   };
 });
 
-faber.factory('contentService', function($rootScope) {
-  var blocks;
-  blocks = [];
+faber.factory('contentService', function($rootScope, faberConfig) {
+  var content;
+  content = {
+    blocks: []
+  };
   return {
+    init: function(initial) {
+      return content = initial;
+    },
     clear: function() {
-      return blocks = [];
+      return content.blocks = [];
     },
     getAll: function() {
-      return blocks;
+      return content.blocks;
     },
     "import": function(json) {
       var imported;
       imported = angular.fromJson(json);
       if (angular.isArray(imported)) {
-        blocks = imported;
-        $rootScope.$broadcast('imported', blocks);
+        content.blocks = imported;
+        $rootScope.$broadcast('imported', content.blocks);
         return true;
       } else {
         return false;
@@ -26964,9 +26526,27 @@ faber.factory('contentService', function($rootScope) {
     },
     "export": function() {
       var json;
-      json = angular.toJson(blocks);
+      json = angular.toJson(content.blocks);
       $rootScope.$broadcast('exported', json);
       return json;
+    },
+    save: function() {
+      if (angular.isDefined(Storage)) {
+        return localStorage.setItem("" + (faberConfig.prefix || 'faber') + ".data", angular.toJson(content.blocks));
+      }
+    },
+    load: function() {
+      var json;
+      if (angular.isDefined(Storage)) {
+        json = localStorage.getItem("" + (faberConfig.prefix || 'faber') + ".data") || [];
+        this["import"](json);
+        return json;
+      } else {
+        return [];
+      }
+    },
+    removeSavedData: function() {
+      return localStorage.removeItem("" + (faberConfig.prefix || 'faber') + ".data");
     }
   };
 });

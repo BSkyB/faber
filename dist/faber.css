@@ -390,8 +390,8 @@ faber-components {
     .faber-blocks faber-block .faber-block-actions {
       display: none;
       position: absolute;
-      right: 0.2em;
-      top: 0.2em; }
+      right: 0;
+      top: 0; }
     .faber-blocks faber-block .faber-block-position {
       font-size: 1em;
       color: #cccccc;
@@ -435,6 +435,9 @@ faber-components {
     display: block; }
     .faber-blocks faber-component-renderer > div {
       padding: 1em; }
+    .faber-blocks faber-component-renderer *:focus {
+      outline: rgba(66, 139, 202, 0.2) solid 2px;
+      outline-offset: 2px; }
 
 html, body {
   display: block;
@@ -449,4 +452,4 @@ body {
 #faber {
   max-width: 1170px;
   width: 100%;
-  margin: auto; }
+  margin: 0 auto 5em; }
