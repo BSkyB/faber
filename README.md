@@ -73,12 +73,12 @@ faber.import(json);
 The configuration can be done using `faberConfig` constant when faber is initialised.
 
 ```javascript
-window.faber = angular.module('faber', []).constant('faberConfig', {
+window.faber = angular.module('faber', ['ngAnimate', 'ngCookies']).constant('faberConfig', {
   expanded: true,
   prefix: 'faber',
   components: [
-    new FaberComponent(),
-    new MediumEditorComponent()
+    FaberComponent,
+    MediumEditorComponent
   ]
 });
 
