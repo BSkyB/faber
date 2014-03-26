@@ -1,7 +1,6 @@
 describe 'GroupBlockDirective:', ()->
   # Use faber-block directive as faber-group-block requires faber-block
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
-#  blockTemplate = '<faber-group-block></faber-group-block>'
 
   config = null
   rootScope = null
@@ -64,9 +63,13 @@ describe 'GroupBlockDirective:', ()->
       expect(@groupBlockElement.find('option').length).toBe 2
 
   describe 'when switch to other group component', ->
-    it 'should show the correct component name', ->
+    beforeEach ->
       @groupBlockScope.currentComponent = 'another-group-component'
       @groupBlockScope.$digest()
 
+    it 'should show the correct component name', ->
       expect(@groupBlockScope.component.id).toBe 'another-group-component'
       expect(@groupBlockScope.component.name).toBe 'Another Group Component'
+
+    it 'should select the block after switch the component', ->
+      expect(@scope.isSelected).toBeTruthy()
