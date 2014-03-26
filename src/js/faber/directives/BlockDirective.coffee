@@ -17,7 +17,7 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       compiledContents $scope, (clone, $scope) ->
         $element.append clone
 
-    post: ($scope, $element, $attrs) ->
+    post: ($scope, $element, $attrs, ctrl) ->
       $scope.currentIndex = $scope.$parent.$index
 
       $scope.mouseover = ()->

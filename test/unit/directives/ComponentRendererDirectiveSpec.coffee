@@ -1,4 +1,4 @@
-describe 'Component Renderer Directive:', ->
+describe 'ComponentRendererDirective:', ->
 
   callbacks =
     initCallback: ()->
@@ -32,6 +32,7 @@ describe 'Component Renderer Directive:', ->
       scope.passedDownBlock = component: 'sample-component'
       blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
       scope.$digest()
+      @blockScope = blockElement.isolateScope()
       @element = blockElement.find('faber-component-renderer')
       @scope = @element.isolateScope()
 
@@ -46,6 +47,9 @@ describe 'Component Renderer Directive:', ->
 
   describe 'when selected the rendered block', ->
     it 'should be able to call selected callback of the component', ->
+      @blockScope.select()
+      @blockScope.$digest()
+
       expect(callbacks.selectedCallback).toHaveBeenCalled()
 
   describe 'when unselected the rendered block', ->

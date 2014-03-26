@@ -1,10 +1,15 @@
-faber.directive 'faberComponents', ($rootScope) ->
+faber.directive 'faberComponents', ($rootScope, $filter, componentsService) ->
   require: '^faberEditor'
   restrict: 'AE'
   templateUrl: 'faber-components.html'
 
   link: ($scope, $element, attrs)->
     $scope.showingComponents = angular.isUndefined $scope.$index
+    $scope.showingGroupComponents = false
+
+    $scope.hasGroupComponents = ()->
+      groupComponents = $filter('filter') $scope.components, type: 'group', true
+      return groupComponents.length > 0
 
     $scope.$watch 'showingComponents', (newValue)->
       if newValue
@@ -25,5 +30,17 @@ faber.directive 'faberComponents', ($rootScope) ->
       insertTo = $scope.$index + 1 or 0
       $scope.insert insertTo, comp
 
+    $scope.insertGroupItemBlock = (evt)->
+      evt.stopPropagation()
+
+      $scope.showingComponents = false
+
+      insertTo = $scope.$index + 1 or 0
+      $scope.insertGroup insertTo
+
     $scope.toggleComponents = ()->
       $scope.showingComponents = !$scope.showingComponents
+
+#    $scope.toggleGroupComponents = (evt)->
+#      evt.stopPropagation() if evt
+#      $scope.showingGroupComponents = !$scope.showingGroupComponents

@@ -14,7 +14,7 @@ class MediumEditorExtended extends MediumEditor
 
     super(btnType) or buttonTemplates[btnType]
 
-class MediumEditorComponent
+class RichTextComponent
   name: 'Rich Text',
   id: 'rich-text',
   type: 'element',

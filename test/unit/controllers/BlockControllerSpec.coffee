@@ -1,5 +1,6 @@
 describe 'BlockController:', ->
   log = null
+  rootScope = null
   scope = null
   blockController = null
   componentsService = null
@@ -11,6 +12,8 @@ describe 'BlockController:', ->
       log = $log
       log.reset()
 
+      rootScope = $rootScope
+
       scope = $rootScope.$new()
       blockController = $controller('BlockController', $scope: scope)
       componentsService = $injector.get 'componentsService'
@@ -21,6 +24,20 @@ describe 'BlockController:', ->
   describe 'when initialised,', ->
     it 'should be defined', ->
       expect(blockController).toBeDefined()
+
+  describe 'when a block is selected,', ->
+    it 'if the block is the selected block, it should broadcast \'SelectBlock\' event with it\'s id', ->
+      spyOn rootScope, '$broadcast'
+
+      scope.select()
+
+      expect(scope.isSelected).toBe true
+      expect(rootScope.$broadcast).toHaveBeenCalledWith('SelectBlock', scope.$id)
+
+    it 'if the block is not the selected block, it should unselect', ->
+      rootScope.$broadcast 'SelectBlock', 'a scope'
+
+      expect(scope.isSelected).toBe false
 
   describe 'when removing a child block,', ->
     blockToRemove = null
@@ -113,8 +130,6 @@ describe 'BlockController:', ->
         componentsService.init [
           ()->
             id: 'aaaaa-component'
-            inputs:
-              title: 'block title'
             type: 'element'
         ]
 
@@ -123,7 +138,7 @@ describe 'BlockController:', ->
         scope.block.component = 'aaaaa-component'
         scope.$digest()
 
-        expect(scope.component.inputs.title).toBe 'block title'
+        expect(scope.component.id).toBe 'aaaaa-component'
 
     describe 'if the component is not available,', ->
       it 'should warn', ->

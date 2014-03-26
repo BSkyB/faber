@@ -1,35 +1,14 @@
 faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
   $scope.block.blocks or= []
-  $scope.component or= new FaberComponent()
-  $scope.renderer or={}
+
+  $scope.isSelected = true
 
   $scope.expanded = !!$rootScope.expanded
 
-  $scope.$on 'CollapseAll', (evt)->
-    $scope.expanded = false
-
-  $scope.$on 'ExpandAll', (evt)->
-    $scope.expanded = true
-
-  # When a child block fire this event with itself as an argument,
-  # the parent block will pick the event and stop it to propagate more
-  # and remove the child block from its children
-  $scope.$on 'RemoveChildBlock', (evt, block)->
-    if $scope.block.blocks.indexOf(block) >= 0
-      evt.stopPropagation()
-      $scope.remove(block)
-
-  # When a child block fire this event with itself and destination index as arbuments,
-  # the parent block will pick the event and stop it to propagate more
-  # and mobe the child block to the destination to re-order its children
-  $scope.$on 'MoveChildBlock', (evt, block, to)->
-    if $scope.block.blocks.indexOf(block) >= 0
-      evt.stopPropagation()
-      $scope.move $scope.block.blocks.indexOf(block), to
-
   # retrieve available component list for the current block
   $scope.components = componentsService.getAll()
+  $scope.component = null
 
   # Check if the component of the block is valid component and the block has all necessary information
   $scope.validateBlock = (block)->
@@ -74,6 +53,13 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   $scope.insert = (index, block)->
     if $scope.validateBlock block
       $scope.block.blocks.splice(index, 0, block)
+      $scope.select()
+
+  # Insert an empty group block to the given index
+  $scope.insertGroup = (index)->
+    console.log "insert group to #{index}"
+    $scope.block.blocks.splice(index, 0, {})
+    $scope.select()
 
   # Move a child block at from index to to index
   $scope.move = (from, to)->
@@ -90,6 +76,25 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
   $scope.moveSelf = (to)->
     $scope.$emit 'MoveChildBlock', $scope.block, to
+
+  # Select the block
+  $scope.select = (evt)->
+    if evt
+      evt.stopPropagation()
+
+    $scope.isSelected = true
+    $rootScope.$broadcast 'SelectBlock', $scope.$id
+
+  # Unselect the block
+  $scope.unselect = (evt)->
+    if evt
+      evt.stopPropagation()
+
+    $scope.isSelected = false
+
+  # ==================
+  # WATCH
+  # ==================
 
   # If the block's component data changes, find the component object and set it to the block
   $scope.$watch 'block.component', (val) ->
@@ -109,3 +114,46 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   $scope.$watch 'block.blocks', ()->
     contentService.save()
 
+  # ==================
+  # ON
+  # ==================
+
+  $scope.$on 'CollapseAll', (evt)->
+    $scope.expanded = false
+
+  $scope.$on 'ExpandAll', (evt)->
+    $scope.expanded = true
+
+  # When a child block fire this event with itself as an argument,
+  # the parent block will pick the event and stop it to propagate more
+  # and remove the child block from its children
+  $scope.$on 'RemoveChildBlock', (evt, block)->
+    if $scope.block.blocks.indexOf(block) >= 0
+      evt.stopPropagation()
+      $scope.remove(block)
+
+  # When a child block fire this event with itself and destination index as arbuments,
+  # the parent block will pick the event and stop it to propagate more
+  # and mobe the child block to the destination to re-order its children
+  $scope.$on 'MoveChildBlock', (evt, block, to)->
+    if $scope.block.blocks.indexOf(block) >= 0
+      evt.stopPropagation()
+      $scope.move $scope.block.blocks.indexOf(block), to
+
+  $scope.$on 'SelectBlock', (evt, id)->
+    unless id is $scope.$id
+      $scope.unselect()
+
+
+  # ==================
+  # FUNCTIONS
+  # ==================
+
+  select: ()->
+    $scope.select()
+
+  getScopeId: ()->
+    $scope.$id
+
+  getComponent: ()->
+    $scope.component

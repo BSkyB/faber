@@ -65,6 +65,9 @@ faber.factory 'componentsService', ($filter, $log) ->
   # @return [Array<FaberComponent>] the matching components.
   #
   findById: (id) ->
+    unless id
+      return null
+
     all = @getAll()
     res = $filter('filter') all, id: id, true
 
