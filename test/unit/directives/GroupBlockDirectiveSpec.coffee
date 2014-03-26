@@ -1,5 +1,6 @@
 describe 'GroupBlockDirective:', ()->
-  blockTemplate = '<faber-group-block data-faber-block-content="passedDownBlock" data-faber-block-inherited-blacklist="blacklist"></faber-group-block>'
+  # Use faber-block directive as faber-group-block requires faber-block
+  blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
 
   config = null
   rootScope = null

@@ -97,57 +97,62 @@ describe 'EditorDirective:', ()->
       expect(obj[2].component).toBe 'b-component'
 
   describe 'when it has child blocks,', ->
-    block1 = block2 = block3 =
-    block1Scope = block2Scope = block3Scope =
-    block1Element = block2Element = block3Element = null
-
     beforeEach ->
-      block1 = component: 'a-component'
-      block2 = component: 'a-component'
-      block3 = component: 'a-component'
+      @groupBlock1 = component: 'group-component-1'
+      @groupBlock2 = component: 'group-component-2'
+      @groupBlock3 = component: 'group-component-3'
+      @elementBlock1 = component: 'a-component'
+      @elementBlock2 = component: 'b-component'
 
-      scope.block.blocks = [block1, block2, block3]
+      scope.block.blocks = [@elementBlock1, @groupBlock1, @groupBlock2, @groupBlock3, @elementBlock2]
 
       scope.$digest()
 
-      block1Element = angular.element element.find('faber-block')[0]
-      block1Scope = block1Element.isolateScope()
-      block2Element = angular.element element.find('faber-block')[1]
-      block2Scope = block2Element.isolateScope()
-      block3Element = angular.element element.find('faber-block')[2]
-      block3Scope = block3Element.isolateScope()
+      @block1Element = angular.element element.find('faber-block')[0]
+      @block1Scope = @block1Element.isolateScope()
+      @block2Element = angular.element element.find('faber-block')[1]
+      @block2Scope = @block2Element.isolateScope()
+      @block3Element = angular.element element.find('faber-block')[2]
+      @block3Scope = @block3Element.isolateScope()
+      @block4Element = angular.element element.find('faber-block')[3]
+      @block4Scope = @block4Element.isolateScope()
+      @block5Element = angular.element element.find('faber-block')[4]
+      @block5Scope = @block5Element.isolateScope()
 
-    it 'the children should know how many siblings it has', ->
-      expect(block1Element.find('option').length).toBe 3
-      expect(block2Element.find('option').length).toBe 3
-      expect(block3Element.find('option').length).toBe 3
+    it 'the children should know how many element block siblings it has', ->
+      expect(@block1Element.find('option').length).toBe 5
+      expect(@block2Element.find('option').length).toBe 5
+      expect(@block3Element.find('option').length).toBe 5
+      expect(@block4Element.find('option').length).toBe 5
+      expect(@block5Element.find('option').length).toBe 5
 
-      expect(block1Element.find('select').val()).toBe '0'
-      expect(block2Element.find('select').val()).toBe '1'
-      expect(block3Element.find('select').val()).toBe '2'
+      expect(@block1Element.find('select').val()).toBe '0'
+      expect(@block2Element.find('select').val()).toBe '1'
+      expect(@block3Element.find('select').val()).toBe '2'
 
     it 'the children should update its current index when a sibling move to different position', ->
-      block3Element.find('select').val('0')
-      block3Scope.onSelectChange()
+      @block3Element.find('select').val('0')
+      @block3Scope.onSelectChange()
       scope.$digest()
 
-      expect(block1Element.find('select').val()).toBe '1'
-      expect(block2Element.find('select').val()).toBe '2'
-      expect(block3Element.find('select').val()).toBe '0'
-
-  describe 'when it has group child blocks,', ->
-    groupBlock1 = component: 'group-component-1'
-    groupBlock2 = component: 'group-component-2'
-    groupBlock3 = component: 'group-component-3'
-    elementBlock1 = component: 'a-component'
-    elementBlock2 = component: 'b-component'
-
-    beforeEach ->
-      scope.block.blocks = [elementBlock1, groupBlock1, groupBlock2, groupBlock3, elementBlock2]
-      scope.$digest()
+      expect(@block1Element.find('select').val()).toBe '1'
+      expect(@block2Element.find('select').val()).toBe '2'
+      expect(@block3Element.find('select').val()).toBe '0'
+      expect(@block4Element.find('select').val()).toBe '3'
+      expect(@block5Element.find('select').val()).toBe '4'
 
     it 'should have correct number of children and their components', ->
       expect(scope.block.blocks.length).toBe 5
       expect(element.find('faber-block').length).toBe 5
       expect(element.find('faber-group-block').length).toBe 3
-      expect(element.find('faber-component-renderer').length).toBe 2
+      expect(element.find('faber-element-block').length).toBe 2
+
+    describe 'when a group block is inserted', ->
+      it 'should use \'faber-group-block\' to render the group', ->
+        scope.insertGroup(2)
+        scope.$digest()
+
+        expect(scope.block.blocks.length).toBe 6
+        expect(scope.block.blocks.length).toBe 6
+        expect(element.find('faber-group-block').length).toBe 4
+        expect(element.find('faber-element-block').length).toBe 2

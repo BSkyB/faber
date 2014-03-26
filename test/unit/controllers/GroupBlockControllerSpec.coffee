@@ -49,7 +49,7 @@ describe 'GroupBlockController:', ->
 
     describe 'if not given any group items', ->
       it 'should not have any children', ->
-        expect(scope.block.blocks.length).toBe 0
+        expect(scope.block.blocks).toBeUndefined()
 
     describe 'if given group items', ->
       beforeEach ->

@@ -1,6 +1,6 @@
 faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
-  $scope.block.blocks or= []
+#  $scope.block.blocks or= []
 
   $scope.isSelected = true
 
@@ -58,7 +58,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   # Insert an empty group block to the given index
   $scope.insertGroup = (index)->
     console.log "insert group to #{index}"
-    $scope.block.blocks.splice(index, 0, {})
+    $scope.block.blocks.splice(index, 0, {component: componentsService.findByType('group')[0].id})
     $scope.select()
 
   # Move a child block at from index to to index
@@ -136,7 +136,7 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   # the parent block will pick the event and stop it to propagate more
   # and mobe the child block to the destination to re-order its children
   $scope.$on 'MoveChildBlock', (evt, block, to)->
-    if $scope.block.blocks.indexOf(block) >= 0
+    if $scope.block.blocks and $scope.block.blocks.indexOf(block) >= 0
       evt.stopPropagation()
       $scope.move $scope.block.blocks.indexOf(block), to
 
