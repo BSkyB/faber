@@ -24,6 +24,9 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
       if $scope.block.component and $scope.component
         template = $scope.component.template
         $component = $compile(template)($scope)
+
+        wrapper = $element.find('div')
+        wrapper.empty()
         $element.find('div').append $component
 
         $scope.component.init($element, $scope.block.content, $scope.update) if $scope.component.init

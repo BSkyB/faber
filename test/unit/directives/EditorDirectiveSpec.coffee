@@ -119,16 +119,11 @@ describe 'EditorDirective:', ()->
       @block5Element = angular.element element.find('faber-block')[4]
       @block5Scope = @block5Element.isolateScope()
 
-    it 'the children should know how many element block siblings it has', ->
-      expect(@block1Element.find('option').length).toBe 5
-      expect(@block2Element.find('option').length).toBe 5
-      expect(@block3Element.find('option').length).toBe 5
-      expect(@block4Element.find('option').length).toBe 5
-      expect(@block5Element.find('option').length).toBe 5
-
-      expect(@block1Element.find('select').val()).toBe '0'
-      expect(@block2Element.find('select').val()).toBe '1'
-      expect(@block3Element.find('select').val()).toBe '2'
+    it 'should have correct number of children and their components', ->
+      expect(scope.block.blocks.length).toBe 5
+      expect(element.find('faber-block').length).toBe 5
+      expect(element.find('faber-group-block').length).toBe 3
+      expect(element.find('faber-element-block').length).toBe 2
 
     it 'the children should update its current index when a sibling move to different position', ->
       @block3Element.find('select').val('0')
@@ -140,12 +135,6 @@ describe 'EditorDirective:', ()->
       expect(@block3Element.find('select').val()).toBe '0'
       expect(@block4Element.find('select').val()).toBe '3'
       expect(@block5Element.find('select').val()).toBe '4'
-
-    it 'should have correct number of children and their components', ->
-      expect(scope.block.blocks.length).toBe 5
-      expect(element.find('faber-block').length).toBe 5
-      expect(element.find('faber-group-block').length).toBe 3
-      expect(element.find('faber-element-block').length).toBe 2
 
     describe 'when a group block is inserted', ->
       it 'should use \'faber-group-block\' to render the group', ->

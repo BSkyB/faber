@@ -9,11 +9,14 @@ window.faber = angular.module('faber', ['ngAnimate'])
     # (array) List of components to be imported and managed by components service
     components: [
       RichTextComponent
-    , ()->
+    ,
+      OrderedListComponent
+    ,
+      ()->
         name: 'Group Component'
         id: 'group-component'
         type: 'group'
-        template: '<p>Group Component template</p>'
+        template: '<ul><li>group component iten</li></ul>'
     ]
   })
   .run (contentService)->

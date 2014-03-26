@@ -1,7 +1,14 @@
-faber.directive 'faberGroupBlock', ($rootScope, $compile, $timeout) ->
-#  scope:
-#    'block': '=faberBlockContent'
+faber.directive 'faberGroupBlock', (componentsService) ->
   restrict: 'E'
-#  transclude: true
   templateUrl: 'faber-group-block.html'
   controller: 'GroupBlockController'
+
+  link: ($scope, $element, attrs)->
+    $scope.$watch 'component', (val)->
+      if val
+        $scope.currentComponent = val.id
+
+    $scope.$watch 'currentComponent', (val)->
+      unless val is $scope.component.id
+        $scope.block.component = val
+#        $scope.component = componentsService.findById val

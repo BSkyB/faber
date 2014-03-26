@@ -28,6 +28,7 @@ describe 'GroupBlockController:', ->
         ()->
           name: 'Element Component 1'
           id: 'element-component-1'
+          type: 'element'
           template: '<div></div>'
       ,
         ()->
@@ -41,15 +42,20 @@ describe 'GroupBlockController:', ->
       controller = $controller('GroupBlockController', $scope: scope)
 
   describe 'when initialised,', ->
-    it 'should have all group components available', ->
-      expect(scope.components.length).toBe 3
-      expect(scope.components[0].id).toBe 'group-component-1'
-      expect(scope.components[1].id).toBe 'group-component-2'
-      expect(scope.components[2].id).toBe 'group-component-3'
+    it 'should have all element components available to be used for children', ->
+      expect(scope.components.length).toBe 2
+      expect(scope.components[0].id).toBe 'element-component-1'
+      expect(scope.components[1].id).toBe 'element-component-2'
+
+    it 'should have all group components available to be interchangeable', ->
+      expect(scope.groupComponents.length).toBe 3
+      expect(scope.groupComponents[0].id).toBe 'group-component-1'
+      expect(scope.groupComponents[1].id).toBe 'group-component-2'
+      expect(scope.groupComponents[2].id).toBe 'group-component-3'
 
     describe 'if not given any group items', ->
       it 'should not have any children', ->
-        expect(scope.block.blocks).toBeUndefined()
+        expect(scope.block.blocks).toEqual []
 
     describe 'if given group items', ->
       beforeEach ->

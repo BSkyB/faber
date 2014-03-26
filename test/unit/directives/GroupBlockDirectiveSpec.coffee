@@ -1,11 +1,20 @@
 describe 'GroupBlockDirective:', ()->
   # Use faber-block directive as faber-group-block requires faber-block
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
+#  blockTemplate = '<faber-group-block></faber-group-block>'
 
   config = null
   rootScope = null
   compile = null
   componentsService = null
+
+  createDirective = (template)->
+    scope = rootScope.$new()
+    scope.passedDownBlock = { component: 'a component' }
+    element = compile(template or blockTemplate)(scope)
+    scope.$digest()
+
+    return element
 
   beforeEach module 'faber'
   beforeEach ->
@@ -22,29 +31,42 @@ describe 'GroupBlockDirective:', ()->
       rootScope = $rootScope
       componentsService = $injector.get 'componentsService'
 
-  createDirective = (template)->
-    scope = rootScope.$new()
-    scope.passedDownBlock = { component: 'a component' }
-    element = compile(template or blockTemplate)(scope)
-    scope.$digest()
+    componentsService.init [
+      ()->
+        id: 'a-component'
+        type: 'element'
+    ,
+      ()->
+        id: 'group-component'
+        name: 'Group Component'
+        type: 'group'
+    ,
+      ()->
+        id: 'another-group-component'
+        name: 'Another Group Component'
+        type: 'group'
+    ]
 
-    return element
+    @element = createDirective()
+    @scope = @element.isolateScope()
+    @scope.expanded = true
+    @scope.block.component = 'group-component'
+    @scope.$digest()
+
+    @groupBlockElement = angular.element @element.find('faber-group-block')
+    @groupBlockScope = @groupBlockElement.scope()
 
   describe 'when initialised,', ->
-    beforeEach ->
-      componentsService.init [
-        ()->
-          id: 'a-component'
-          type: 'element'
-      ,
-        ()->
-          id: 'group-component'
-          type: 'group'
-      ]
+    it 'should be correctly initialised', ->
+      expect(@element).toBeDefined()
 
-      @element = createDirective()
-      @scope = @element.isolateScope()
+    it 'should have interchangeable group component list', ->
+      expect(@groupBlockElement.find('option').length).toBe 2
 
-    it 'should be defined', ->
-      element = createDirective()
-      expect(element).toBeDefined()
+  describe 'when switch to other group component', ->
+    it 'should show the correct component name', ->
+      @groupBlockScope.currentComponent = 'another-group-component'
+      @groupBlockScope.$digest()
+
+      expect(@groupBlockScope.component.id).toBe 'another-group-component'
+      expect(@groupBlockScope.component.name).toBe 'Another Group Component'

@@ -1,5 +1,5 @@
 faber.directive 'faberComponents', ($rootScope, $filter, componentsService) ->
-  require: '^faberEditor'
+#  require: '^faberEditor'
   restrict: 'AE'
   templateUrl: 'faber-components.html'
 

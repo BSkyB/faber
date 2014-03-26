@@ -1,6 +1,5 @@
 faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
-#  $scope.block.blocks or= []
 
   $scope.isSelected = true
 
@@ -98,13 +97,14 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   # If the block's component data changes, find the component object and set it to the block
   $scope.$watch 'block.component', (val) ->
-    component = componentsService.findById val
+    if val
+      component = componentsService.findById val
 
-    if !component and componentsService.getAll().length > 0
-      $log.warn 'cannot find a component of the given name': val
-    else
-      $scope.component = component or new FaberComponent()
-      contentService.save()
+      if !component and componentsService.getAll().length > 0
+        $log.warn 'cannot find a component of the given name': val
+      else
+        $scope.component = component or new FaberComponent()
+        contentService.save()
 
   # If block's content changes save it
   $scope.$watch 'block.content', ()->
