@@ -17,19 +17,19 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       compiledContents $scope, (clone, $scope) ->
         $element.append clone
 
-    post: ($scope, $element, $attrs, ctrl) ->
+    post: ($scope, $element, $attrs, $ctrl) ->
       $scope.currentIndex = $scope.$parent.$index
 
-      $scope.mouseover = ()->
-#        console.log 'mouseover'
+      $scope.expanded = !!$rootScope.expanded
+
+      $scope.isSelected = false
+      $scope.isMoving = false
 
       $scope.mouseenter = ()->
         $scope.isMouseHover = true
-#        console.log 'mouseenter'
 
       $scope.mouseleave = ()->
         $scope.isMouseHover = false
-#        console.log 'mouseleave'
 
       # Get available index range that can be used to move in the parent block's children
       # Used to create the select options
@@ -53,5 +53,50 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
           $timeout ()->
             $scope.isMoving = true
 
-      $scope.$on 'SelectBlock', ()->
+      $scope.onBlockClick = ()->
+        $rootScope.$broadcast 'SelectBlock', $scope.$id
+
+      # Select the block
+      $scope.select = (evt)->
+        if evt
+          evt.stopPropagation()
+
+        $scope.isSelected = true
+
+      # Unselect the block
+      $scope.unselect = (evt)->
+        if evt
+          evt.stopPropagation()
+
+        $scope.isSelected = false
+
+      # Emit RemoveChildBlock event with itself so its parent block can remove it
+      $scope.removeSelf = ()->
+        $scope.$parent.remove $scope.block
+
+      # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
+      $scope.moveSelf = (to)->
+        $scope.$parent.move $scope.$parent.block.blocks.indexOf($scope.block), to
+
+      $scope.$on 'SelectBlock', (evt, id)->
         $scope.isMoving = false
+
+        if id is $scope.$id
+          $scope.select()
+        else
+          $scope.unselect()
+
+      $scope.$on 'CollapseAll', (evt)->
+        $scope.expanded = false
+
+      $scope.$on 'ExpandAll', (evt)->
+        $scope.expanded = true
+
+      $ctrl.select = ()->
+        $scope.select()
+
+      $ctrl.getScopeId = ()->
+        $scope.$id
+
+      $ctrl.getComponent = ()->
+        $scope.component

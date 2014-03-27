@@ -25,20 +25,6 @@ describe 'BlockController:', ->
     it 'should be defined', ->
       expect(blockController).toBeDefined()
 
-  describe 'when a block is selected,', ->
-    it 'if the block is the selected block, it should broadcast \'SelectBlock\' event with it\'s id', ->
-      spyOn rootScope, '$broadcast'
-
-      scope.select()
-
-      expect(scope.isSelected).toBe true
-      expect(rootScope.$broadcast).toHaveBeenCalledWith('SelectBlock', scope.$id)
-
-    it 'if the block is not the selected block, it should unselect', ->
-      rootScope.$broadcast 'SelectBlock', 'a scope'
-
-      expect(scope.isSelected).toBe false
-
   describe 'when removing a child block,', ->
     blockToRemove = null
 
@@ -72,24 +58,6 @@ describe 'BlockController:', ->
         scope.remove = 'test block'
 
         expect(scope.block.blocks.length).toBe 4
-
-  describe 'when collapse all event is fired,', ->
-    beforeEach ->
-      inject ($rootScope)->
-        $rootScope.$broadcast 'CollapseAll'
-
-    it 'should be collapsed', ->
-      expect(scope.expanded).toBe false
-
-  describe 'when expand all event is fired,', ->
-    beforeEach ->
-      scope.expanded = false
-
-      inject ($rootScope)->
-        $rootScope.$broadcast 'ExpandAll'
-
-    it 'should be expanded', ->
-      expect(scope.expanded).toBe true
 
   describe 'when block data changes', ->
     contentService = null
@@ -202,9 +170,3 @@ describe 'BlockController:', ->
       expect(scope.block.blocks[1]).toBe block3
       expect(scope.block.blocks[2]).toBe block2
 
-    it 'should be able to re-order when MoveChildBlock event is recieved with a childblock and its destination', ->
-      scope.$emit 'MoveChildBlock', block3, 0
-
-      expect(scope.block.blocks[0]).toBe block3
-      expect(scope.block.blocks[1]).toBe block1
-      expect(scope.block.blocks[2]).toBe block2

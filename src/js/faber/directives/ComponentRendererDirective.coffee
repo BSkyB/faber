@@ -1,4 +1,4 @@
-faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $compile, componentsService)->
+faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $timeout, $compile, componentsService)->
   require: '^faberBlock'
   restrict: 'AE'
   scope:
@@ -30,6 +30,7 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $c
         $element.find('div').append $component
 
         $scope.component.init($element, $scope.block.content, $scope.update) if $scope.component.init
+        $rootScope.$broadcast 'SelectBlock', blockController.getScopeId()
 
     $scope.$on 'SelectBlock', (evt, id)->
       if $scope.component

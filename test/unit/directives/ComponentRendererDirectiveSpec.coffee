@@ -1,4 +1,5 @@
 describe 'ComponentRendererDirective:', ->
+  rootScope = null
 
   callbacks =
     initCallback: ()->
@@ -28,6 +29,7 @@ describe 'ComponentRendererDirective:', ->
           callbacks.unselectedCallback()
       componentsService.init [comp]
 
+      rootScope = $rootScope
       scope = $rootScope.$new()
       scope.passedDownBlock = component: 'sample-component'
       blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
@@ -47,7 +49,7 @@ describe 'ComponentRendererDirective:', ->
 
   describe 'when selected the rendered block', ->
     it 'should be able to call selected callback of the component', ->
-      @blockScope.select()
+      rootScope.$broadcast 'SelectBlock', @blockScope.$id
       @blockScope.$digest()
 
       expect(callbacks.selectedCallback).toHaveBeenCalled()
