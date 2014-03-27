@@ -145,3 +145,23 @@ describe 'EditorDirective:', ()->
         expect(scope.block.blocks.length).toBe 6
         expect(element.find('faber-group-block').length).toBe 4
         expect(element.find('faber-element-block').length).toBe 2
+
+  describe 'when content is imported,', ->
+    beforeEach ->
+      contentService.import '[
+        {"component":"group-component-1","blocks":[]},
+        {"component":"a-component"},
+        {"component":"group-component-2","blocks":[]}
+      ]'
+      scope.$digest()
+
+    it 'should not highlight/select any blocks', ->
+      faberBlocks = element.find('faber-block')
+
+      inject ($timeout)->
+        $timeout ()->
+          expect(scope.block.blocks.length).toBe 3
+          expect(faberBlocks.length).toBe 3
+          expect(angular.element(faberBlocks[0]).isolateScope().isSelected).toBeFalsy()
+          expect(angular.element(faberBlocks[1]).isolateScope().isSelected).toBeFalsy()
+          expect(angular.element(faberBlocks[2]).isolateScope().isSelected).toBeFalsy()

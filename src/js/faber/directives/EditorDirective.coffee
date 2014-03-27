@@ -1,4 +1,4 @@
-faber.directive 'faberEditor', ($rootScope, $document) ->
+faber.directive 'faberEditor', ($rootScope, $document, $timeout) ->
   restrict: 'AE'
   templateUrl: 'faber-editor.html'
   controller: 'EditorController'
@@ -20,3 +20,8 @@ faber.directive 'faberEditor', ($rootScope, $document) ->
           $rootScope.$broadcast 'ShowComponents', null
           $rootScope.$broadcast 'SelectBlock', null
     , true
+
+    $scope.$on 'imported', (evt, blocks) ->
+      # make sure that no blocks are selected when they are bulk imported
+      $timeout ()->
+        $rootScope.$broadcast 'SelectBlock', $scope.$id

@@ -113,7 +113,7 @@ describe 'EditorController:', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toEqual new @groupComp()
 
-  describe 'if content is imported,', ->
+  describe 'when content is imported,', ->
     describe 'if all the block\'s have valid components,', ->
       it 'should add the blocks to the block list', ->
         @componentsService.init [
