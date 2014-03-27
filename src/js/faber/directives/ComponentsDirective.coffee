@@ -1,4 +1,9 @@
-faber.directive 'faberComponents', ($rootScope, $filter, componentsService) ->
+faber.directive 'faberComponents', ($rootScope, $filter) ->
+  buttonClickWithIndexReturn = (evt, $scope)->
+    evt.stopPropagation()
+    $scope.showingComponents = false
+    return $scope.$index + 1 or 0
+
   restrict: 'AE'
   templateUrl: 'faber-components.html'
 
@@ -18,20 +23,13 @@ faber.directive 'faberComponents', ($rootScope, $filter, componentsService) ->
         $scope.showingComponents = false
 
     $scope.insertBlock = (evt, comp)->
-      evt.stopPropagation()
+      $scope.insert buttonClickWithIndexReturn(evt, $scope), comp
 
-      $scope.showingComponents = false
-
-      insertTo = $scope.$index + 1 or 0
-      $scope.insert insertTo, comp
+    $scope.insertGroupBlock = (evt)->
+      $scope.insertGroup buttonClickWithIndexReturn(evt, $scope)
 
     $scope.insertGroupItemBlock = (evt)->
-      evt.stopPropagation()
-
-      $scope.showingComponents = false
-
-      insertTo = $scope.$index + 1 or 0
-      $scope.insertGroup insertTo
+      $scope.insertGroupItem buttonClickWithIndexReturn(evt, $scope)
 
     $scope.toggleComponents = ()->
       $scope.showingComponents = !$scope.showingComponents

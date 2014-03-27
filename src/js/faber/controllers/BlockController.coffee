@@ -52,7 +52,6 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
 
   # Insert an empty group block to the given index
   $scope.insertGroup = (index)->
-    console.log "insert group to #{index}"
     $scope.block.blocks.splice(index, 0, {component: componentsService.findByType('group')[0].id})
     $rootScope.$broadcast 'SelectBlock', $scope.$id
 

@@ -54,19 +54,23 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
             $scope.isMoving = true
 
       $scope.onBlockClick = ()->
-        $rootScope.$broadcast 'SelectBlock', $scope.$id
+#        $rootScope.$broadcast 'SelectBlock', $scope.$id
+        $rootScope.$broadcast 'SelectBlock', null
+        $scope.$emit 'SelectBlock', $scope.$id
 
       # Select the block
       $scope.select = (evt)->
-        if evt
-          evt.stopPropagation()
+        console.log 'select', $scope.$id
+#        if evt
+#          evt.stopPropagation()
 
         $scope.isSelected = true
 
       # Unselect the block
       $scope.unselect = (evt)->
-        if evt
-          evt.stopPropagation()
+        console.log 'unselect', $scope.$id
+#        if evt
+#          evt.stopPropagation()
 
         $scope.isSelected = false
 

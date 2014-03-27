@@ -1,5 +1,5 @@
 describe 'GroupBlockDirective:', ()->
-  # Use faber-block directive as faber-group-block requires faber-block
+  # Use faber-block directive as faber-components requires faber-block
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
 
   config = null
@@ -62,6 +62,11 @@ describe 'GroupBlockDirective:', ()->
     it 'should have interchangeable group component list', ->
       expect(@groupBlockElement.find('option').length).toBe 2
 
+    it 'should have a button to add group item', ->
+      button = angular.element @groupBlockElement.find('faber-components').find('button')
+      expect(button.length).toBe 1
+      expect(button.text()).toBe 'Item'
+
   describe 'when switch to other group component', ->
     beforeEach ->
       @groupBlockScope.currentComponent = 'another-group-component'
@@ -74,8 +79,27 @@ describe 'GroupBlockDirective:', ()->
     it 'should select the block after switch the component', ->
       expect(@scope.isSelected).toBeTruthy()
 
-  xit 'should be able to collapse the block', ->
-    expect(false).toBeTruthy()
+  describe 'when selected (edit mode),', ->
+    it 'should be able to collapse the block', ->
+      expect(false).toBeTruthy()
 
-  xit 'should be able to expand the block', ->
-    expect(false).toBeTruthy()
+    it 'should be able to expand the block', ->
+      expect(false).toBeTruthy()
+
+  describe 'when not selected (preview mode),', ->
+    it 'should not allow to collapse the block', ->
+      expect(false).toBeTruthy()
+
+  describe 'when add group item button is clicked', ->
+    beforeEach ->
+      button = angular.element @groupBlockElement.find('faber-components').find('button')
+      button.triggerHandler('click')
+      @scope.$digest()
+
+    it 'should add a group item block', ->
+      expect(@scope.block.blocks.length).toBe 1
+      expect(@groupBlockElement.find('faber-block').length).toBe 1
+      expect(@groupBlockElement.find('faber-block').find('faber-group-item-block').length).toBe 1
+
+    it 'should still be hilighted after the item block is added', ->
+      expect(@scope.isSelected).toBe true

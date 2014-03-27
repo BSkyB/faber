@@ -10,6 +10,12 @@ window.faber = angular.module('faber', ['ngAnimate'])
     components: [
       RichTextComponent
     ,
+      ()->
+        name: 'Element Component'
+        id: 'element-component'
+        type: 'element'
+        template: '<p>element component</p>'
+    ,
       OrderedListComponent
     ,
       ()->

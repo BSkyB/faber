@@ -42,10 +42,9 @@ describe 'GroupBlockController:', ->
       controller = $controller('GroupBlockController', $scope: scope)
 
   describe 'when initialised,', ->
-    it 'should have all element components available to be used for children', ->
-      expect(scope.components.length).toBe 2
-      expect(scope.components[0].id).toBe 'element-component-1'
-      expect(scope.components[1].id).toBe 'element-component-2'
+    it 'should be able to add a group item', ->
+      expect(scope.components.length).toBe 1
+      expect(scope.components[0].name).toBe 'Item'
 
     it 'should have all group components available to be interchangeable', ->
       expect(scope.groupComponents.length).toBe 3
