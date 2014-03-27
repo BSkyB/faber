@@ -73,3 +73,9 @@ describe 'GroupBlockDirective:', ()->
 
     it 'should select the block after switch the component', ->
       expect(@scope.isSelected).toBeTruthy()
+
+  xit 'should be able to collapse the block', ->
+    expect(false).toBeTruthy()
+
+  xit 'should be able to expand the block', ->
+    expect(false).toBeTruthy()

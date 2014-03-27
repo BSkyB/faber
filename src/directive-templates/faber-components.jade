@@ -6,7 +6,3 @@ div(ng-click="toggleComponents()")
 
     li.faber-component(ng-if="hasGroupComponents()")
       button(ng-click="insertGroupItemBlock($event)") Group
-
-      //ul(ng-if="showingGroupComponents")
-        li(ng-repeat="groupComp in components | filter : {type: 'group'}")
-          button(ng-click="insertBlock($event, {component: groupComp.id })") {{groupComp.name}}
