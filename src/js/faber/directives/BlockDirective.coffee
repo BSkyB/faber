@@ -22,7 +22,7 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
 
       $scope.expanded = !!$rootScope.expanded
 
-      $scope.isSelected = false
+      $scope.isSelected = true
       $scope.isMoving = false
 
       $scope.mouseenter = ()->
@@ -53,25 +53,20 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
           $timeout ()->
             $scope.isMoving = true
 
-      $scope.onBlockClick = ()->
-#        $rootScope.$broadcast 'SelectBlock', $scope.$id
+      $scope.onBlockClick = (evt)->
+        evt.stopPropagation() if evt
+
         $rootScope.$broadcast 'SelectBlock', null
-        $scope.$emit 'SelectBlock', $scope.$id
+        $rootScope.$broadcast 'ShowComponents', null
+
+        $scope.$broadcast 'SelectBlock', $scope.$id
 
       # Select the block
       $scope.select = (evt)->
-        console.log 'select', $scope.$id
-#        if evt
-#          evt.stopPropagation()
-
         $scope.isSelected = true
 
       # Unselect the block
       $scope.unselect = (evt)->
-        console.log 'unselect', $scope.$id
-#        if evt
-#          evt.stopPropagation()
-
         $scope.isSelected = false
 
       # Emit RemoveChildBlock event with itself so its parent block can remove it
@@ -87,7 +82,7 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
 
         if id is $scope.$id
           $scope.select()
-        else
+        else if id is null
           $scope.unselect()
 
       $scope.$on 'CollapseAll', (evt)->

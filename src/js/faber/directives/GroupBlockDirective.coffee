@@ -1,16 +1,14 @@
-faber.directive 'faberGroupBlock', (componentsService) ->
+faber.directive 'faberGroupBlock', () ->
   restrict: 'E'
-  require: '^faberBlock'
   templateUrl: 'faber-group-block.html'
   controller: 'GroupBlockController'
 
-  link: ($scope, $element, attrs, blockController)->
+  link: ($scope, $element, attrs)->
     $scope.$watch 'component', (val)->
       if val
         $scope.currentComponent = val.id
 
     $scope.$watch 'currentComponent', (val)->
-      unless val is $scope.component.id
+      unless val is $scope.component?.id
         $scope.block.component = val
-        blockController.select()
-#        $scope.component = componentsService.findById val
+        $scope.isSelected = true

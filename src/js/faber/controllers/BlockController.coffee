@@ -32,7 +32,6 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
-#      contentService.save()
       return true
     else
       $log.warn 'cannot find a component of the given name': block.component
@@ -48,12 +47,10 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   $scope.insert = (index, block)->
     if $scope.validateBlock block
       $scope.block.blocks.splice(index, 0, block)
-      $rootScope.$broadcast 'SelectBlock', $scope.$id
 
   # Insert an empty group block to the given index
   $scope.insertGroup = (index)->
     $scope.block.blocks.splice(index, 0, {component: componentsService.findByType('group')[0].id})
-    $rootScope.$broadcast 'SelectBlock', $scope.$id
 
   # Move a child block at from index to to index
   $scope.move = (from, to)->

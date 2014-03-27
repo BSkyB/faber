@@ -24,4 +24,4 @@ faber.directive 'faberEditor', ($rootScope, $document, $timeout) ->
     $scope.$on 'imported', (evt, blocks) ->
       # make sure that no blocks are selected when they are bulk imported
       $timeout ()->
-        $rootScope.$broadcast 'SelectBlock', $scope.$id
+        $rootScope.$broadcast 'SelectBlock', null

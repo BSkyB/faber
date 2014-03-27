@@ -30,7 +30,10 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
         $element.find('div').append $component
 
         $scope.component.init($element, $scope.block.content, $scope.update) if $scope.component.init
-        $rootScope.$broadcast 'SelectBlock', blockController.getScopeId()
+
+#        $rootScope.$broadcast 'SelectBlock', null
+        $scope.$broadcast 'SelectBlock', blockController.getScopeId()
+#        $rootScope.$broadcast 'SelectComponent', blockController.getScopeId()
 
     $scope.$on 'SelectBlock', (evt, id)->
       if $scope.component

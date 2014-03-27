@@ -1,4 +1,4 @@
-div(ng-click="toggleComponents()")
+div(ng-click="toggleComponents($event)")
   i.fa.fa-plus-square(ng-if="!showingComponents")
   ul.faber-available-components(ng-if="showingComponents")
     li.faber-component(ng-repeat="comp in components | filter : {type: 'element'}")

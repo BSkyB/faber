@@ -1,6 +1,5 @@
 describe 'GroupBlockDirective:', ()->
-  # Use faber-block directive as faber-components requires faber-block
-  blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
+  blockTemplate = '<faber-group-block></faber-group-block>'
 
   config = null
   rootScope = null
@@ -9,7 +8,6 @@ describe 'GroupBlockDirective:', ()->
 
   createDirective = (template)->
     scope = rootScope.$new()
-    scope.passedDownBlock = { component: 'a component' }
     element = compile(template or blockTemplate)(scope)
     scope.$digest()
 
@@ -47,59 +45,74 @@ describe 'GroupBlockDirective:', ()->
     ]
 
     @element = createDirective()
-    @scope = @element.isolateScope()
-    @scope.expanded = true
-    @scope.block.component = 'group-component'
+    @scope = @element.scope()
+    @scope.component = componentsService.findById 'group-component'
     @scope.$digest()
 
-    @groupBlockElement = angular.element @element.find('faber-group-block')
-    @groupBlockScope = @groupBlockElement.scope()
-
   describe 'when initialised,', ->
-    it 'should be correctly initialised', ->
-      expect(@element).toBeDefined()
-
     it 'should have interchangeable group component list', ->
-      expect(@groupBlockElement.find('option').length).toBe 2
+      expect(@element.find('option').length).toBe 2
 
     it 'should have a button to add group item', ->
-      button = angular.element @groupBlockElement.find('faber-components').find('button')
+      button = angular.element @element.find('faber-components').find('button')
       expect(button.length).toBe 1
       expect(button.text()).toBe 'Item'
 
   describe 'when switch to other group component', ->
     beforeEach ->
-      @groupBlockScope.currentComponent = 'another-group-component'
-      @groupBlockScope.$digest()
+      @scope.currentComponent = 'another-group-component'
+      @scope.$digest()
 
     it 'should show the correct component name', ->
-      expect(@groupBlockScope.component.id).toBe 'another-group-component'
-      expect(@groupBlockScope.component.name).toBe 'Another Group Component'
+      expect(@scope.component.id).toBe 'another-group-component'
+      expect(@scope.component.name).toBe 'Another Group Component'
 
     it 'should select the block after switch the component', ->
       expect(@scope.isSelected).toBeTruthy()
 
-  describe 'when selected (edit mode),', ->
+  xdescribe 'when selected (edit mode),', ->
+    # TODO
     it 'should be able to collapse the block', ->
       expect(false).toBeTruthy()
 
     it 'should be able to expand the block', ->
       expect(false).toBeTruthy()
 
-  describe 'when not selected (preview mode),', ->
+  xdescribe 'when not selected (preview mode),', ->
+    # TODO
     it 'should not allow to collapse the block', ->
       expect(false).toBeTruthy()
 
   describe 'when add group item button is clicked', ->
     beforeEach ->
-      button = angular.element @groupBlockElement.find('faber-components').find('button')
-      button.triggerHandler('click')
+      @button = angular.element @element.find('faber-components').find('button')
+      @button.triggerHandler('click')
       @scope.$digest()
 
     it 'should add a group item block', ->
       expect(@scope.block.blocks.length).toBe 1
-      expect(@groupBlockElement.find('faber-block').length).toBe 1
-      expect(@groupBlockElement.find('faber-block').find('faber-group-item-block').length).toBe 1
+      expect(@element.find('faber-block').length).toBe 1
+      expect(@element.find('faber-block').find('faber-group-item-block').length).toBe 1
 
-    it 'should still be hilighted after the item block is added', ->
-      expect(@scope.isSelected).toBe true
+    it 'should hilghight the new item block', ->
+      firstScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[0]).scope()
+
+      expect(firstScope.isSelected).toBe true
+
+      # toggle the last faber-components that contains add item block button
+      lastFaberComponents = @element.find('faber-components')[2]
+      lastFaberComponentsScope = angular.element(lastFaberComponents).scope()
+      lastFaberComponentsScope.showingComponents = true
+      @scope.$digest()
+
+      # insert a new group item block at the end of the list
+      secondButton = angular.element(lastFaberComponents).find('button')
+      secondButton.triggerHandler('click')
+      @scope.$digest()
+
+      firstScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[0]).scope()
+      secondScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[1]).scope()
+
+      expect(@scope.block.blocks.length).toBe 2
+      expect(firstScope.isSelected).toBe false
+      expect(secondScope.isSelected).toBe true

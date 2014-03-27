@@ -17,7 +17,6 @@ faber.controller 'GroupBlockController', ($rootScope, $controller, $scope, compo
 
   # Insert an empty group item glock in to a group block
   $scope.insertGroupItem = (index)->
-    console.log 'insert a group item to', index
     groupItem =
       blocks: []
     $scope.block.blocks.splice(index, 0, groupItem)

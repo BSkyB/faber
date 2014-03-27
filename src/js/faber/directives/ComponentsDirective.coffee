@@ -1,6 +1,7 @@
 faber.directive 'faberComponents', ($rootScope, $filter) ->
   buttonClickWithIndexReturn = (evt, $scope)->
-    evt.stopPropagation()
+    evt.stopPropagation() if evt
+    $rootScope.$broadcast 'SelectBlock', null
     $scope.showingComponents = false
     return $scope.$index + 1 or 0
 
@@ -31,5 +32,6 @@ faber.directive 'faberComponents', ($rootScope, $filter) ->
     $scope.insertGroupItemBlock = (evt)->
       $scope.insertGroupItem buttonClickWithIndexReturn(evt, $scope)
 
-    $scope.toggleComponents = ()->
+    $scope.toggleComponents = (evt)->
+      evt.stopPropagation() if evt
       $scope.showingComponents = !$scope.showingComponents

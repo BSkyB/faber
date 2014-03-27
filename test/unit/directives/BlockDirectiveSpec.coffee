@@ -58,12 +58,20 @@ describe 'Block Directive:', ()->
 
   describe 'when a block is selected,', ->
     it 'if the block is the selected block it should set highlight the block', ->
-      rootScope.$broadcast 'SelectBlock', @scope.$id
+      @scope.onBlockClick()
+      @scope.$digest()
 
       expect(@scope.isSelected).toBe true
 
     it 'if the block is not the selected block, it should unselect', ->
-      rootScope.$broadcast 'SelectBlock', 'a scope'
+      # select the block first
+      @scope.isSelected = true
+
+      anotherBlockElement = createDirective()
+      anotherBlockScope = anotherBlockElement.isolateScope()
+      anotherBlockScope.onBlockClick()
+
+      @scope.$digest()
 
       expect(@scope.isSelected).toBe false
 
