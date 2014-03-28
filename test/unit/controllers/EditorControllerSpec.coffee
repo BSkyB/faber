@@ -41,27 +41,6 @@ describe 'EditorController:', ->
     it 'should get all initial blocks from content service', ->
       expect(@scope.block.blocks).toBe @contentService.getAll()
 
-    describe 'when setting expanded flag,', ->
-      beforeEach ->
-        inject ($injector, $rootScope, $controller, faberConfig)->
-          @config = faberConfig
-          @config.expanded = false
-
-          @scope = $rootScope
-          spyOn @scope, '$broadcast'
-
-          @controller = $controller('EditorController', $scope: @scope)
-          @scope.$digest()
-
-      afterEach ->
-        @config = {}
-
-      it 'set default expanded flag', ->
-        expect(@scope.expanded).toBe false
-
-      it 'should broadcast expand all event', ->
-        expect(@scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'
-
     describe 'if given an element component,', ->
       beforeEach ->
         inject (faberConfig)->

@@ -3,9 +3,6 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
   # extends BlockController
   $controller('BlockController', {$scope: $scope})
 
-  $rootScope.$watch 'expanded', (newValue)->
-    $rootScope.$broadcast if $rootScope.expanded then 'ExpandAll' else 'CollapseAll'
-
   # a flag to tell this is the top level block so it can have top level only components available
   $scope.isTopLevel = true
 

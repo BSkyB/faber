@@ -52,12 +52,27 @@ describe 'Block Directive:', ()->
         @scope.component = componentsService.findById('a-component')
         @scope.$digest()
 
-      it 'cannot add any children to the block', ->
+      it 'cannot have any children to the block', ->
         expect(@scope.component.type).toBe 'element'
         expect(@element.find('faber-components').length).toBe 0
 
       it 'should have \'faber-element-block\' class', ->
         expect(angular.element(@element.children()[0]).hasClass('faber-element-block')).toBe true
+
+    describe 'if the component type is group,', ->
+      beforeEach ->
+        @scope.component = componentsService.findById('group-component')
+        @scope.$digest()
+
+      it 'should not have \'faber-element-block\' class', ->
+        expect(angular.element(@element.children()[0]).hasClass('faber-element-block')).toBe false
+
+      it 'should be able to collapse an expanded group item block', ->
+         # TODO
+        expect(@scope.expanded).toBe true
+
+      it 'should be able to expand a collapsed group item block', ->
+        # TODO
 
   describe 'when a block is selected,', ->
     it 'if the block is the selected block it should set highlight the block', ->

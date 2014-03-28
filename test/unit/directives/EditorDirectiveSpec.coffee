@@ -56,7 +56,6 @@ describe 'EditorDirective:', ()->
       scope = $rootScope.$new()
       element = $compile('<faber-editor></faber-editor>')(scope)
       scope.$digest()
-#      @scope = @element.scope()
 
   describe 'when initialised,', ->
     it 'should be defined', ->
@@ -64,6 +63,23 @@ describe 'EditorDirective:', ()->
 
     it 'should have a set of components so you can add the first block', ->
       expect(element.find('faber-components').length).toBe 1
+
+    describe 'when setting expanded flag,', ->
+      beforeEach ->
+        inject ($injector, $rootScope, $controller)->
+          config.expanded = false
+
+          scope = $rootScope
+          spyOn scope, '$broadcast'
+
+          $controller('EditorController', $scope: scope)
+          scope.$digest()
+
+      it 'set default expanded flag', ->
+        expect(scope.expanded).toBe false
+
+      it 'should broadcast expand all event', ->
+        expect(scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'
 
   describe 'when a block is added,', ->
     result = null

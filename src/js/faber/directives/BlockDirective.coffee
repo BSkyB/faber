@@ -20,10 +20,14 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
     post: ($scope, $element, $attrs, $ctrl) ->
       $scope.currentIndex = $scope.$parent.$index
 
-      $scope.expanded = !!$rootScope.expanded
+      $scope.isExpanded = !!$rootScope.isExpanded
 
       $scope.isSelected = true
       $scope.isMoving = false
+
+      $scope.isGroupBlock = false
+      $scope.isGroupItemBlock = false
+      $scope.isElementBlock = false
 
       $scope.mouseenter = ()->
         $scope.isMouseHover = true
@@ -90,6 +94,17 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
 
       $scope.$on 'ExpandAll', (evt)->
         $scope.expanded = true
+
+      $scope.$watchCollection '[$parent.component, component]', ()->
+        $scope.isElement = $scope.isGroup = $scope.isGroupItem = false
+
+        if $scope.$parent.component and $scope.$parent.component.type is 'group'
+          $scope.isGroupItemBlock = true
+        else if $scope.component
+          if $scope.component.type is 'element'
+            $scope.isElementBlock = true
+          if $scope.component.type is 'group'
+            $scope.isGroupBlock = true
 
       $ctrl.select = ()->
         $scope.select()
