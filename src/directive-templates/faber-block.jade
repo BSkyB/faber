@@ -1,10 +1,17 @@
 .faber-block-item(ng-class="{'faber-element-block': component.type == 'element', 'faber-block-hover': isMouseHover, 'faber-block-selected': isSelected, 'faber-block-moving': isMoving}", ng-mouseenter="mouseenter()", ng-mouseleave="mouseleave()", ng-click="onBlockClick($event)")
+
   .faber-block-actions
     label.faber-block-position(ng-click="positionSelect()")
-      | Position:&nbsp;
+      //| Position:&nbsp;
       span {{$parent.$index+1}} / {{$parent.block.blocks.length}}
         select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
-    button.faber-block-close.fa.fa-trash-o(ng-click="removeSelf()")
+        i.faber-icon-button.faber-icon-sort
+    button.faber-icon-button.faber-icon-remove(ng-click="removeSelf()")
+
+    .faber-group-item-block-actions(ng-if="isGroupItemBlock")
+      button.faber-icon-button.faber-icon-expand(ng-if="!isExpanded")
+      button.faber-icon-button.faber-icon-collapse(ng-if="isExpanded")
+      button.faber-icon-button.faber-icon-edit
 
   faber-group-item-block(ng-if="isGroupItemBlock")
   faber-element-block(ng-if="isElementBlock")

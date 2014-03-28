@@ -192,7 +192,7 @@
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1; } }
 
-.medium-editor {
+.rich-text {
   margin: 1em 0; }
 
 .medium-toolbar-arrow-under:after {
@@ -255,6 +255,43 @@
 .medium-editor-anchor-preview i {
   margin: 5px; }
 
+@font-face {
+  font-family: 'icons';
+  src: url("fonts/icons.eot?13gnte");
+  src: url("fonts/icons.eot?#iefix13gnte") format("embedded-opentype"), url("fonts/icons.woff?13gnte") format("woff"), url("fonts/icons.ttf?13gnte") format("truetype"), url("fonts/icons.svg?13gnte#icons") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[class^="faber-icon-"], [class*=" faber-icon-"] {
+  font-family: 'icons';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.faber-icon-edit:before {
+  content: "\e600"; }
+
+.faber-icon-remove:before {
+  content: "\e62b"; }
+
+.faber-icon-collapse:before {
+  content: "\e632"; }
+
+.faber-icon-expand:before {
+  content: "\e633"; }
+
+.faber-icon-group:before {
+  content: "\e636"; }
+
+.faber-icon-sort:before {
+  content: "\e647"; }
+
 [ng-if="showingComponents"].ng-enter, [ng-if="showingComponents"].ng-leave,
 [ng-if="!showingComponents"].ng-enter,
 [ng-if="!showingComponents"].ng-leave {
@@ -300,7 +337,10 @@ faber-components {
     font-size: 1.2em;
     width: 100%;
     padding: 0.5em;
-    cursor: pointer; }
+    cursor: pointer;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
   faber-components button {
     display: inline-block;
     margin-bottom: 0;
@@ -377,11 +417,13 @@ faber-components {
     display: block; }
     .faber-blocks faber-block .faber-block-item {
       position: relative;
-      border: 2px solid transparent; }
-      .faber-blocks faber-block .faber-block-item.faber-block-hover, .faber-blocks faber-block .faber-block-item.faber-block-selected {
-        border-color: #eeeeee; }
-        .faber-blocks faber-block .faber-block-item.faber-block-hover .faber-block-actions, .faber-blocks faber-block .faber-block-item.faber-block-selected .faber-block-actions {
-          display: block; }
+      border: 2px dotted #eeeeee; }
+      .faber-blocks faber-block .faber-block-item.faber-element-block {
+        border: 2px solid transparent; }
+        .faber-blocks faber-block .faber-block-item.faber-element-block.faber-block-hover, .faber-blocks faber-block .faber-block-item.faber-element-block.faber-block-selected {
+          border-color: #eeeeee; }
+      .faber-blocks faber-block .faber-block-item.faber-block-hover .faber-block-actions, .faber-blocks faber-block .faber-block-item.faber-block-selected .faber-block-actions {
+        display: block; }
       .faber-blocks faber-block .faber-block-item.faber-block-moving {
         -webkit-animation: faber-block-moving 1s;
         -moz-animation: faber-block-moving 1s;
@@ -390,8 +432,8 @@ faber-components {
     .faber-blocks faber-block .faber-block-actions {
       display: none;
       position: absolute;
-      right: 0.2em;
-      top: 0.2em; }
+      right: 0;
+      top: 0; }
     .faber-blocks faber-block .faber-block-position {
       font-size: 1em;
       color: #cccccc;
@@ -422,7 +464,7 @@ faber-components {
         color: #428bca;
         background: transparent;
         cursor: pointer; }
-    .faber-blocks faber-block button.faber-block-close {
+    .faber-blocks faber-block button.faber-icon-button {
       font-size: 1.2em;
       color: #428bca;
       border: none;
@@ -431,10 +473,19 @@ faber-components {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none; }
+  .faber-blocks faber-group-block {
+    display: block;
+    padding: 1em; }
+  .faber-blocks faber-group-item-block {
+    display: block;
+    padding: 1em; }
   .faber-blocks faber-component-renderer {
     display: block; }
     .faber-blocks faber-component-renderer > div {
       padding: 1em; }
+    .faber-blocks faber-component-renderer *:focus {
+      outline: rgba(66, 139, 202, 0.2) solid 2px;
+      outline-offset: 2px; }
 
 html, body {
   display: block;
@@ -449,4 +500,4 @@ body {
 #faber {
   max-width: 1170px;
   width: 100%;
-  margin: auto; }
+  margin: 0 auto 5em; }

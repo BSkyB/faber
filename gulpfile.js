@@ -68,6 +68,13 @@ gulp.task('bower', function() {
     return bower();
 });
 
+gulp.task('copy-icons', function() {
+  return gulp.src([
+      './src/css/fonts/*'
+    ])
+    .pipe(gulp.dest(DEV_DIR + '/css/fonts'));
+});
+
 gulp.task('templatecache', function () {
     return gulp.src('./src/directive-templates/**/*.jade')
         .pipe(jade())
@@ -93,21 +100,13 @@ gulp.task('dist-build-css', ['build'], function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-copy-fontawesome', ['build'], function() {
-    return gulp.src([
-            './dev/js/lib/components-font-awesome/css/font-awesome.min.css',
-            './dev/js/lib/components-font-awesome/fonts/*'
-        ])
-        .pipe(gulp.dest(DIST_DIR));
-});
-
 gulp.task('dist-build-demo', ['build'], function() {
     return gulp.src('./src/dist.jade')
         .pipe(jade())
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo', 'dist-copy-fontawesome']);
+gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo']);
 
 gulp.task('dist-test', ['dist-build'], function() {
     return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))
@@ -156,7 +155,7 @@ gulp.task('watch', ['connect'], function() {
 });
 
 gulp.task('install', ['bower']);
-gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache']);
+gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache', 'copy-icons']);
 
 gulp.task('dev', ['build', 'watch']);
 gulp.task('devtest', ['karma', 'watch']);
