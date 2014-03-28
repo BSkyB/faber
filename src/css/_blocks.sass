@@ -14,12 +14,17 @@
 
     .faber-block-item
       position: relative
-      border: 2px solid transparent
+      border: 2px dotted #eee
+
+      &.faber-element-block
+        border: 2px solid transparent
+
+        &.faber-block-hover,
+        &.faber-block-selected
+          border-color: #eee
 
       &.faber-block-hover,
       &.faber-block-selected
-        border-color: #eee
-
         .faber-block-actions
           display: block
 

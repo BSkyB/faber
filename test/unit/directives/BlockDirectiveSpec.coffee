@@ -56,6 +56,9 @@ describe 'Block Directive:', ()->
         expect(@scope.component.type).toBe 'element'
         expect(@element.find('faber-components').length).toBe 0
 
+      it 'should have \'faber-element-block\' class', ->
+        expect(angular.element(@element.children()[0]).hasClass('faber-element-block')).toBe true
+
   describe 'when a block is selected,', ->
     it 'if the block is the selected block it should set highlight the block', ->
       @scope.onBlockClick()

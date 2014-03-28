@@ -70,16 +70,16 @@ describe 'GroupBlockDirective:', ()->
     it 'should select the block after switch the component', ->
       expect(@scope.isSelected).toBeTruthy()
 
+  # TODO
   xdescribe 'when selected (edit mode),', ->
-    # TODO
     it 'should be able to collapse the block', ->
       expect(false).toBeTruthy()
 
     it 'should be able to expand the block', ->
       expect(false).toBeTruthy()
 
+  # TODO
   xdescribe 'when not selected (preview mode),', ->
-    # TODO
     it 'should not allow to collapse the block', ->
       expect(false).toBeTruthy()
 
