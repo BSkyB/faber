@@ -83,21 +83,25 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.moveSelf = (to)->
         $scope.$parent.move $scope.$parent.block.blocks.indexOf($scope.block), to
 
+      # Switch to edit mode on group block
       $scope.edit = (evt)->
         evt.stopPropagation() if evt
 
         $scope.isPreview = false
 
+      # Switch to preview mode on group block
       $scope.preview = (evt)->
         evt.stopPropagation() if evt
 
         $scope.isPreview = true
 
+      # Expand group item block
       $scope.expand = (evt)->
         evt.stopPropagation() if evt
 
         $scope.isExpanded = true
 
+      # Collapse group item block
       $scope.collapse = (evt)->
         evt.stopPropagation() if evt
 
@@ -127,12 +131,3 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
             $scope.isElementBlock = true
           if $scope.component.type is 'group'
             $scope.isGroupBlock = true
-
-      $ctrl.select = ()->
-        $scope.select()
-
-      $ctrl.getScopeId = ()->
-        $scope.$id
-
-      $ctrl.getComponent = ()->
-        $scope.component
