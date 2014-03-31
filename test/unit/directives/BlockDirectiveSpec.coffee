@@ -36,6 +36,10 @@ describe 'Block Directive:', ()->
         ()->
           id: 'group-component'
           type: 'group'
+      ,
+        ()->
+          id: 'child-component'
+          type: 'element'
       ]
 
       @element = createDirective()
@@ -70,6 +74,48 @@ describe 'Block Directive:', ()->
         expect(@scope.isGroupItemBlock).toBeFalsy()
         expect(angular.element(@element.children()[0]).hasClass('faber-element-block')).toBe false
 
+      it 'should be able to switch to preview mode from edit mode', ->
+        @scope.isPreview = false
+        @scope.$digest()
+
+        # make it to edit mode first
+        expect(@scope.isPreview).toBeFalsy()
+
+        previewButton = @element[0].querySelector('button.faber-preview-group-button')
+
+        # preview button should be there
+        expect(previewButton).not.toBe null
+
+        # edit button should not be there
+        expect(@element[0].querySelector('button.faber-edit-group-button')).toBe null
+
+        $previewButton = angular.element previewButton
+        $previewButton.triggerHandler 'click'
+        @scope.$digest()
+
+        expect(@scope.isPreview).toBeTruthy()
+
+      it 'should be able to switch to edit mode from preview mode', ->
+        @scope.isPreview = true
+        @scope.$digest()
+
+        # make it to preview mode first
+        expect(@scope.isPreview).toBeTruthy()
+
+        editButton = @element[0].querySelector('button.faber-edit-group-button')
+
+        # edit button should be there
+        expect(editButton).not.toBe null
+
+        # preview button should not be there
+        expect(@element[0].querySelector('button.faber-preview-group-button')).toBe null
+
+        $editButton = angular.element editButton
+        $editButton.triggerHandler 'click'
+        @scope.$digest()
+
+        expect(@scope.isPreview).toBeFalsy()
+
       describe 'when in edit mode,', ->
         beforeEach ->
           @scope.block.blocks = [
@@ -92,7 +138,7 @@ describe 'Block Directive:', ()->
           @groupItem1WrapperScope = @groupItem1Wrapper.scope()
 
         describe 'if there are group item blocks', ->
-          it 'should have correct number of group item blocks', ->
+          it 'should have correct number of faber-group-item-block', ->
             expect(@scope.block.blocks.length).toBe 2
             expect(@element.find('faber-group-item-block').length).toBe 2
 

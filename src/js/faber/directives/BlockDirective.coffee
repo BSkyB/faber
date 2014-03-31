@@ -25,6 +25,8 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.isSelected = true
       $scope.isMoving = false
 
+      $scope.isPreview = false
+
       $scope.isGroupBlock = false
       $scope.isGroupItemBlock = false
       $scope.isElementBlock = false
@@ -80,6 +82,16 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
       $scope.moveSelf = (to)->
         $scope.$parent.move $scope.$parent.block.blocks.indexOf($scope.block), to
+
+      $scope.edit = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isPreview = false
+
+      $scope.preview = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isPreview = true
 
       $scope.expand = (evt)->
         evt.stopPropagation() if evt

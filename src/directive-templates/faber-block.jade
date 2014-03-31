@@ -2,8 +2,8 @@
 
   .faber-block-actions
     .faber-group-block-actions(ng-if="isGroupBlock")
-      button.faber-icon-edit(ng-if="isPreview")
-      button.faber-icon-edit.toggled-on(ng-if="!isPreview")
+      button.faber-edit-group-button.faber-icon-edit(ng-if="isPreview", ng-click="edit($event)")
+      button.faber-preview-group-button.faber-icon-edit.toggled-on(ng-if="!isPreview", ng-click="preview($event)")
     .faber-group-item-block-actions(ng-if="isGroupItemBlock")
       button.faber-icon-plus(ng-if="!isExpanded", ng-click="expand($event)")
       button.faber-icon-minus(ng-if="isExpanded", ng-click="collapse($event)")

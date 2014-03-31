@@ -4,4 +4,3 @@ faber.directive 'faberGroupItemBlock', () ->
   controller: 'GroupItemBlockController'
 
   link: ($scope, $element, attrs, blockController)->
-    $scope.isPreview = true
