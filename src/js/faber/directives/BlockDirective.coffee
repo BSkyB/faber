@@ -22,7 +22,7 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
 
       $scope.isExpanded = !!$rootScope.isExpanded
 
-      $scope.isSelected = true
+      $scope.isSelected = false
       $scope.isMoving = false
 
       $scope.isPreview = false
@@ -50,8 +50,6 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.onSelectChange = ()->
         to = $element.find('select').val()
         if to >= 0
-          $rootScope.$broadcast 'SelectBlock', null
-
           $scope.moveSelf to
 
           # Setting isMoving to true is wrapped inside of $timeout so it can be applied after false is set first
@@ -62,10 +60,9 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.onBlockClick = (evt)->
         evt.stopPropagation() if evt
 
-        $rootScope.$broadcast 'SelectBlock', null
+        $rootScope.$broadcast 'SelectBlockOfIndex', null
         $rootScope.$broadcast 'ShowComponents', null
-
-        $scope.$broadcast 'SelectBlock', $scope.$id
+        $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
 
       # Select the block
       $scope.select = (evt)->
@@ -107,12 +104,14 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
 
         $scope.isExpanded = false
 
-      $scope.$on 'SelectBlock', (evt, id)->
-        $scope.isMoving = false
+      $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
+        unless scope
+          $scope.unselect()
+          return
 
-        if id is $scope.$id
+        if scope.block.blocks[index] is $scope.block
           $scope.select()
-        else if id is null
+        else
           $scope.unselect()
 
       $scope.$on 'CollapseAll', (evt)->

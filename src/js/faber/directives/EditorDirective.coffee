@@ -18,13 +18,14 @@ faber.directive 'faberEditor', ($rootScope, $document, $timeout) ->
       unless isInside
         $rootScope.$apply ()->
           $rootScope.$broadcast 'ShowComponents', null
-          $rootScope.$broadcast 'SelectBlock', null
+          $rootScope.$broadcast 'SelectBlockOfIndex', null
     , true
 
     $scope.$on 'imported', (evt, blocks) ->
-      # make sure that no blocks are selected when they are bulk imported
+      # make sure to close all components menu
       $timeout ()->
-        $rootScope.$broadcast 'SelectBlock', null
+        $rootScope.$broadcast 'ShowComponents', null
+
 
     $rootScope.$watch 'isExpanded', ()->
       $rootScope.$broadcast if $rootScope.isExpanded then 'ExpandAll' else 'CollapseAll'

@@ -1,4 +1,4 @@
-describe 'Components Directive:', ->
+describe 'ComponentsDirective:', ->
   beforeEach module 'faber'
 
   beforeEach ->
@@ -38,6 +38,8 @@ describe 'Components Directive:', ->
 
       @element = $compile(angular.element(editorElement.find('faber-components')))(scope)
       @scope = @element.scope()
+      @scope.$digest()
+
       @scope.showingComponents = true
       @scope.$digest()
 

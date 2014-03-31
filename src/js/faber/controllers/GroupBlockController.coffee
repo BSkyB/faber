@@ -20,4 +20,3 @@ faber.controller 'GroupBlockController', ($rootScope, $controller, $scope, compo
     groupItem =
       blocks: []
     $scope.block.blocks.splice(index, 0, groupItem)
-    $rootScope.$broadcast 'SelectBlock', $scope.$id

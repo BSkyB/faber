@@ -27,11 +27,22 @@ describe 'ComponentRendererDirective:', ->
           callbacks.selectedCallback()
         unselected: ()->
           callbacks.unselectedCallback()
-      componentsService.init [comp]
+      componentsService.init [
+        ()->
+          id: 'group-component'
+          type: 'group'
+      ,
+        comp
+      ]
 
       rootScope = $rootScope
+      rootScope.block =
+        component: 'group-component'
+        blocks: [
+          component: 'sample-component'
+        ]
       scope = $rootScope.$new()
-      scope.passedDownBlock = component: 'sample-component'
+      scope.passedDownBlock = rootScope.block.blocks[0]
       blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
       scope.$digest()
       @blockScope = blockElement.isolateScope()
@@ -49,19 +60,19 @@ describe 'ComponentRendererDirective:', ->
 
   describe 'when selected the rendered block', ->
     it 'should be able to call selected callback of the component', ->
-      rootScope.$broadcast 'SelectBlock', @blockScope.$id
+      rootScope.$broadcast 'SelectBlockOfIndex', rootScope, 0
       @blockScope.$digest()
 
       expect(callbacks.selectedCallback).toHaveBeenCalled()
 
   describe 'when unselected the rendered block', ->
     it 'should be able to call unselected callback of the component', ->
-      @scope.unselect()
+      @scope.unselectRendered()
 
       expect(callbacks.unselectedCallback).toHaveBeenCalled()
 
   describe 'when update is called with content data', ->
     it 'shoud update the block\'s content data', ->
-      @scope.update('<p>Lorem ipsum</p>')
+      @scope.updateRendered('<p>Lorem ipsum</p>')
 
       expect(@scope.block.content).toBe '<p>Lorem ipsum</p>'

@@ -1,4 +1,4 @@
-describe 'Block Directive:', ()->
+describe 'BlockDirective:', ()->
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
 
   config = null
@@ -7,8 +7,15 @@ describe 'Block Directive:', ()->
   componentsService = null
 
   createDirective = (template)->
+    rootScope.block =
+      component: 'group-component'
+      blocks: [
+        component: 'a-component'
+      ,
+        component: 'child-component'
+      ]
     scope = rootScope.$new()
-    scope.passedDownBlock = { component: 'a-component' }
+    scope.passedDownBlock = rootScope.block.blocks[0]
     element = compile(template or blockTemplate)(scope)
     scope.$digest()
 

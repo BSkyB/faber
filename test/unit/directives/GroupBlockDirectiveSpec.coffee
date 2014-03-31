@@ -54,7 +54,12 @@ describe 'GroupBlockDirective:', ()->
       expect(@element.find('option').length).toBe 2
 
     it 'should have a button to add group item', ->
+      componentsScope = angular.element(@element.find('faber-components')).scope()
+      componentsScope.showingComponents = true
+      componentsScope.$digest()
+
       button = angular.element @element.find('faber-components').find('button')
+
       expect(button.length).toBe 1
       expect(button.text()).toBe 'Item'
 
@@ -72,6 +77,10 @@ describe 'GroupBlockDirective:', ()->
 
   describe 'when add group item button is clicked', ->
     beforeEach ->
+      componentsScope = angular.element(@element.find('faber-components')).scope()
+      componentsScope.showingComponents = true
+      componentsScope.$digest()
+
       @button = angular.element @element.find('faber-components').find('button')
       @button.triggerHandler('click')
       @scope.$digest()
@@ -80,25 +89,3 @@ describe 'GroupBlockDirective:', ()->
       expect(@scope.block.blocks.length).toBe 1
       expect(@element.find('faber-block').length).toBe 1
       expect(@element.find('faber-block').find('faber-group-item-block').length).toBe 1
-
-    it 'should hilghight the new item block', ->
-      firstScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[0]).scope()
-
-      expect(firstScope.isSelected).toBe true
-
-      # toggle the last faber-components that contains add item block button
-      lastFaberComponents = @element.find('faber-components')[2]
-      lastFaberComponentsScope = angular.element(lastFaberComponents).scope()
-      lastFaberComponentsScope.showingComponents = true
-      @scope.$digest()
-
-      # insert a new group item block at the end of the list
-      secondButton = angular.element(lastFaberComponents).find('button')
-      secondButton.triggerHandler('click')
-      @scope.$digest()
-
-      firstScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[0]).scope()
-      secondScope = angular.element(@element.find('faber-block').find('faber-group-item-block')[1]).scope()
-
-      expect(@scope.block.blocks.length).toBe 2
-      expect(firstScope.isSelected).toBe false

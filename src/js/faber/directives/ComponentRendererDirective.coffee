@@ -5,13 +5,13 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
   link: ($scope, $element, $attrs)->
     $scope.component = null
 
-    $scope.select = ()->
-      $scope.component.selected($element, $scope.update) if $scope.component.selected
+    $scope.selectRendered = ()->
+      $scope.component.selected($element, $scope.updateRendered) if $scope.component.selected
 
-    $scope.unselect = ()->
-      $scope.component.unselected($element, $scope.update) if $scope.component.unselected
+    $scope.unselectRendered = ()->
+      $scope.component.unselected($element, $scope.updateRendered) if $scope.component.unselected
 
-    $scope.update = (content)->
+    $scope.updateRendered = (content)->
       if content
         $scope.block.content = content
 
@@ -26,14 +26,14 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
         wrapper.empty()
         $element.find('div').append $component
 
-        $scope.component.init($element, $scope.block.content, $scope.update) if $scope.component.init
+        $scope.component.init($element, $scope.block.content, $scope.updateRendered) if $scope.component.init
 
-        $scope.$broadcast 'SelectBlock', $scope.$id
+    $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
+      unless scope
+        $scope.unselectRendered()
+        return
 
-    $scope.$on 'SelectBlock', (evt, id)->
-      if $scope.component
-        unless id is $scope.$id
-          $scope.unselect()
-        else
-          $scope.select()
-
+      if scope.block.blocks[index] is $scope.block
+        $scope.selectRendered()
+      else
+        $scope.unselectRendered()
