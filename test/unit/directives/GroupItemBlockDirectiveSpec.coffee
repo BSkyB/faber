@@ -63,7 +63,8 @@ describe 'GroupItemBlockDirective:', ->
       expect(angular.element(buttons[1]).text()).toBe 'Element Component 2'
 
   describe 'when the item block has children', ->
-    it 'should be able to show correct number of the child blocks', ->
+    it 'should be able to show correct number of the child blocks if it\'s expanded', ->
+      @scope.isExpanded = true
       @scope.block.blocks = [
         component: 'element-component-1'
       ,

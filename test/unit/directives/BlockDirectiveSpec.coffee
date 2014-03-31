@@ -8,7 +8,7 @@ describe 'Block Directive:', ()->
 
   createDirective = (template)->
     scope = rootScope.$new()
-    scope.passedDownBlock = { component: 'a component' }
+    scope.passedDownBlock = { component: 'a-component' }
     element = compile(template or blockTemplate)(scope)
     scope.$digest()
 
@@ -40,7 +40,7 @@ describe 'Block Directive:', ()->
 
       @element = createDirective()
       @scope = @element.isolateScope()
-      @scope.expanded = true
+      @scope.isExpanded = true
 
   describe 'when initialised,', ->
     it 'should be defined', ->
@@ -49,7 +49,7 @@ describe 'Block Directive:', ()->
 
     describe 'if the component type is element,', ->
       beforeEach ->
-        @scope.component = componentsService.findById('a-component')
+        @scope.block.component = 'a-component'
         @scope.$digest()
 
       it 'cannot have any children to the block', ->
@@ -61,18 +61,78 @@ describe 'Block Directive:', ()->
 
     describe 'if the component type is group,', ->
       beforeEach ->
-        @scope.component = componentsService.findById('group-component')
+        @scope.block.component = 'group-component'
         @scope.$digest()
 
       it 'should not have \'faber-element-block\' class', ->
+        expect(@scope.isElementBlock).toBeFalsy()
+        expect(@scope.isGroupBlock).toBeTruthy()
+        expect(@scope.isGroupItemBlock).toBeFalsy()
         expect(angular.element(@element.children()[0]).hasClass('faber-element-block')).toBe false
 
-      it 'should be able to collapse an expanded group item block', ->
-         # TODO
-        expect(@scope.expanded).toBe true
+      describe 'when in edit mode,', ->
+        beforeEach ->
+          @scope.block.blocks = [
+            # group item 1
+            blocks: [
+              component: 'child-component'
+            ,
+              component: 'child-component'
+            ]
+          ,
+            # group item 2
+            blocks: [
+              component: 'child-component'
+            ]
+          ]
+          @scope.$digest()
 
-      it 'should be able to expand a collapsed group item block', ->
-        # TODO
+          @groupItem1Element = @element.find('faber-group-item-block')[0]
+          @groupItem1Wrapper = angular.element(@groupItem1Element).parent() # wrapping faber-block
+          @groupItem1WrapperScope = @groupItem1Wrapper.scope()
+
+        describe 'if there are group item blocks', ->
+          it 'should have correct number of group item blocks', ->
+            expect(@scope.block.blocks.length).toBe 2
+            expect(@element.find('faber-group-item-block').length).toBe 2
+
+          it 'should be able to collapse an expanded group item block', ->
+            @groupItem1WrapperScope.isExpanded = false
+            @groupItem1WrapperScope.$digest()
+
+            # check it's not expanded first
+            expect(@groupItem1WrapperScope.isExpanded).toBe false
+
+            expandButton = angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-plus')
+
+            # expand button should be there
+            expect(expandButton).not.toBe null
+
+            # collapse button should not be there
+            expect(angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-minus')).toBe null
+
+            $expandButton = angular.element expandButton
+            $expandButton.triggerHandler 'click'
+            @groupItem1WrapperScope.$digest()
+
+            expect(@groupItem1WrapperScope.isExpanded).toBe true
+
+          it 'should be able to expand a collapsed group item block', ->
+            @groupItem1WrapperScope.isExpanded = true
+            @groupItem1WrapperScope.$digest()
+
+            expect(@groupItem1WrapperScope.isExpanded).toBe true
+
+            collapseButton = angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-minus')
+
+            expect(collapseButton).not.toBe null
+            expect(angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-plus')).toBe null
+
+            $collapseButton = angular.element collapseButton
+            $collapseButton.triggerHandler 'click'
+            @groupItem1WrapperScope.$digest()
+
+            expect(@groupItem1WrapperScope.isExpanded).toBe false
 
   describe 'when a block is selected,', ->
     it 'if the block is the selected block it should set highlight the block', ->
@@ -98,15 +158,15 @@ describe 'Block Directive:', ()->
       rootScope.$broadcast 'CollapseAll'
 
     it 'should be collapsed', ->
-      expect(@scope.expanded).toBe false
+      expect(@scope.isExpanded).toBe false
 
   describe 'when expand all event is fired,', ->
     beforeEach ->
-      @scope.expanded = false
+      @scope.isExpanded = false
       rootScope.$broadcast 'ExpandAll'
 
     it 'should be expanded', ->
-      expect(@scope.expanded).toBe true
+      expect(@scope.isExpanded).toBe true
 
   describe 'when re-order a block,', ->
     block1 = block2 = block3 = null

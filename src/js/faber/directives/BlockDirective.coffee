@@ -81,6 +81,16 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.moveSelf = (to)->
         $scope.$parent.move $scope.$parent.block.blocks.indexOf($scope.block), to
 
+      $scope.expand = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isExpanded = true
+
+      $scope.collapse = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isExpanded = false
+
       $scope.$on 'SelectBlock', (evt, id)->
         $scope.isMoving = false
 
@@ -90,13 +100,13 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
           $scope.unselect()
 
       $scope.$on 'CollapseAll', (evt)->
-        $scope.expanded = false
+        $scope.isExpanded = false
 
       $scope.$on 'ExpandAll', (evt)->
-        $scope.expanded = true
+        $scope.isExpanded = true
 
       $scope.$watchCollection '[$parent.component, component]', ()->
-        $scope.isElement = $scope.isGroup = $scope.isGroupItem = false
+        $scope.isElementBlock = $scope.isGroupBlock = $scope.isGroupItemBlock = false
 
         if $scope.$parent.component and $scope.$parent.component.type is 'group'
           $scope.isGroupItemBlock = true

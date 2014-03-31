@@ -10,7 +10,7 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
   contentService.init $scope.block
 
   # inherit from faberConfig if it is set when faber is initialised otherwise true by default
-  $rootScope.expanded = if angular.isDefined faberConfig.expanded then faberConfig.expanded else true
+  $rootScope.isExpanded = if angular.isDefined faberConfig.expanded then faberConfig.expanded else true
 
   # initialise components service with the given components list
   componentsService.init(faberConfig.components or [])

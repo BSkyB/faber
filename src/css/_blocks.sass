@@ -36,6 +36,7 @@
       position: absolute
       right: 0
       top: 0
+      padding: 0 1em
 
     .faber-block-position
       font-size: 1em
@@ -64,14 +65,31 @@
         background: transparent
         cursor: pointer
 
-    button.faber-icon-button
+    .faber-group-item-block-actions
+      display: inline-block
+      padding-right: 1em
+      margin-right: 1em
+      border-right: 1px solid #eee
+
+    button[class^="faber-icon-"],
+    button[class*=" faber-icon-"]
       font-size: 1.2em
       color: $blue
-      border: none
+      border: 1px solid $blue
+      padding: 0
       background: transparent
       cursor: pointer
 
       +appearance(none)
+      +border-radius(3px)
+
+      &:hover
+        color: darken($blue, 10%)
+        border-color: darken($blue, 10%)
+
+      &.toggled-on
+        background: $blue
+        color: #fff
 
   faber-group-block
     display: block

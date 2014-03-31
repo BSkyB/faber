@@ -2,7 +2,7 @@ p group item block
 
 faber-components
 
-.faber-blocks
+.faber-blocks(ng-if="isExpanded")
   .faber-block-repeat(ng-repeat="data in block.blocks")
     faber-block(data-faber-block-content="data")
 

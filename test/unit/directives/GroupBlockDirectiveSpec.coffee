@@ -102,4 +102,3 @@ describe 'GroupBlockDirective:', ()->
 
       expect(@scope.block.blocks.length).toBe 2
       expect(firstScope.isSelected).toBe false
-      expect(secondScope.isSelected).toBe true

@@ -76,7 +76,7 @@ describe 'EditorDirective:', ()->
           scope.$digest()
 
       it 'set default expanded flag', ->
-        expect(scope.expanded).toBe false
+        expect(scope.isExpanded).toBe false
 
       it 'should broadcast expand all event', ->
         expect(scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'

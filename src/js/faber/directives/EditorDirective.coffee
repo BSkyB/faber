@@ -26,5 +26,5 @@ faber.directive 'faberEditor', ($rootScope, $document, $timeout) ->
       $timeout ()->
         $rootScope.$broadcast 'SelectBlock', null
 
-    $rootScope.$watch 'expanded', ()->
+    $rootScope.$watch 'isExpanded', ()->
       $rootScope.$broadcast if $rootScope.isExpanded then 'ExpandAll' else 'CollapseAll'
