@@ -1,14 +1,14 @@
 .faber-block-item(ng-class="{'faber-element-block': isElementBlock, 'faber-block-hover': isMouseHover, 'faber-block-selected': isSelected, 'faber-block-moving': isMoving}", ng-mouseenter="mouseenter()", ng-mouseleave="mouseleave()", ng-click="onBlockClick($event)")
 
   .faber-block-actions
+    .faber-group-block-actions(ng-if="isGroupBlock")
+      button.faber-icon-edit(ng-if="isPreview")
+      button.faber-icon-edit.toggled-on(ng-if="!isPreview")
     .faber-group-item-block-actions(ng-if="isGroupItemBlock")
       button.faber-icon-plus(ng-if="!isExpanded", ng-click="expand($event)")
       button.faber-icon-minus(ng-if="isExpanded", ng-click="collapse($event)")
-      button.faber-icon-edit
-      button.faber-icon-edit.toggled-on
 
     label.faber-block-position(ng-click="positionSelect()")
-      //| Position:&nbsp;
       span {{$parent.$index+1}} / {{$parent.block.blocks.length}}
         select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
         i.faber-icon-button.faber-icon-sort

@@ -36,7 +36,7 @@ describe 'ComponentRendererDirective:', ->
       scope.$digest()
       @blockScope = blockElement.isolateScope()
       @element = blockElement.find('faber-component-renderer')
-      @scope = @element.isolateScope()
+      @scope = @element.scope()
 
       @scope.$digest()
 

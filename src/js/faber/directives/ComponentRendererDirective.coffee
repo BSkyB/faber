@@ -1,11 +1,8 @@
 faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $timeout, $compile, componentsService)->
-  require: '^faberBlock'
   restrict: 'AE'
-  scope:
-    'block': '=faberComponentBlock'
   template: '<div></div>'
 
-  link: ($scope, $element, $attrs, blockController)->
+  link: ($scope, $element, $attrs)->
     $scope.component = null
 
     $scope.select = ()->
@@ -31,13 +28,11 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
 
         $scope.component.init($element, $scope.block.content, $scope.update) if $scope.component.init
 
-#        $rootScope.$broadcast 'SelectBlock', null
-        $scope.$broadcast 'SelectBlock', blockController.getScopeId()
-#        $rootScope.$broadcast 'SelectComponent', blockController.getScopeId()
+        $scope.$broadcast 'SelectBlock', $scope.$id
 
     $scope.$on 'SelectBlock', (evt, id)->
       if $scope.component
-        unless id is blockController.getScopeId()
+        unless id is $scope.$id
           $scope.unselect()
         else
           $scope.select()
