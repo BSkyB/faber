@@ -31,11 +31,15 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.isGroupItemBlock = false
       $scope.isElementBlock = false
 
+
+      $scope.isMouseHover = true
+
       $scope.mouseOver = (evt)->
-        $scope.isMouseHover = true
+#        evt.stopPropagation()
+#        $scope.isMouseHover = true
 
       $scope.mouseOut = (evt)->
-        $scope.isMouseHover = false
+#        $scope.isMouseHover = false
 
       # Get available index range that can be used to move in the parent block's children
       # Used to create the select options

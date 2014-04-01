@@ -1,7 +1,7 @@
 .faber-block-item(ng-class="{'faber-element-block': isElementBlock, 'faber-group-block': isGroupBlock, 'faber-block-preview': isPreview,'faber-block-hover': isMouseHover, 'faber-block-selected': isSelected, 'faber-block-moving': isMoving}", ng-mouseover="mouseOver($event)", ng-mouseout="mouseOut($event)", ng-click="onBlockClick($event)")
 
   .faber-block-actions
-    label.faber-select.faber-block-position(ng-click="positionSelect()")
+    //label.faber-select.faber-block-position(ng-click="positionSelect()")
       span {{$parent.$index+1}} / {{$parent.block.blocks.length}}
         select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
         i.faber-icon-button.faber-icon-sort
@@ -14,6 +14,10 @@
       button.faber-icon-plus(title="Expand", ng-if="!isExpanded", ng-click="expand($event)")
       button.faber-icon-minus(title="Collapse", ng-if="isExpanded", ng-click="collapse($event)")
 
+    label.faber-select.faber-block-position
+      //span
+      button.faber-icon-sort(title="Change order")
+      select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
     button.faber-icon-remove(title="Remove", ng-click="removeSelf()")
 
   faber-group-item-block(ng-if="isGroupItemBlock")
