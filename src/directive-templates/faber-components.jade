@@ -1,4 +1,5 @@
 div(ng-click="toggleComponents($event)")
+  .faber-components-line(ng-if="!showingComponents")
   i.faber-icon-plus(ng-if="!showingComponents")
   ul.faber-available-components(ng-if="showingComponents")
     li.faber-component(ng-repeat="comp in components | filter : {type: 'element'}")

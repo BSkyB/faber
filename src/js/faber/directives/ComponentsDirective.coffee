@@ -9,7 +9,8 @@ faber.directive 'faberComponents', ($rootScope, $filter, $timeout) ->
   templateUrl: 'faber-components.html'
 
   link: ($scope, $element, attrs)->
-    $scope.showingComponents = (angular.isUndefined $scope.$index) and $scope.isExpanded
+#    $scope.showingComponents = (angular.isUndefined $scope.$index) and $scope.isExpanded
+    $scope.showingComponents = $scope.block.blocks.length is 0
 
     $scope.hasGroupComponents = ()->
       groupComponents = $filter('filter') $scope.components, type: 'group', true
@@ -26,6 +27,10 @@ faber.directive 'faberComponents', ($rootScope, $filter, $timeout) ->
             $scope.showingComponents = true
         else
           $scope.showingComponents = false
+
+#    $scope.$watch 'isPreview', (val)->
+#      if $scope.isGroupBlock and !val
+#        $scope.showingComponents = false
 
     $scope.$on 'ShowComponents', (evt, id)->
       unless id is $scope.$id

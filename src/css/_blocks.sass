@@ -16,6 +16,7 @@
       position: relative
       border: 2px dotted #eee
 
+      &.faber-block-preview,
       &.faber-element-block
         border: 2px solid transparent
 
@@ -32,73 +33,73 @@
         +animation(faber-block-moving 1s)
 
     .faber-block-actions
+      font-family: Verdana, Geneva, sans-serif
+      font-size: 16px
+
       display: none
       position: absolute
       right: 0
-      top: 0
-      padding: 0 1em
+      top: 5px
+      padding: 0 0.8em
 
     .faber-block-position
-      font-size: 1em
+      line-height: 1.2em
       color: #ccc
       margin-right: 0.5em
-
-      span
-        color: $blue
-        display: inline-block
-        position: relative
-
-      select
-        +appearance(none)
-        +border-radius(0)
-        +opacity(0)
-
-        position: absolute
-        top: 0
-        left: 0
-        width: 100%
-        margin: 0
-        border: none
-        font: inherit
-        font-size: 1em
-        color: $blue
-        background: transparent
-        cursor: pointer
 
     .faber-group-block-actions,
     .faber-group-item-block-actions
       display: inline-block
-      padding-right: 1em
-      margin-right: 1em
-      border-right: 1px solid #eee
 
     button[class^="faber-icon-"],
     button[class*=" faber-icon-"]
-      font-size: 1.2em
-      color: $blue
+      font-size: 1em
+      color: #FFF
       border: 1px solid $blue
       padding: 0
-      background: transparent
+      background: $blue
       cursor: pointer
 
       +appearance(none)
       +border-radius(3px)
 
       &:hover
-        color: darken($blue, 10%)
-        border-color: darken($blue, 10%)
+        color: #FFF
+        background: darken($blue, 10%)
 
       &.toggled-on
-        background: $blue
-        color: #fff
+        background: #FFF
+        color: $blue
+
+        &:hover
+          background: #f4f4f4
+
+      &.faber-icon-remove
+        $alert: #d1472d
+        background: $alert
+        border-color: $alert
+
+        &:hover
+          background: darken($alert, 10%)
 
   faber-group-block
     display: block
-    padding: 1em
+    padding: 2em 1em 1em 1em
+    background: #fafafa
+
+    &.faber-group-block-preview
+      background: transparent
+
+    .faber-group-component
+      position: absolute
+      left: 0
+      top: 5px
+      padding: 0 1em
 
   faber-group-item-block
     display: block
-    padding: 1em
+    padding: 2em 1em 1em 1em
+    background: #fff
 
   faber-component-renderer
     display: block
@@ -108,4 +109,4 @@
 
     *:focus
       outline: rgba($blue, 0.2) solid 2px
-      outline-offset: 2px
+      //outline-offset: 2px

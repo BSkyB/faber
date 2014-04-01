@@ -1,4 +1,7 @@
-select(ng-model="currentComponent", ng-options="c.id as c.name for c in groupComponents")
+label.faber-select.faber-group-component(ng-if="!isPreview")
+  span {{component.name}}
+    select(ng-model="$parent.currentComponent", ng-options="c.id as c.name for c in groupComponents")
+    i.faber-icon-button.faber-icon-sort
 
 faber-component-renderer(data-faber-component-block="block", ng-if="isPreview")
 

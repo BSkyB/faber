@@ -31,10 +31,10 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.isGroupItemBlock = false
       $scope.isElementBlock = false
 
-      $scope.mouseenter = ()->
+      $scope.mouseOver = (evt)->
         $scope.isMouseHover = true
 
-      $scope.mouseleave = ()->
+      $scope.mouseOut = (evt)->
         $scope.isMouseHover = false
 
       # Get available index range that can be used to move in the parent block's children
@@ -53,14 +53,13 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
           $scope.moveSelf to
 
           # Setting isMoving to true is wrapped inside of $timeout so it can be applied after false is set first
-          $scope.isMoving = false
+          $rootScope.$broadcast 'ResetIsMoving'
           $timeout ()->
             $scope.isMoving = true
 
       $scope.onBlockClick = (evt)->
         evt.stopPropagation() if evt
 
-        $rootScope.$broadcast 'SelectBlockOfIndex', null
         $rootScope.$broadcast 'ShowComponents', null
         $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
 
@@ -103,6 +102,9 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
         evt.stopPropagation() if evt
 
         $scope.isExpanded = false
+
+      $scope.$on 'ResetIsMoving', (evt)->
+        $scope.isMoving = false
 
       $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
         unless scope
