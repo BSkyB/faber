@@ -1,4 +1,7 @@
-faber-components
+label.faber-group-item-title
+  input(type="text", placeholder="Type the item's title", ng-model="block.title")
+
+faber-components(ng-if="isExpanded")
 
 .faber-blocks(ng-if="isExpanded")
   .faber-block-repeat(ng-repeat="data in block.blocks")

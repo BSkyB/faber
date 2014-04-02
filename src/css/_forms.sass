@@ -29,3 +29,93 @@
     left: 0
     width: 100%
     margin: 0
+
+faber-block
+  button[class^="faber-icon-"],
+  button[class*=" faber-icon-"]
+    font-size: 1em
+    color: #FFF
+    border: 1px solid $blue
+    padding: 0
+    background: $blue
+    cursor: pointer
+
+    +appearance(none)
+    +border-radius(3px)
+
+    &:hover
+      color: #FFF
+      background: darken($blue, 10%)
+
+    &.toggled-on
+      background: #FFF
+      color: $blue
+
+      &:hover
+        background: #f4f4f4
+
+    &.faber-icon-remove
+      $alert: #d1472d
+      background: $alert
+      border-color: $alert
+
+      &:hover
+        background: darken($alert, 10%)
+
+faber-group-item-block
+  .faber-group-item-title
+    display: inline-block
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 32px
+    padding: 4px 5.5em 0 0.5em
+
+    background: #e4e4e4
+
+    +box-sizing(border-box)
+
+    //&:only-child
+    //  height: 100%
+
+    input
+      font-family: Verdana, Geneva, sans-serif
+      font-size: 14px
+      color: #333
+      background: transparent
+
+      width: 100%
+      margin: 0 0 1em 0
+      padding: 3px
+
+      +box-sizing(border-box)
+
+      +appearance(none)
+      border: none
+
+      &:only-child
+        margin-bottom: 0
+
+      &:focus
+        outline: none
+
+      &::-webkit-input-placeholder
+        font-style: italic
+        color: #ccc
+
+      &:-moz-placeholder
+        font-style: italic
+        color: #ccc
+
+      &::-moz-placeholder
+        font-style: italic
+        color: #ccc
+
+      &:-ms-input-placeholder
+        font-style: italic
+        color: #ccc
+
+faber-component-renderer
+  *:focus
+    outline: rgba($blue, 0.2) solid 2px

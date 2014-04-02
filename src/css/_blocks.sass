@@ -39,49 +39,22 @@
       display: none
       position: absolute
       right: 0
-      top: 5px
-      padding: 0 0.8em
+      top: 0
+      padding: 5px 0.8em
+      height: 32px
+
+      +box-sizing(border-box)
+
+    .faber-group-item-block
+      & > .faber-block-actions
+        z-index: 1
 
     .faber-block-position
       position: relative
-      //line-height: 1.2em
-      //color: #ccc
-      //margin-right: 0.5em
 
     .faber-group-block-actions,
     .faber-group-item-block-actions
       display: inline-block
-
-    button[class^="faber-icon-"],
-    button[class*=" faber-icon-"]
-      font-size: 1em
-      color: #FFF
-      border: 1px solid $blue
-      padding: 0
-      background: $blue
-      cursor: pointer
-
-      +appearance(none)
-      +border-radius(3px)
-
-      &:hover
-        color: #FFF
-        background: darken($blue, 10%)
-
-      &.toggled-on
-        background: #FFF
-        color: $blue
-
-        &:hover
-          background: #f4f4f4
-
-      &.faber-icon-remove
-        $alert: #d1472d
-        background: $alert
-        border-color: $alert
-
-        &:hover
-          background: darken($alert, 10%)
 
   faber-group-block
     display: block
@@ -99,15 +72,17 @@
 
   faber-group-item-block
     display: block
-    padding: 2em 1em 1em 1em
+    padding: 1em
     background: #fff
+    min-height: 32px
+
+    +box-sizing(border-box)
+
+    & > faber-components:first-of-type
+      margin-top: 2.5em
 
   faber-component-renderer
     display: block
 
     & > div
       padding: 1em
-
-    *:focus
-      outline: rgba($blue, 0.2) solid 2px
-      //outline-offset: 2px

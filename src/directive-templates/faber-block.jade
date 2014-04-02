@@ -1,11 +1,6 @@
-.faber-block-item(ng-class="{'faber-element-block': isElementBlock, 'faber-group-block': isGroupBlock, 'faber-block-preview': isPreview,'faber-block-hover': isMouseHover, 'faber-block-selected': isSelected, 'faber-block-moving': isMoving}", ng-mouseover="mouseOver($event)", ng-mouseout="mouseOut($event)", ng-click="onBlockClick($event)")
+.faber-block-item(ng-class="{'faber-element-block': isElementBlock, 'faber-group-block': isGroupBlock, 'faber-group-item-block': isGroupItemBlock, 'faber-block-preview': isPreview,'faber-block-hover': isMouseHover, 'faber-block-selected': isSelected, 'faber-block-moving': isMoving}", ng-mouseover="mouseOver($event)", ng-mouseout="mouseOut($event)", ng-click="onBlockClick($event)")
 
   .faber-block-actions
-    //label.faber-select.faber-block-position(ng-click="positionSelect()")
-      span {{$parent.$index+1}} / {{$parent.block.blocks.length}}
-        select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
-        i.faber-icon-button.faber-icon-sort
-
     .faber-group-block-actions(ng-if="isGroupBlock")
       button.faber-edit-group-button.faber-icon-edit.toggled-on(title="Edit", ng-if="isPreview", ng-click="edit($event)")
       button.faber-preview-group-button.faber-icon-edit(title="Preview", ng-if="!isPreview", ng-click="preview($event)")

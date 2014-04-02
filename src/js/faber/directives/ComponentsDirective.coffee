@@ -9,7 +9,6 @@ faber.directive 'faberComponents', ($rootScope, $filter, $timeout) ->
   templateUrl: 'faber-components.html'
 
   link: ($scope, $element, attrs)->
-#    $scope.showingComponents = (angular.isUndefined $scope.$index) and $scope.isExpanded
     $scope.showingComponents = $scope.block.blocks.length is 0
 
     $scope.hasGroupComponents = ()->
