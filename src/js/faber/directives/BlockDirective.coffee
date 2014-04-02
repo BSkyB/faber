@@ -35,7 +35,6 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.isMouseHover = true
 
       $scope.mouseOver = (evt)->
-        evt.stopPropagation()
         $scope.isMouseHover = true
 
       $scope.mouseOut = (evt)->

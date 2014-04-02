@@ -57,8 +57,11 @@ describe 'GroupItemBlockDirective:', ->
 
   describe 'when initialised,', ->
     it 'should have only element components to be available', ->
+      @scope.isExpanded = true
+      @scope.$digest()
+      
       components = @element.find('faber-components')
-      componentsScope = components.scope()
+      componentsScope = angular.element(components).scope()
       componentsScope.showingComponents = true
       componentsScope.$digest()
       buttons = components.find('button')
