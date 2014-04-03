@@ -110,15 +110,15 @@ var FaberComponent = function() {
     template: '<div></div>',
     topLevelOnly: false,
 
-    init: function($element, update) {
+    init: function($scope, $element, update) {
       // Initialise the component
     },
 
-    selected: function($element) {
+    selected: function($scope, $element, update) {
       // Do something when the component block is selected
     },
 
-    unselected: function($element) {
+    unselected: function($scope, $element, update) {
       // Do something when the component block is unselected
     },
   }
@@ -127,7 +127,7 @@ var FaberComponent = function() {
 
 ## How to make a component
 
-Components typically have the following parameters
+Components typically have the following
 
 ##### type
 
@@ -159,11 +159,13 @@ Components typically have the following parameters
 
 Default: `false`
 
-##### init($element, initialContent)
+##### init($scope, $element, initialContent)
 
 > Optional
 
 > Callback function to be called when the component is rendered on the block list
+
+`$scope`: The component renderer's isolate scope. If the component is using angular, you can put your scope functions to it
 
 `$element`: The rendered DOM element passed from ComponentRendererDirective
 
@@ -173,7 +175,7 @@ For example, MediumEditorComponent sends a string of html format.
 
 `update`: To be called whenever the component wants to update and save the content changes
 
-##### selected ($element, update)
+##### selected ($scope, $element, update)
 
 > Optional
 
@@ -183,7 +185,7 @@ For example, MediumEditorComponent sends a string of html format.
 
 `update`: To be called whenever the component wants to update and save the content changes
 
-##### unselected ($element, update)
+##### unselected ($scope, $element, update)
 
 > Optional
 
@@ -214,17 +216,43 @@ var TextComponent = function() {
 
 #### Group component
 
+`<faber-render/>` renders all element blocks added to the given block item
+
 ```javascript
 var OrderedListComponent = function() {
   return {
     name: 'Ordered List',
     id: 'ordered-list',
     type: 'group',
-    template: '<ol class="ordered-list"><li ng-repeat="b in block.blocks">ordered list item</li></ol>'
+    template: '<ol class="ordered-list">
+                <li ng-repeat="b in block.blocks">
+                  ordered list item
+                  <faber-render data-faber-render-block="b"></faber-render>
+                </li>
+              </ol>'
   };
 };
 ```
 
+
+#### Using the component's isolate scope
+
+```javascript
+var TextComponent = function() {
+  return {
+    name: 'Text',
+    id: 'text',
+    type: 'element',
+    template: '<input type="text" ng-model="block.content"/><button ng-click="onClickMe()">Click me!</button>',
+
+    init: function($scope, $element, content) {
+      $scope.onClickMe = function() {
+        alert('Hello!');
+      }
+    }
+  };
+};
+```
 
 #### Using injector()
 
@@ -236,7 +264,7 @@ var OrderedListComponent = function() {
     type: 'group',
     template: '<ol class="ordered-list"><li ng-repeat="b in block.blocks">ordered list item</li></ol>',
 
-    init: function($element, content) {
+    init: function($scope, $element, content) {
       var injector = $element.injector();
       var $http = injector.get('$http');
       // ... do something with $http service
@@ -268,7 +296,7 @@ var TextComponent = function() {
 
     input: null
 
-    init: function($element, initialContent, update) {
+    init: function($scope, $element, initialContent, update) {
 
       this.input = $element[0].getElementsByClassName('text-component')[0]
       this.input.innerHTML = initialContent || '';
@@ -279,12 +307,11 @@ var TextComponent = function() {
       });
     },
 
-    selected: function($element, update) {
-      // set focus the input field
+    selected: function($scope, $element, update) {
       $element[0].getElementsByClassName('text-component')[0].focus()
     },
 
-    unselected: function($element, update) {
+    unselected: function($scope, $element, update) {
       $element[0].getElementsByClassName('text-component')[0].blur()
       update(this.input.innerHTML);
     }
@@ -307,7 +334,7 @@ var OrderedListComponent = function() {
     type: 'group',
     template: '<ol class="ordered-list"></ol>',
 
-    init: function($element, content) {
+    init: function($scope, $element, content) {
       // ... do something
     }
   };
