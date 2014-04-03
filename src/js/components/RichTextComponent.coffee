@@ -21,6 +21,7 @@ class RichTextComponent
   template: '<div class="rich-text" data-tust-html><br/></div>'
 
   editor: null
+  editorInstance: null
 
   init: ($element, initialContent, update)->
     opts =
@@ -30,14 +31,16 @@ class RichTextComponent
     @editor = $element[0].getElementsByClassName('rich-text')[0]
     @editor.innerHTML = initialContent or ''
 
-    new MediumEditorExtended @editor, opts
+    @editorInstance = new MediumEditorExtended @editor, opts
 
-    @editor.addEventListener 'keyup', ()=>
+    @editor.addEventListener 'input', ()=>
       update @editor.innerHTML
 
   selected: ($element, update)->
+#    @editorInstance.activate()
     $element[0].getElementsByClassName('rich-text')[0].focus()
 
   unselected: ($element, update)->
     $element[0].getElementsByClassName('rich-text')[0].blur()
     update @editor.innerHTML
+    @editorInstance.deactivate()
