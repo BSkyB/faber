@@ -9,7 +9,7 @@ class OrderedListComponent
   template: '<ol class="ordered-list">
     <li ng-repeat="b in block.blocks">
       <p>{{ b.title }}</p>
-      <faber-render data-faber-render-block="b"></faber-render>
+      <faber-render data-faber-render-block="b"/>
     </li>
   </ol>'
 

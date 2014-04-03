@@ -1,5 +1,4 @@
 faber.directive 'faberRender', ($compile, componentsService)->
-#  require: 'ngModel'
   restrict: 'AE'
   templateUrl: 'faber-render.html'
   scope:

@@ -1,2 +1,2 @@
-div(ng-repeat="block in data.blocks")
+div(ng-repeat="block in data.blocks", ng-if="data")
   faber-component-renderer(data-faber-component-renderer-block="block", data-faber-group-preview="isGroupPreview()")

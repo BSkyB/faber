@@ -1,6 +1,6 @@
 faber.directive 'faberComponentRenderer', ($compile, componentsService)->
   restrict: 'AE'
-  template: '<div></div>'
+  template: '<div ng-class="component.id"></div>'
   scope:
     block: '=faberComponentRendererBlock'
     checkGroupPreview: '&faberGroupPreview'
@@ -16,15 +16,17 @@ faber.directive 'faberComponentRenderer', ($compile, componentsService)->
       wrapper.empty()
       $element.find('div').append $component
 
-      $scope.component.init($scope, $element, content, $scope.updateRendered) if $scope.component.init
+      if $scope.component.init
+        $scope.component.init($scope, $element, content, $scope.updateRendered) if $scope.component.type is 'element'
+        $scope.component.init($scope, $element, content) if $scope.component.type is 'group'
 
     $scope.component = null
 
     $scope.selectRendered = ()->
-      $scope.component.selected($element, $scope.updateRendered) if $scope.component.selected
+      $scope.component.selected($scope, $element, $scope.updateRendered) if $scope.component.selected
 
     $scope.unselectRendered = ()->
-      $scope.component.unselected($element, $scope.updateRendered) if $scope.component.unselected
+      $scope.component.unselected($scope, $element, $scope.updateRendered) if $scope.component.unselected
 
     $scope.updateRendered = (content)->
       if content

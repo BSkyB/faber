@@ -22,7 +22,6 @@ faber-components
       +transition(all 0.15s)
 
     i
-      color: $blue
       +opacity(1)
       +transition(all 0.3s)
 
@@ -32,7 +31,7 @@ faber-components
 
     display: inline-block
     position: relative
-    color: darken(#eee, 10%)
+    color: $blue
     font-size: 1.2em
     line-height: 0
     width: 100%
@@ -41,6 +40,12 @@ faber-components
     padding: 0
 
     +box-sizing(border-box)
+
+    faber-group-block &
+      color: $green
+
+    faber-group-item-block &
+      color: $blue
 
   button
     display: inline-block
@@ -61,8 +66,8 @@ faber-components
     +border-radius(4px)
 
   button.faber-group-button
-    color: green
-    border-color: green
+    color: $green
+    border-color: $green
 
   .faber-available-components
     position: relative
