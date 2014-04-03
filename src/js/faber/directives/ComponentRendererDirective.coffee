@@ -1,8 +1,13 @@
-faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $timeout, $compile, componentsService)->
+faber.directive 'faberComponentRenderer', ($compile, componentsService)->
   restrict: 'AE'
   template: '<div></div>'
+  scope:
+    block: '=faberComponentRendererBlock'
+    checkGroupPreview: '&faberGroupPreview'
 
   link: ($scope, $element, $attrs)->
+    $scope.isGroupPreview = $scope.checkGroupPreview() or false
+
     setComponent = (content)->
       template = $scope.component.template
       $component = $compile(template)($scope)
@@ -11,7 +16,7 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
       wrapper.empty()
       $element.find('div').append $component
 
-      $scope.component.init($element, content, $scope.updateRendered) if $scope.component.init
+      $scope.component.init($scope, $element, content, $scope.updateRendered) if $scope.component.init
 
     $scope.component = null
 
@@ -26,6 +31,9 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
         $scope.block.content = content
 
     $scope.$watch 'block.component', (val)->
+      if !$scope.block
+        return
+
       # retrieve the component's template and append it to the block
       $scope.component = componentsService.findById($scope.block.component)
       if $scope.block.component and $scope.component
@@ -33,7 +41,7 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
         initialContent = if $scope.component.type is 'element' then $scope.block.content else angular.copy($scope.block.blocks)
         setComponent initialContent
 
-    $scope.$on 'BlockModeChanged', (evt)->
+    $scope.$on 'BlockModeChanged', (evt, val)->
       setComponent $scope.block.content
 
     $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
@@ -43,5 +51,5 @@ faber.directive 'faberComponentRenderer', ($rootScope, $http, $templateCache, $t
 
       if scope.block.blocks[index] is $scope.block
         $scope.selectRendered()
-      else if scope is $scope
-        $scope.unselectRendered()
+#      else if scope is $scope
+#        $scope.unselectRendered()

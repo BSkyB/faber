@@ -13,4 +13,4 @@ class OrderedListComponent
     </li>
   </ol>'
 
-  init: ($element, content)->
+  init: ($scope, $element, content)->

@@ -18,12 +18,12 @@ class RichTextComponent
   name: 'Rich Text',
   id: 'rich-text',
   type: 'element',
-  template: '<div class="rich-text" data-tust-html><br/></div>'
+  template: '<p>group preview: {{ $id }}, {{ isGroupPreview }}</p><div class="rich-text" data-tust-html><br/></div>'
 
   editor: null
   editorInstance: null
 
-  init: ($element, initialContent, update)->
+  init: ($scope, $element, initialContent, update)->
     opts =
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote']
       placeholder: 'Type your text'
@@ -37,10 +37,10 @@ class RichTextComponent
       update @editor.innerHTML
 
   selected: ($element, update)->
-#    @editorInstance.activate()
+    @editorInstance.deactivate()
+    @editorInstance.activate()
     $element[0].getElementsByClassName('rich-text')[0].focus()
 
   unselected: ($element, update)->
     $element[0].getElementsByClassName('rich-text')[0].blur()
     update @editor.innerHTML
-    @editorInstance.deactivate()

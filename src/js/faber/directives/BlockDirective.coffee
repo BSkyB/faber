@@ -45,7 +45,7 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.indexRange = ()->
         res = []
         min = 0
-        max = if $scope.$parent and $scope.$parent.block then Math.max($scope.$parent.block.blocks.length-1, min) else min
+        max = if $scope.$parent and $scope.$parent.block and $scope.$parent.block.blocks then Math.max($scope.$parent.block.blocks.length-1, min) else min
         for i in [min..max]
           res.push i
         return res
@@ -89,14 +89,14 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
         $scope.isPreview = false
 
         $rootScope.$broadcast 'ResetIsMoving'
-        $rootScope.$broadcast 'BlockModeChanged'
+        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Switch to preview mode on group block
       $scope.preview = (evt)->
         evt.stopPropagation() if evt
 
         $scope.isPreview = true
-        $rootScope.$broadcast 'BlockModeChanged'
+        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Expand group item block
       $scope.expand = (evt)->

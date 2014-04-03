@@ -47,11 +47,23 @@ describe 'ComponentRendererDirective:', ->
       scope.$digest()
       @blockScope = blockElement.isolateScope()
       @element = blockElement.find('faber-component-renderer')
-      @scope = @element.scope()
+      @scope = @element.isolateScope()
 
       @scope.$digest()
 
   describe 'when render a component', ->
+    it 'should know if it is in group preview mode', ->
+      inject ($rootScope, $compile)->
+        scope = $rootScope.$new()
+        scope.block =
+          component: 'sample-component'
+        scope.isGroupPreview = ()->
+          true
+        el = $compile('<faber-component-renderer data-faber-component-renderer-block="block" data-faber-group-preview="isGroupPreview()"></faber-component-renderer>')(scope)
+        rendererScope = el.isolateScope()
+
+        expect(rendererScope.isGroupPreview).toBe true
+
     it 'should be able to render the template of the given component', ->
       expect(@element.text()).toBe 'Sample Component'
 
