@@ -3,10 +3,6 @@ Faber
 
 Block based content editor
 
-## TODOs
-
-1.	Pluggable themes
-
 ## Usage
 
 For use in the browser just use the files from `/dist`
@@ -101,6 +97,8 @@ Default: 'faber'
 
 ### components
 
+Check 'How to make a component' section for more details
+
 > List of components to be imported and managed by components service.
 
 ``` javascript
@@ -126,6 +124,8 @@ var FaberComponent = function() {
   }
 }
 ```
+
+## How to make a component
 
 Components typically have the following parameters
 
@@ -192,3 +192,129 @@ For example, MediumEditorComponent sends a string of html format.
 `$element`: The rendered DOM element passed from ComponentRendererDirective
 
 `update`: To be called whenever the component wants to update and save the content changes
+
+
+### With Angular
+
+It is possible to use the passed down 'block' using Angular directives in the template
+
+
+#### Element component
+```javascript
+var TextComponent = function() {
+  return {
+    name: 'Text',
+    id: 'text',
+    type: 'element',
+    template: '<input type="text" ng-model="block.content"/>'
+  };
+};
+```
+
+
+#### Group component
+
+```javascript
+var OrderedListComponent = function() {
+  return {
+    name: 'Ordered List',
+    id: 'ordered-list',
+    type: 'group',
+    template: '<ol class="ordered-list"><li ng-repeat="b in block.blocks">ordered list item</li></ol>'
+  };
+};
+```
+
+
+#### Using injector()
+
+```javascript
+var OrderedListComponent = function() {
+  return {
+    name: 'Ordered List',
+    id: 'ordered-list',
+    type: 'group',
+    template: '<ol class="ordered-list"><li ng-repeat="b in block.blocks">ordered list item</li></ol>',
+
+    init: function($element, content) {
+      var injector = $element.injector();
+      var $http = injector.get('$http');
+      // ... do something with $http service
+    }
+  };
+};
+```
+
+
+### Without Angular
+
+Or build by manipulating DOM using your choice of tool sush as jQuery.
+
+Initial content is passed to the component when `init()` is called and this is bound directly to block data.
+
+Use `update()` to update the content if you want to control the timing of updating the content.
+`update()` can have array, object, string or any type as the argument.
+
+
+#### Element component
+
+```javascript
+var TextComponent = function() {
+  return {
+    name: 'Text',
+    id: 'text',
+    type: 'element',
+    template: '<input class="text-component" type="text"/>',
+
+    input: null
+
+    init: function($element, initialContent, update) {
+
+      this.input = $element[0].getElementsByClassName('text-component')[0]
+      this.input.innerHTML = initialContent || '';
+
+      var self = this;
+      this.input.addEventListener('keyup', function() {
+        update(self.input.innerHTML);
+      });
+    },
+
+    selected: function($element, update) {
+      // set focus the input field
+      $element[0].getElementsByClassName('text-component')[0].focus()
+    },
+
+    unselected: function($element, update) {
+      $element[0].getElementsByClassName('text-component')[0].blur()
+      update(this.input.innerHTML);
+    }
+  };
+};
+```
+
+#### Group component
+
+`init()` will be called whenever it's switched to preview mode
+
+Unlike element components, group components don't need selected and unlelected callback as they are always either preview or edit mode
+and update callback is not passed with init() because of the same reason
+
+```javascript
+var OrderedListComponent = function() {
+  return {
+    name: 'Ordered List',
+    id: 'ordered-list',
+    type: 'group',
+    template: '<ol class="ordered-list"></ol>',
+
+    init: function($element, content) {
+      // ... do something
+    }
+  };
+};
+```
+
+
+## TODOs
+
+1.	Pluggable themes
