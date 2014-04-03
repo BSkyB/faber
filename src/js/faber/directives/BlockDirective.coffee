@@ -89,12 +89,14 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
         $scope.isPreview = false
 
         $rootScope.$broadcast 'ResetIsMoving'
+        $rootScope.$broadcast 'BlockModeChanged'
 
       # Switch to preview mode on group block
       $scope.preview = (evt)->
         evt.stopPropagation() if evt
 
         $scope.isPreview = true
+        $rootScope.$broadcast 'BlockModeChanged'
 
       # Expand group item block
       $scope.expand = (evt)->

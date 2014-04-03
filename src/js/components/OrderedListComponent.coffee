@@ -1,11 +1,16 @@
 class OrderedListComponent
-  name: 'Ordered List',
-  id: 'ordered-list',
-  type: 'group',
-  template: '<ol class="ordered-list"><li>ordered list item</li></ol>'
+  name: 'Ordered List'
+  id: 'ordered-list'
+  type: 'group'
 
-  init: ($element, initialContent, update)->
+  # For this sample component, angular directive ng-repeat is used
+  # but DOM can be directly managed from init()
+  # Check README to find out more about how to make components
+  template: '<ol class="ordered-list">
+    <li ng-repeat="b in block.blocks">
+      <p>{{ b.title }}</p>
+      <faber-render data-faber-render-block="b"></faber-render>
+    </li>
+  </ol>'
 
-  selected: ($element, update)->
-
-  unselected: ($element, update)->
+  init: ($element, content)->
