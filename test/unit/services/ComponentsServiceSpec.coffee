@@ -20,35 +20,20 @@ describe 'ComponentsService:', ()->
         @invalid =
           ()->
             test: "test copy"
-        @invalidInputs =
-          ()->
-            inputs: 'invalid'
-            id: 'a-component'
-            type: 'element'
         @invalidTemplate =
           ()->
-            inputs:
-              title: 'block title'
             id: null
             type: 'group'
         @invalidType =
           ()->
-            inputs:
-              title: 'block title'
             id: 'a-component'
             type: 'no idea what this is'
         @valid =
           ()->
-            inputs:
-              title: 'block title'
             id: 'a-component'
             type: 'group'
-        @validNoInputs =
-          ()->
-            id: 'a-component'
-            type: 'element'
 
-        @componentsService.init [@invalid, @invalidInputs, @invalidTemplate, @invalidType, @valid, @validNoInputs]
+        @componentsService.init [@invalid,@invalidTemplate, @invalidType, @valid]
 
       afterEach ->
         inject ($log)->
@@ -57,18 +42,16 @@ describe 'ComponentsService:', ()->
       it 'should warn', ->
         logs = @log.warn.logs
 
-        expect(logs.length).toBe 4
+        expect(logs.length).toBe 3
         expect(logs).toContain ['invalid': @invalid]
-        expect(logs).toContain ['invalid': @invalidInputs]
         expect(logs).toContain ['invalid': @invalidTemplate]
         expect(logs).toContain ['invalid': @invalidType]
 
-      it 'should store other valid components', ->
+      it 'should store only valid components', ->
         components = @componentsService.getAll()
 
-        expect(components.length).toBe 2
+        expect(components.length).toBe 1
         expect(components).toContain new @valid()
-        expect(components).toContain new @validNoInputs()
 
     it 'should be able to find components of given type', ->
       @componentsService.init [

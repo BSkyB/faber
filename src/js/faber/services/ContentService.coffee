@@ -1,4 +1,4 @@
-faber.factory 'contentService', ($rootScope, faberConfig) ->
+angular.module('faber').factory 'contentService', ($rootScope, faberConfig) ->
   # Initialise blocks collection
   content =
     blocks: []

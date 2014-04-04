@@ -1,23 +1,37 @@
-describe 'Components Directive:', ->
+describe 'ComponentsDirective:', ->
   beforeEach module 'faber'
 
   beforeEach ->
-    inject ($compile, $rootScope, $injector, faberConfig)->
-      @componentsService = $injector.get 'componentsService'
+    inject ($compile, $rootScope, $injector)->
+#      @componentsService = $injector.get 'componentsService'
+      configService = $injector.get 'configService'
 
       scope = $rootScope.$new()
-      faberConfig.components = [
-        ()->
-          inputs:
-            title: 'component title'
-          id: 'a-component'
-          type: 'element'
-      ,
-        ()->
-          id: 'top-level-only-component'
-          type: 'element'
-          topLevelOnly: true
-      ]
+      configService.init
+        components: [
+          ()->
+            inputs:
+              title: 'component title'
+            id: 'a-component'
+            type: 'element'
+        ,
+          ()->
+            id: 'top-level-only-component'
+            type: 'element'
+            topLevelOnly: true
+        ,
+          ()->
+            id: 'group-component-1'
+            type: 'group'
+        ,
+          ()->
+            id: 'group-component-2'
+            type: 'group'
+        ,
+          ()->
+            id: 'group-component-3'
+            type: 'group'
+        ]
 
       editorElement = $compile('<faber-editor><faber-components></faber-components></faber-editor>')(scope)
       scope.components = ()->
@@ -26,21 +40,27 @@ describe 'Components Directive:', ->
 
       @element = $compile(angular.element(editorElement.find('faber-components')))(scope)
       @scope = @element.scope()
+      @scope.$digest()
 
-  it 'should be able to show all of the given components', ->
-    @scope.showingComponents = true
-    @scope.$digest()
+      @scope.showingComponents = true
+      @scope.$digest()
 
-    expect(@element.find('li').length).toBe 2
+  it 'should be able to show all of the given element components', ->
+    expect(@element.find('li').length).toBe 3
+
+  it 'should add \'Group\' button if there are any group components', ->
+    expect(angular.element(@element.find('li')[2]).text()).toBe 'Group'
 
   it 'should be able to toggle the appearance', ->
     @scope.showingComponents = false
     @scope.toggleComponents()
     @scope.$digest()
 
-    expect(@element.find('li').length).toBe 2
+    expect(@element.find('li').length).toBe 3
 
     @scope.toggleComponents()
     @scope.$digest()
 
     expect(@element.find('li').length).toBe 0
+
+

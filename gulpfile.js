@@ -18,17 +18,23 @@ var DEV_DIR = './dev';
 var DIST_DIR = './dist';
 
 var SRC_FILES = [
-    DEV_DIR + '/js/lib/angular/angular.js',
-    DEV_DIR + '/js/lib/angular-animate/angular-animate.js',
-    DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
-    DEV_DIR + '/js/faber/classes/FaberComponent.js',
-    DEV_DIR + '/js/faber/faber.js',
-    DEV_DIR + '/js/faber/**/*.js',
+        DEV_DIR + '/js/lib/angular/angular.js',
+        DEV_DIR + '/js/lib/angular-animate/angular-animate.js',
+        DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
+        DEV_DIR + '/js/faber/classes/FaberComponent.js',
+        DEV_DIR + '/js/faber/faber.js',
+        DEV_DIR + '/js/faber/**/*.js'
+];
+
+var DIST_FILES = [
+        DEV_DIR + '/js/faber/classes/FaberComponent.js',
+        DEV_DIR + '/js/faber/faber.js',
+        DEV_DIR + '/js/faber/**/*.js'
 ];
 
 var BUILTIN_COMPONENTS = [
-    DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
-    DEV_DIR + '/js/components/**/*.js',
+        DEV_DIR + '/js/lib/medium-editor/dist/js/medium-editor.js',
+        DEV_DIR + '/js/components/**/*.js',
 ];
 
 var TEST_FILES = [
@@ -37,8 +43,8 @@ var TEST_FILES = [
 ];
 
 gulp.task('connect', connect.server({
-  root: ['dev'],
-  port: 1337
+    root: ['dev'],
+    port: 1337
 }));
 
 gulp.task('coffee', function() {
@@ -75,8 +81,27 @@ gulp.task('templatecache', function () {
         .pipe(gulp.dest(DEV_DIR + '/js/faber/directives'));
 });
 
+gulp.task('dev-copy-icons', function() {
+    return gulp.src([
+        './src/css/fonts/*'
+    ])
+        .pipe(gulp.dest(DEV_DIR + '/css/fonts'));
+});
+
+gulp.task('dist-copy-icons', function() {
+    return gulp.src([
+        './src/css/fonts/*'
+    ])
+        .pipe(gulp.dest(DIST_DIR + '/fonts'));
+});
+
+gulp.task('dist-copy-angular', ['build'], function() {
+    return gulp.src([DEV_DIR + '/js/lib/angular/angular.js', DEV_DIR + '/js/lib/angular-animate/angular-animate.js', DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js'])
+        .pipe(gulp.dest(DIST_DIR));
+});
+
 gulp.task('dist-build-js', ['build'], function() {
-    return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES))
+    return gulp.src(BUILTIN_COMPONENTS.concat(DIST_FILES))
         .pipe(concat('faber.js'))
         .pipe(gulp.dest(DIST_DIR))
         .pipe(uglify({mangle: false}))
@@ -93,34 +118,26 @@ gulp.task('dist-build-css', ['build'], function() {
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-copy-fontawesome', ['build'], function() {
-    return gulp.src([
-            './dev/js/lib/components-font-awesome/css/font-awesome.min.css',
-            './dev/js/lib/components-font-awesome/fonts/*'
-        ])
-        .pipe(gulp.dest(DIST_DIR));
-});
-
 gulp.task('dist-build-demo', ['build'], function() {
     return gulp.src('./src/dist.jade')
         .pipe(jade())
         .pipe(gulp.dest(DIST_DIR));
 });
 
-gulp.task('dist-build', ['dist-build-js', 'dist-build-css', 'dist-build-demo', 'dist-copy-fontawesome']);
+gulp.task('dist-build', ['dist-copy-icons', 'dist-copy-angular', 'dist-build-js', 'dist-build-css', 'dist-build-demo']);
 
 gulp.task('dist-test', ['dist-build'], function() {
-    return gulp.src([DIST_DIR + '/faber.js'].concat(TEST_FILES))
+    return gulp.src([DIST_DIR + '/angular.js', DIST_DIR + '/angular-animate.js', DIST_DIR + '/angular-mocks.js', DIST_DIR + '/faber.js'].concat(TEST_FILES))
         .pipe(karma({
             configFile: 'test/config/karma.conf.js'
-    }));
+        }));
 });
 
 gulp.task('dist-min-test', ['dist-build'], function() {
-    return gulp.src([DIST_DIR + '/faber.min.js'].concat(TEST_FILES))
+    return gulp.src([DIST_DIR + '/angular.js', DIST_DIR + '/angular-animate.js', DIST_DIR + '/angular-mocks.js', DIST_DIR + '/faber.min.js'].concat(TEST_FILES))
         .pipe(karma({
             configFile: 'test/config/karma.conf.js'
-    }));
+        }));
 });
 
 gulp.task('karma', ['build'], function() {
@@ -156,7 +173,7 @@ gulp.task('watch', ['connect'], function() {
 });
 
 gulp.task('install', ['bower']);
-gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache']);
+gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache', 'dev-copy-icons']);
 
 gulp.task('dev', ['build', 'watch']);
 gulp.task('devtest', ['karma', 'watch']);

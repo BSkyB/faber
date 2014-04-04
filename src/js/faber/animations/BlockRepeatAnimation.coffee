@@ -1,4 +1,4 @@
-faber.animation '.faber-block-repeat', ($window, $document, $rootElement, $interval)->
+angular.module('faber').animation '.faber-block-repeat', ($window, $document, $rootElement, $interval)->
   getEnd = (el)->
     pos = 0
 

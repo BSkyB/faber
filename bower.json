@@ -6,8 +6,7 @@
   "dependencies": {
     "angular": "~1.2.13",
     "angular-local-storage": "~0.0.1",
-    "components-font-awesome": "~4.0.3",
-    "medium-editor": "~1.6.7",
+    "medium-editor": "~1.7.5",
     "angular-animate": "~1.2.14",
     "angular-cookies": "~1.2.15"
   },

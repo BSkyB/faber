@@ -1,35 +1,9 @@
-faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
+angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
-  $scope.block.blocks or= []
-  $scope.component or= new FaberComponent()
-  $scope.renderer or={}
-
-  $scope.expanded = !!$rootScope.expanded
-
-  $scope.$on 'CollapseAll', (evt)->
-    $scope.expanded = false
-
-  $scope.$on 'ExpandAll', (evt)->
-    $scope.expanded = true
-
-  # When a child block fire this event with itself as an argument,
-  # the parent block will pick the event and stop it to propagate more
-  # and remove the child block from its children
-  $scope.$on 'RemoveChildBlock', (evt, block)->
-    if $scope.block.blocks.indexOf(block) >= 0
-      evt.stopPropagation()
-      $scope.remove(block)
-
-  # When a child block fire this event with itself and destination index as arbuments,
-  # the parent block will pick the event and stop it to propagate more
-  # and mobe the child block to the destination to re-order its children
-  $scope.$on 'MoveChildBlock', (evt, block, to)->
-    if $scope.block.blocks.indexOf(block) >= 0
-      evt.stopPropagation()
-      $scope.move $scope.block.blocks.indexOf(block), to
 
   # retrieve available component list for the current block
-  $scope.components = if $scope.component.type is 'element' then [] else componentsService.findNonTopLevelOnly()
+  $scope.components = componentsService.getAll()
+  $scope.component = null
 
   # Check if the component of the block is valid component and the block has all necessary information
   $scope.validateBlock = (block)->
@@ -58,7 +32,6 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if $scope.validateBlock block
       $scope.block.blocks or= []
       $scope.block.blocks.push block
-#      contentService.save()
       return true
     else
       $log.warn 'cannot find a component of the given name': block.component
@@ -75,6 +48,10 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
     if $scope.validateBlock block
       $scope.block.blocks.splice(index, 0, block)
 
+  # Insert an empty group block to the given index
+  $scope.insertGroup = (index)->
+    $scope.block.blocks.splice(index, 0, {component: componentsService.findByType('group')[0].id})
+
   # Move a child block at from index to to index
   $scope.move = (from, to)->
     max = $scope.block.blocks.length
@@ -83,23 +60,20 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
       $scope.$broadcast 'BlockMoved'
       contentService.save()
 
-  # Emit RemoveChildBlock event with itself so its parent block can remove it
-  $scope.removeSelf = ()->
-    $scope.$emit 'RemoveChildBlock', $scope.block
-
-  # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
-  $scope.moveSelf = (to)->
-    $scope.$emit 'MoveChildBlock', $scope.block, to
+  # ==================
+  # WATCH
+  # ==================
 
   # If the block's component data changes, find the component object and set it to the block
   $scope.$watch 'block.component', (val) ->
-    component = componentsService.findById val
+    if val
+      component = componentsService.findById val
 
-    if !component and componentsService.getAll().length > 0
-      $log.warn 'cannot find a component of the given name': val
-    else
-      $scope.component = component or new FaberComponent()
-      contentService.save()
+      if !component and componentsService.getAll().length > 0
+        $log.warn 'cannot find a component of the given name': val
+      else
+        $scope.component = component or new FaberComponent()
+        contentService.save()
 
   # If block's content changes save it
   $scope.$watch 'block.content', ()->
@@ -108,4 +82,3 @@ faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService
   # If a child block is added or removed save the changes
   $scope.$watch 'block.blocks', ()->
     contentService.save()
-

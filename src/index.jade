@@ -3,16 +3,17 @@ html(lang="en")
   head
     title Faber
 
-    link(href="js/lib/components-font-awesome/css/font-awesome.css", type="text/css", rel="stylesheet")
     link(href="css/faber.css", type="text/css", rel="stylesheet")
 
     // Medium Editor
     link(href="js/lib/medium-editor/dist/css/medium-editor.css", type="text/css", rel="stylesheet")
-    link(href="css/faber-medium-editor.css", type="text/css", rel="stylesheet")
+    link(href="css/faber-rich-text-component.css", type="text/css", rel="stylesheet")
 
     script(src="js/lib/medium-editor/dist/js/medium-editor.js")
 
+    // Default Components
     script(src="js/components/RichTextComponent.js")
+    script(src="js/components/OrderedListComponent.js")
 
     //script(src="js/lib/jquery/dist/jquery.js")
     script(src="js/lib/angular/angular.js")
@@ -30,22 +31,57 @@ html(lang="en")
     // Controllers
     script(src="js/faber/controllers/BlockController.js")
     script(src="js/faber/controllers/EditorController.js")
+    script(src="js/faber/controllers/GroupBlockController.js")
+    script(src="js/faber/controllers/GroupItemBlockController.js")
 
     // Directives
     script(src="js/faber/directives/BlockDirective.js")
     script(src="js/faber/directives/EditorDirective.js")
+    script(src="js/faber/directives/ElementBlockDirective.js")
+    script(src="js/faber/directives/GroupBlockDirective.js")
+    script(src="js/faber/directives/GroupItemBlockDirective.js")
     script(src="js/faber/directives/ComponentsDirective.js")
     script(src="js/faber/directives/ComponentRendererDirective.js")
-    script(src="js/faber/directives/SelectDirective.js")
     script(src="js/faber/directives/TrustHtmlDirective.js")
+    script(src="js/faber/directives/RenderDirective.js")
 
     // Animations
     script(src="js/faber/animations/BlockRepeatAnimation.js")
 
     // Services
+    script(src="js/faber/services/ConfigService.js")
     script(src="js/faber/services/ComponentsService.js")
     script(src="js/faber/services/ContentService.js")
 
   body
     #faber(ng-app="faber")
       faber-editor
+
+    script(type='text/javascript').
+      var faberConfig = {
+        // (array) List of components to be imported and managed by components service
+        components: [
+          RichTextComponent
+        ,
+          function() {
+            return {
+              name: 'Element Component',
+              id: 'element-component',
+              type: 'element',
+              template: '<p>element component</p>'
+            }
+          }
+        ,
+          OrderedListComponent
+        ,
+          function() {
+            return {
+              name: 'Group Component',
+              id: 'group-component',
+              type: 'group',
+              template: '<ul><li>group component itenm</li></ul>'
+            }
+          }
+        ]
+      };
+      faber.init(faberConfig);

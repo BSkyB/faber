@@ -1,19 +1,14 @@
-window.faber = angular.module('faber', ['ngAnimate'])
-  .constant('faberConfig', {
-      # (boolean) Default expanded flag for child blocks
-      expanded: true
+# Extend faber module to add initial init() because the module's run() is excuted later before the init() is needed
+window.faber = angular.extend(
+    angular.module('faber', ['ngAnimate'])
+    .value('faberConfig', {})
+    .run (configService, contentService)->
+        faber.import = contentService.import
+        faber.export = contentService.export
 
-      # (string) Prefix to be used when save the content to cookie
-      prefix: 'faber'
-
-      # (array) List of components to be imported and managed by components service
-      components: [
-          MediumEditorComponent
-      ]
-    })
-  .run (contentService)->
-    faber.import = contentService.import
-    faber.export = contentService.export
-
-    faber.load = contentService.load
-    faber.removeSavedData = contentService.removeSavedData
+        faber.init = configService.init
+        faber.init faber.initialConfig
+  ,
+    init: (config)->
+      @initialConfig = config
+)

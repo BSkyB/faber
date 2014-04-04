@@ -14,59 +14,75 @@
 
     .faber-block-item
       position: relative
-      border: 2px solid transparent
+      border: 2px dotted #eee
+
+      &.faber-block-preview,
+      &.faber-element-block
+        border: 2px solid transparent
+
+        &.faber-block-hover,
+        &.faber-block-selected
+          border-color: #eee
 
       &.faber-block-hover,
       &.faber-block-selected
-        border-color: #eee
-
-        .faber-block-actions
+        & > .faber-block-actions
           display: block
 
       &.faber-block-moving
         +animation(faber-block-moving 1s)
 
     .faber-block-actions
+      font-family: Verdana, Geneva, sans-serif
+      font-size: 16px
+
       display: none
       position: absolute
       right: 0
       top: 0
+      padding: 5px 0.8em
+      height: 32px
+
+      +box-sizing(border-box)
+
+      button
+        margin-right: 3px
+
+    .faber-group-item-block
+      & > .faber-block-actions
+        z-index: 1
 
     .faber-block-position
-      font-size: 1em
-      color: #ccc
-      margin-right: 0.5em
+      position: relative
 
-      span
-        color: $blue
-        display: inline-block
-        position: relative
+    .faber-group-block-actions,
+    .faber-group-item-block-actions
+      display: inline-block
 
-      select
-        +appearance(none)
-        +border-radius(0)
-        +opacity(0)
+  faber-group-block
+    display: block
+    padding: 2em 1em 1em 1em
+    background: #fafafa
 
-        position: absolute
-        top: 0
-        left: 0
-        width: 100%
-        margin: 0
-        border: none
-        font: inherit
-        font-size: 1em
-        color: $blue
-        background: transparent
-        cursor: pointer
-
-    button.faber-block-close
-      font-size: 1.2em
-      color: $blue
-      border: none
+    &.faber-group-block-preview
       background: transparent
-      cursor: pointer
 
-      +appearance(none)
+    .faber-group-component
+      position: absolute
+      left: 0
+      top: 5px
+      padding: 0 1em
+
+  faber-group-item-block
+    display: block
+    padding: 1em
+    background: #fff
+    min-height: 32px
+
+    +box-sizing(border-box)
+
+    & > faber-components:first-of-type
+      margin-top: 2.5em
 
   faber-component-renderer
     display: block
@@ -74,6 +90,10 @@
     & > div
       padding: 1em
 
-    *:focus
-      outline: rgba($blue, 0.2) solid 2px
-      outline-offset: 2px
+  faber-render
+    display: block
+
+  .faber-block-preview
+    faber-component-renderer > div
+      padding: 0
+

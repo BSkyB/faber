@@ -1,0 +1,46 @@
+@font-face {
+	font-family: 'icons';
+	src:url('fonts/icons.eot?13gnte');
+	src:url('fonts/icons.eot?#iefix13gnte') format('embedded-opentype'),
+		url('fonts/icons.woff?13gnte') format('woff'),
+		url('fonts/icons.ttf?13gnte') format('truetype'),
+		url('fonts/icons.svg?13gnte#icons') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="faber-icon-"], [class*=" faber-icon-"] {
+	font-family: 'icons';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.faber-icon-edit:before {
+	content: "\e600";
+}
+.faber-icon-remove:before {
+	content: "\e62b";
+}
+.faber-icon-minus:before {
+	content: "\e632";
+}
+.faber-icon-plus:before {
+	content: "\e633";
+}
+.faber-icon-group:before {
+	content: "\e636";
+}
+.faber-icon-sort:before {
+	content: "\f0dc";
+}
+.faber-icon-arrow-down:before {
+  content: "\e638";
+}
