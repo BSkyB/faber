@@ -12,46 +12,48 @@ describe 'EditorDirective:', ()->
       $templateCache.put 'a-component', '<p>A component</p>'
       $templateCache.put 'top-level-only-component', '<p>Top level component</p>'
 
-      config = faberConfig
-      config.components = [
-        ()->
-          inputs:
-            title: 'component title'
-          id: 'a-component'
-          type: 'element'
-      ,
-        ()->
-          inputs:
-            title: 'component title'
-          id: 'b-component'
-          type: 'element'
-      ,
-        ()->
-          id: 'top-level-only-component'
-          type: 'element'
-          topLevelOnly: true
-      ,
-        ()->
-          name: 'Group Component 1'
-          id: 'group-component-1'
-          type: 'group'
-          template: '<ul></ul>'
-      ,
-        ()->
-          name: 'Group Component 2'
-          id: 'group-component-2'
-          type: 'group'
-          template: '<ol></ol>'
-      ,
-        ()->
-          name: 'Group Component 3'
-          id: 'group-component-3'
-          type: 'group'
-          template: '<dl></dl>'
-      ]
-
       componentsService = $injector.get 'componentsService'
       contentService = $injector.get 'contentService'
+      configService = $injector.get 'configService'
+
+      configService.init
+        components: [
+          ()->
+            inputs:
+              title: 'component title'
+            id: 'a-component'
+            type: 'element'
+        ,
+          ()->
+            inputs:
+              title: 'component title'
+            id: 'b-component'
+            type: 'element'
+        ,
+          ()->
+            id: 'top-level-only-component'
+            type: 'element'
+            topLevelOnly: true
+        ,
+          ()->
+            name: 'Group Component 1'
+            id: 'group-component-1'
+            type: 'group'
+            template: '<ul></ul>'
+        ,
+          ()->
+            name: 'Group Component 2'
+            id: 'group-component-2'
+            type: 'group'
+            template: '<ol></ol>'
+        ,
+          ()->
+            name: 'Group Component 3'
+            id: 'group-component-3'
+            type: 'group'
+            template: '<dl></dl>'
+        ]
+      config = configService.get()
 
       scope = $rootScope.$new()
       element = $compile('<faber-editor></faber-editor>')(scope)

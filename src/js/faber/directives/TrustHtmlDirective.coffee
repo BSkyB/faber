@@ -1,4 +1,4 @@
-faber.directive 'trustHtml', ($sce)->
+angular.module('faber').directive 'trustHtml', ($sce)->
   replace: true
   restrict: 'M'
   template: '<div ng-bind-html="trustedHtml"></div>'

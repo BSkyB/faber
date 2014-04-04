@@ -2,34 +2,36 @@ describe 'ComponentsDirective:', ->
   beforeEach module 'faber'
 
   beforeEach ->
-    inject ($compile, $rootScope, $injector, faberConfig)->
-      @componentsService = $injector.get 'componentsService'
+    inject ($compile, $rootScope, $injector)->
+#      @componentsService = $injector.get 'componentsService'
+      configService = $injector.get 'configService'
 
       scope = $rootScope.$new()
-      faberConfig.components = [
-        ()->
-          inputs:
-            title: 'component title'
-          id: 'a-component'
-          type: 'element'
-      ,
-        ()->
-          id: 'top-level-only-component'
-          type: 'element'
-          topLevelOnly: true
-      ,
-        ()->
-          id: 'group-component-1'
-          type: 'group'
-      ,
-        ()->
-          id: 'group-component-2'
-          type: 'group'
-      ,
-        ()->
-          id: 'group-component-3'
-          type: 'group'
-      ]
+      configService.init
+        components: [
+          ()->
+            inputs:
+              title: 'component title'
+            id: 'a-component'
+            type: 'element'
+        ,
+          ()->
+            id: 'top-level-only-component'
+            type: 'element'
+            topLevelOnly: true
+        ,
+          ()->
+            id: 'group-component-1'
+            type: 'group'
+        ,
+          ()->
+            id: 'group-component-2'
+            type: 'group'
+        ,
+          ()->
+            id: 'group-component-3'
+            type: 'group'
+        ]
 
       editorElement = $compile('<faber-editor><faber-components></faber-components></faber-editor>')(scope)
       scope.components = ()->

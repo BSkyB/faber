@@ -1,4 +1,4 @@
-faber.directive 'faberGroupBlock', () ->
+angular.module('faber').directive 'faberGroupBlock', () ->
   restrict: 'E'
   templateUrl: 'faber-group-block.html'
   controller: 'GroupBlockController'

@@ -31,6 +31,35 @@ This will run [Karma](http://karma-runner.github.io/) [Jasmine](http://jasmine.g
 
 Faber has exposed the following services so they can be used outside of the module.
 
+### faber.init(config)
+
+> Exposed `init()` function of ConfigService
+
+> It takes configuration object to initialise Faber
+
+```javascript
+var faberConfig = {
+  // (array) List of components to be imported and managed by components service
+  components: [
+    RichTextComponent,
+    function() {
+      name: 'Element Component'
+      id: 'element-component'
+      type: 'element'
+      template: '<p>element component</p>'
+    },
+    OrderedListComponent,
+    function() {
+      name: 'Group Component'
+      id: 'group-component'
+      type: 'group'
+      template: '<ul><li>group component itenm</li></ul>'
+    }
+  ]
+};
+faber.init(faberConfig);
+```
+
 
 ### faber.import(JSON)
 
@@ -52,14 +81,14 @@ var json = '[
 faber.import(json);
 ```
 
-> Exposed `import` function of ContenService.
+> Exposed `import()` function of ContenService.
 
 > It takes a JSON format string as an argument and populate the blocks after validating it.
 
 
 ### faber.export()
 
-> Exposed `export` function of ContentService.
+> Exposed `export()` function of ContentService.
 
 > It will return JSON formatted blocks
 
@@ -70,8 +99,6 @@ The configuration can be done using `faberConfig` constant when faber is initial
 
 ```javascript
 window.faber = angular.module('faber', ['ngAnimate']).constant('faberConfig', {
-  expanded: true,
-  prefix: 'faber',
   components: [
     FaberComponent,
     MediumEditorComponent
@@ -79,21 +106,6 @@ window.faber = angular.module('faber', ['ngAnimate']).constant('faberConfig', {
 });
 
 ```
-### expanded
-
-> Default 'expanded' flag for child blocks.
-
-default: `true`
-
----
-
-### prefix
-
-> Prefix to be used when save the content to local storage
-
-Default: 'faber'
-
----
 
 ### components
 

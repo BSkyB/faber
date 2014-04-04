@@ -1,4 +1,4 @@
-faber.directive 'faberElementBlock', ($rootScope, $compile, $timeout) ->
+angular.module('faber').directive 'faberElementBlock', ($rootScope, $compile, $timeout) ->
 #  scope:
 #    'block': '=faberBlockContent'
   restrict: 'E'

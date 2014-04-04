@@ -1,4 +1,4 @@
-faber.directive 'faberComponentRenderer', ($compile, componentsService)->
+angular.module('faber').directive 'faberComponentRenderer', ($compile, componentsService)->
   restrict: 'AE'
   template: '<div ng-class="component.id"></div>'
   scope:

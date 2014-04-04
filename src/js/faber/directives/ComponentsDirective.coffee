@@ -1,4 +1,4 @@
-faber.directive 'faberComponents', ($rootScope, $filter, $timeout) ->
+angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $timeout) ->
   buttonClickWithIndexReturn = (evt, $scope)->
     evt.stopPropagation() if evt
     $rootScope.$broadcast 'SelectBlockOfIndex', null

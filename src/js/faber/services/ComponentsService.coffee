@@ -1,4 +1,4 @@
-faber.factory 'componentsService', ($filter, $log) ->
+angular.module('faber').factory 'componentsService', ($filter, $log) ->
   # Initalise components collection.
   raws = []
 
@@ -9,7 +9,7 @@ faber.factory 'componentsService', ($filter, $log) ->
   #
   validate = (component) ->
     comp = new component()
-    (angular.isObject(comp.inputs) or !comp.inputs) and angular.isString(comp.id) and (comp.type is 'element' or comp.type is 'group')
+    return angular.isString(comp.id) and (comp.type is 'element' or comp.type is 'group')
 
   # Initalizes the component service.
   #

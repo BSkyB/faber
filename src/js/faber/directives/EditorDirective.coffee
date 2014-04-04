@@ -1,4 +1,4 @@
-faber.directive 'faberEditor', ($rootScope, $document, $timeout) ->
+angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeout) ->
   restrict: 'AE'
   templateUrl: 'faber-editor.html'
   controller: 'EditorController'

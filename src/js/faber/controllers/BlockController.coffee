@@ -1,4 +1,4 @@
-faber.controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
+angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
 
   # retrieve available component list for the current block

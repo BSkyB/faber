@@ -1,4 +1,11 @@
-faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, contentService, componentsService, faberConfig) ->
+angular.module('faber').controller 'EditorController', ($rootScope, $scope, $controller, $log, configService, contentService, componentsService) ->
+
+  configEditor = (config)->
+    $rootScope.isExpanded = if angular.isDefined config.expanded then config.expanded else true
+    componentsService.init config.components or []
+
+    # retrieve available component list for the current block
+    $scope.components = componentsService.getAll()
 
   # extends BlockController
   $controller('BlockController', {$scope: $scope})
@@ -9,11 +16,7 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
   $scope.block.blocks = []
   contentService.init $scope.block
 
-  # inherit from faberConfig if it is set when faber is initialised otherwise true by default
-  $rootScope.isExpanded = if angular.isDefined faberConfig.expanded then faberConfig.expanded else true
-
-  # initialise components service with the given components list
-  componentsService.init(faberConfig.components or [])
+  configEditor configService.get()
 
   validateElementBlock = (block) ->
     if $scope.validateBlock block and block.blocks?.length > 0
@@ -48,5 +51,5 @@ faber.controller 'EditorController', ($rootScope, $scope, $controller, $log, con
     $scope.$apply ()->
       $scope.block.blocks = validateImported blocks
 
-  # retrieve available component list for the current block
-  $scope.components = componentsService.getAll()
+  $scope.$on 'ConfigUpdated', (evt, config)->
+    configEditor config

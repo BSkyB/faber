@@ -1,4 +1,4 @@
-faber.controller 'GroupItemBlockController', ($rootScope, $controller, $scope, componentsService)->
+angular.module('faber').controller 'GroupItemBlockController', ($rootScope, $controller, $scope, componentsService)->
   # extends BlockController
   $controller 'BlockController', {$scope: $scope}
 
