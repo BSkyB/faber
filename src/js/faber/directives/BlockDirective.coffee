@@ -17,7 +17,7 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       compiledContents $scope, (clone, $scope) ->
         $element.append clone
 
-    post: ($scope, $element, $attrs, $ctrl) ->
+    post: ($scope, $element, $attrs) ->
       $scope.currentIndex = $scope.$parent.$index
 
       $scope.isExpanded = !!$rootScope.isExpanded

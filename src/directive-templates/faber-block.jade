@@ -10,7 +10,6 @@
       button.faber-icon-minus(title="Collapse", ng-if="isExpanded", ng-click="collapse($event)")
 
     label.faber-select.faber-block-position
-      //span
       button.faber-icon-sort(title="Change order")
       select(ng-model="$parent.$index", ng-options="i as (i == $parent.$index ? (i+1)+' (current)' : i+1) for i in indexRange()", ng-change="onSelectChange()")
     button.faber-icon-remove(title="Remove", ng-click="removeSelf()")

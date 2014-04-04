@@ -27,10 +27,6 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
         else
           $scope.showingComponents = false
 
-#    $scope.$watch 'isPreview', (val)->
-#      if $scope.isGroupBlock and !val
-#        $scope.showingComponents = false
-
     $scope.$on 'ShowComponents', (evt, id)->
       unless id is $scope.$id
         $scope.showingComponents = false

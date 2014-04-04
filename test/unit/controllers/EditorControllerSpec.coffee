@@ -144,8 +144,7 @@ describe 'EditorController:', ->
         expect(@scope.block.blocks[2].blocks[0].blocks.length).toBe 9
 
     # Exclude until group block is implemented
-    # TODO
-    xdescribe 'if a block\'s component is not valid,', ->
+    describe 'if a block\'s component is not valid,', ->
       it 'should not add the block', ->
         @componentsService.init [
           ()->

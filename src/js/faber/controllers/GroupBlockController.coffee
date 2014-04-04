@@ -5,7 +5,6 @@ angular.module('faber').controller 'GroupBlockController', ($rootScope, $control
   $scope.block.blocks or= []
 
   # retrieve available component list for the current block
-#  $scope.components = componentsService.findByType 'element'
   $scope.components = [
     name: 'Item'
     id: 'group-item'

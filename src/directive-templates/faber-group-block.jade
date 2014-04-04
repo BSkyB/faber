@@ -4,11 +4,9 @@ label.faber-select.faber-group-component(ng-hide="isPreview")
     i.faber-icon-button.faber-icon-arrow-down
 
 faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview")
-//faber-component-renderer(data-faber-render-component="component", data-faber-render-block="block")
 
 faber-components(ng-if="!isPreview")
 
-//.faber-blocks
 .faber-blocks(ng-hide="isPreview")
   .faber-block-repeat(ng-repeat="data in block.blocks")
     faber-block(data-faber-block-content="data")
