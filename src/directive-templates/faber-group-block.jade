@@ -1,0 +1,14 @@
+label.faber-select.faber-group-component(ng-hide="isPreview")
+  span {{component.name}}
+    select(ng-model="currentComponent", ng-options="c.id as c.name for c in groupComponents")
+    i.faber-icon-button.faber-icon-arrow-down
+
+faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview")
+
+faber-components(ng-if="!isPreview")
+
+.faber-blocks(ng-hide="isPreview")
+  .faber-block-repeat(ng-repeat="data in block.blocks")
+    faber-block(data-faber-block-content="data")
+
+    faber-components

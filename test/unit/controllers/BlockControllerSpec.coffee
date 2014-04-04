@@ -1,5 +1,6 @@
 describe 'BlockController:', ->
   log = null
+  rootScope = null
   scope = null
   blockController = null
   componentsService = null
@@ -10,6 +11,8 @@ describe 'BlockController:', ->
     inject ($injector, $rootScope, $controller, $log)->
       log = $log
       log.reset()
+
+      rootScope = $rootScope
 
       scope = $rootScope.$new()
       blockController = $controller('BlockController', $scope: scope)
@@ -56,24 +59,6 @@ describe 'BlockController:', ->
 
         expect(scope.block.blocks.length).toBe 4
 
-  describe 'when collapse all event is fired,', ->
-    beforeEach ->
-      inject ($rootScope)->
-        $rootScope.$broadcast 'CollapseAll'
-
-    it 'should be collapsed', ->
-      expect(scope.expanded).toBe false
-
-  describe 'when expand all event is fired,', ->
-    beforeEach ->
-      scope.expanded = false
-
-      inject ($rootScope)->
-        $rootScope.$broadcast 'ExpandAll'
-
-    it 'should be expanded', ->
-      expect(scope.expanded).toBe true
-
   describe 'when block data changes', ->
     contentService = null
     config = null
@@ -113,8 +98,6 @@ describe 'BlockController:', ->
         componentsService.init [
           ()->
             id: 'aaaaa-component'
-            inputs:
-              title: 'block title'
             type: 'element'
         ]
 
@@ -123,7 +106,7 @@ describe 'BlockController:', ->
         scope.block.component = 'aaaaa-component'
         scope.$digest()
 
-        expect(scope.component.inputs.title).toBe 'block title'
+        expect(scope.component.id).toBe 'aaaaa-component'
 
     describe 'if the component is not available,', ->
       it 'should warn', ->
@@ -187,9 +170,3 @@ describe 'BlockController:', ->
       expect(scope.block.blocks[1]).toBe block3
       expect(scope.block.blocks[2]).toBe block2
 
-    it 'should be able to re-order when MoveChildBlock event is recieved with a childblock and its destination', ->
-      scope.$emit 'MoveChildBlock', block3, 0
-
-      expect(scope.block.blocks[0]).toBe block3
-      expect(scope.block.blocks[1]).toBe block1
-      expect(scope.block.blocks[2]).toBe block2

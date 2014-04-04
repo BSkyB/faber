@@ -1,5 +1,14 @@
-div(ng-click="toggleComponents()")
-  i.fa.fa-plus-square(ng-if="!showingComponents")
+div(ng-click="toggleComponents($event)")
+  .faber-components-line(ng-if="!showingComponents")
+  i.faber-icon-plus(ng-if="!showingComponents")
   ul.faber-available-components(ng-if="showingComponents")
-    li.faber-component(ng-repeat="comp in components")
+    li.faber-component(ng-repeat="comp in components | filter : {type: 'element'}")
       button(ng-click="insertBlock($event, {component: comp.id })") {{comp.name}}
+
+    li.faber-component(ng-if="hasGroupComponents()")
+      button.faber-group-button(ng-click="insertGroupBlock($event)")
+        span.faber-icon-group
+        | Group
+
+    li.faber-component(ng-if="component.type == 'group'")
+      button.faber-group-button(ng-click="insertGroupItemBlock($event)") Item

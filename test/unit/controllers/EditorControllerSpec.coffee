@@ -1,16 +1,35 @@
 describe 'EditorController:', ->
-  beforeEach module 'faber'
+  newConfig =
+    expanded: false
+    components: [
+      RichTextComponent
+    ,
+      ()->
+        name: 'Element Component'
+        id: 'element-component'
+        type: 'element'
+        template: '<p>element component</p>'
+    ,
+      OrderedListComponent
+    ,
+      ()->
+        name: 'Group Component'
+        id: 'group-component'
+        type: 'group'
+        template: '<ul><li>group component itenm</li></ul>'
+    ]
 
-  beforeEach ->
-    inject (faberConfig)->
-      @config = faberConfig
-      @config.expanded = false
+  beforeEach module 'faber'
 
   beforeEach ->
     inject ($injector, $rootScope, $controller, $log)->
       @scope = $rootScope.$new()
       @editorController = $controller('EditorController', $scope: @scope)
+
+      @configService = $injector.get 'configService'
       @contentService = $injector.get 'contentService'
+
+      @config = @configService.get()
 
       @componentsService = $injector.get 'componentsService'
       @componentsService.init [
@@ -41,37 +60,25 @@ describe 'EditorController:', ->
     it 'should get all initial blocks from content service', ->
       expect(@scope.block.blocks).toBe @contentService.getAll()
 
-    describe 'when setting expanded flag,', ->
-      beforeEach ->
-        inject ($injector, $rootScope, $controller, faberConfig)->
-          @config = faberConfig
-          @config.expanded = false
+    it 'should config the editor with default settings', ->
+      expect(@scope.isExpanded).toBe true
+      expect(@scope.components.length).toBe 2
 
-          @scope = $rootScope
-          spyOn @scope, '$broadcast'
+    it 'should update configurations if new config is available', ->
+      faber.init newConfig
 
-          @controller = $controller('EditorController', $scope: @scope)
-          @scope.$digest()
-
-      afterEach ->
-        @config = {}
-
-      it 'set default expanded flag', ->
-        expect(@scope.expanded).toBe false
-
-      it 'should broadcast expand all event', ->
-        expect(@scope.$broadcast).toHaveBeenCalledWith 'CollapseAll'
+      expect(@scope.isExpanded).toBe false
 
     describe 'if given an element component,', ->
       beforeEach ->
-        inject (faberConfig)->
-          @config = faberConfig
+        inject ()->
           @elementComp = ()->
             id: 'base-component'
             name: 'Base component'
             type: 'element'
             template: ''
-          @config.components = [ @elementComp ]
+          @configService.init
+            components: [ @elementComp ]
 
       beforeEach ->
         inject ($injector, $rootScope, $controller)->
@@ -96,7 +103,8 @@ describe 'EditorController:', ->
             id: 'base-component'
             name: 'Base component'
             type: 'group'
-          @config.components = [ @groupComp ]
+          @configService.init
+            components: [ @groupComp ]
 
       beforeEach ->
         inject ($injector, $rootScope, $controller)->
@@ -113,7 +121,7 @@ describe 'EditorController:', ->
         expect(allComponents.length).toBe 1
         expect(allComponents[0]).toEqual new @groupComp()
 
-  describe 'if content is imported,', ->
+  describe 'when content is imported,', ->
     describe 'if all the block\'s have valid components,', ->
       it 'should add the blocks to the block list', ->
         @componentsService.init [
@@ -135,6 +143,7 @@ describe 'EditorController:', ->
         expect(@scope.block.blocks[2].blocks.length).toBe 4
         expect(@scope.block.blocks[2].blocks[0].blocks.length).toBe 9
 
+    # Exclude until group block is implemented
     describe 'if a block\'s component is not valid,', ->
       it 'should not add the block', ->
         @componentsService.init [

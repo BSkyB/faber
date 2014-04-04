@@ -1,4 +1,4 @@
-faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
+angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout) ->
   scope:
     'block': '=faberBlockContent'
   restrict: 'E'
@@ -20,23 +20,32 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
     post: ($scope, $element, $attrs) ->
       $scope.currentIndex = $scope.$parent.$index
 
-      $scope.mouseover = ()->
-#        console.log 'mouseover'
+      $scope.isExpanded = !!$rootScope.isExpanded
 
-      $scope.mouseenter = ()->
+      $scope.isSelected = false
+      $scope.isMoving = false
+
+      $scope.isPreview = false
+
+      $scope.isGroupBlock = false
+      $scope.isGroupItemBlock = false
+      $scope.isElementBlock = false
+
+
+      $scope.isMouseHover = false
+
+      $scope.mouseOver = (evt)->
         $scope.isMouseHover = true
-#        console.log 'mouseenter'
 
-      $scope.mouseleave = ()->
+      $scope.mouseOut = (evt)->
         $scope.isMouseHover = false
-#        console.log 'mouseleave'
 
       # Get available index range that can be used to move in the parent block's children
       # Used to create the select options
       $scope.indexRange = ()->
         res = []
         min = 0
-        max = if $scope.$parent and $scope.$parent.block then Math.max($scope.$parent.block.blocks.length-1, min) else min
+        max = if $scope.$parent and $scope.$parent.block and $scope.$parent.block.blocks then Math.max($scope.$parent.block.blocks.length-1, min) else min
         for i in [min..max]
           res.push i
         return res
@@ -44,14 +53,89 @@ faber.directive 'faberBlock', ($rootScope, $compile, $timeout) ->
       $scope.onSelectChange = ()->
         to = $element.find('select').val()
         if to >= 0
-          $rootScope.$broadcast 'SelectBlock', null
-
           $scope.moveSelf to
 
           # Setting isMoving to true is wrapped inside of $timeout so it can be applied after false is set first
-          $scope.isMoving = false
+          $rootScope.$broadcast 'ResetIsMoving'
           $timeout ()->
             $scope.isMoving = true
 
-      $scope.$on 'SelectBlock', ()->
+      $scope.onBlockClick = (evt)->
+        evt.stopPropagation() if evt
+
+        $rootScope.$broadcast 'ShowComponents', null
+        $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
+
+      # Select the block
+      $scope.select = (evt)->
+        $scope.isSelected = true
+
+      # Unselect the block
+      $scope.unselect = (evt)->
+        $scope.isSelected = false
+
+      # Emit RemoveChildBlock event with itself so its parent block can remove it
+      $scope.removeSelf = ()->
+        $scope.$parent.remove $scope.block
+
+      # Edmit MoveChildBlock event with destination index so its parent block can move it to the new index
+      $scope.moveSelf = (to)->
+        $scope.$parent.move $scope.$parent.block.blocks.indexOf($scope.block), to
+
+      # Switch to edit mode on group block
+      $scope.edit = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isPreview = false
+
+        $rootScope.$broadcast 'ResetIsMoving'
+        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
+
+      # Switch to preview mode on group block
+      $scope.preview = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isPreview = true
+        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
+
+      # Expand group item block
+      $scope.expand = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isExpanded = true
+
+      # Collapse group item block
+      $scope.collapse = (evt)->
+        evt.stopPropagation() if evt
+
+        $scope.isExpanded = false
+
+      $scope.$on 'ResetIsMoving', (evt)->
         $scope.isMoving = false
+
+      $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
+        unless scope
+          $scope.unselect()
+          return
+
+        if scope.block.blocks[index] is $scope.block
+          $scope.select()
+        else
+          $scope.unselect()
+
+      $scope.$on 'CollapseAll', (evt)->
+        $scope.isExpanded = false
+
+      $scope.$on 'ExpandAll', (evt)->
+        $scope.isExpanded = true
+
+      $scope.$watchCollection '[$parent.component, component]', ()->
+        $scope.isElementBlock = $scope.isGroupBlock = $scope.isGroupItemBlock = false
+
+        if $scope.$parent.component and $scope.$parent.component.type is 'group'
+          $scope.isGroupItemBlock = true
+        else if $scope.component
+          if $scope.component.type is 'element'
+            $scope.isElementBlock = true
+          if $scope.component.type is 'group'
+            $scope.isGroupBlock = true

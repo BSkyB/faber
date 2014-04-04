@@ -1,4 +1,4 @@
-faber.directive 'faberEditor', ($rootScope, $document) ->
+angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeout) ->
   restrict: 'AE'
   templateUrl: 'faber-editor.html'
   controller: 'EditorController'
@@ -18,5 +18,14 @@ faber.directive 'faberEditor', ($rootScope, $document) ->
       unless isInside
         $rootScope.$apply ()->
           $rootScope.$broadcast 'ShowComponents', null
-          $rootScope.$broadcast 'SelectBlock', null
+          $rootScope.$broadcast 'SelectBlockOfIndex', null
     , true
+
+    $scope.$on 'imported', (evt, blocks) ->
+      # make sure to close all components menu
+      $timeout ()->
+        $rootScope.$broadcast 'ShowComponents', null
+
+
+    $rootScope.$watch 'isExpanded', ()->
+      $rootScope.$broadcast if $rootScope.isExpanded then 'ExpandAll' else 'CollapseAll'
