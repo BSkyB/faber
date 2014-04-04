@@ -8,7 +8,6 @@ class OrderedListComponent
   # Check README to find out more about how to make components
   template: '<ol class="ordered-list">
     <li ng-repeat="b in block.blocks">
-      <p>{{ b.title }}</p>
       <faber-render data-faber-render-block="b"/>
     </li>
   </ol>'
