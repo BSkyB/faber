@@ -20,6 +20,8 @@
     "README.md",
     "gulpfile.js",
     "installs.sh",
-    "circle.yml"
+    "circle.yml",
+    "dist/angular*",
+    "dist/*.html"
   ]
 }
