@@ -17,6 +17,7 @@
     "dev",
     "src",
     "test",
+    "package.json",
     "README.md",
     "gulpfile.js",
     "installs.sh",
