@@ -35,7 +35,8 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.isMouseHover = false
 
       $scope.mouseOver = (evt)->
-        $scope.isMouseHover = true
+        unless evt.target.tagName.toLowerCase() is 'select'
+          $scope.isMouseHover = true
 
       $scope.mouseOut = (evt)->
         $scope.isMouseHover = false
@@ -63,8 +64,9 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.onBlockClick = (evt)->
         evt.stopPropagation() if evt
 
-        $rootScope.$broadcast 'ShowComponents', null
-        $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
+        unless evt.target.tagName.toLowerCase() is 'select'
+          $rootScope.$broadcast 'ShowComponents', null
+          $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
 
       # Select the block
       $scope.select = (evt)->

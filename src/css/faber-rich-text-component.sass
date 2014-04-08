@@ -51,6 +51,8 @@ $medium_editor_link_color: #fff
 
   li 
     padding: 0
+    width: $medium_editor_button_size
+    +box-sizing(border-box)
 
     button 
       min-width: $medium_editor_button_size
@@ -63,6 +65,8 @@ $medium_editor_link_color: #fff
       &:hover 
         background-color: darken($medium_editor_bgcolor, 20)
         color: #fff
+
+      +box-sizing(border-box)
 
     .medium-editor-button-active 
       background-color: darken($medium_editor_bgcolor, 30)

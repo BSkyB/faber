@@ -1016,6 +1016,10 @@ OrderedListComponent = (function() {
 
 })();
 
+
+/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
+;if("document" in self&&!("classList" in document.createElement("_"))){(function(j){"use strict";if(!("Element" in j)){return}var a="classList",f="prototype",m=j.Element[f],b=Object,k=String[f].trim||function(){return this.replace(/^\s+|\s+$/g,"")},c=Array[f].indexOf||function(q){var p=0,o=this.length;for(;p<o;p++){if(p in this&&this[p]===q){return p}}return -1},n=function(o,p){this.name=o;this.code=DOMException[o];this.message=p},g=function(p,o){if(o===""){throw new n("SYNTAX_ERR","An invalid or illegal string was specified")}if(/\s/.test(o)){throw new n("INVALID_CHARACTER_ERR","String contains an invalid character")}return c.call(p,o)},d=function(s){var r=k.call(s.getAttribute("class")||""),q=r?r.split(/\s+/):[],p=0,o=q.length;for(;p<o;p++){this.push(q[p])}this._updateClassName=function(){s.setAttribute("class",this.toString())}},e=d[f]=[],i=function(){return new d(this)};n[f]=Error[f];e.item=function(o){return this[o]||null};e.contains=function(o){o+="";return g(this,o)!==-1};e.add=function(){var s=arguments,r=0,p=s.length,q,o=false;do{q=s[r]+"";if(g(this,q)===-1){this.push(q);o=true}}while(++r<p);if(o){this._updateClassName()}};e.remove=function(){var t=arguments,s=0,p=t.length,r,o=false;do{r=t[s]+"";var q=g(this,r);if(q!==-1){this.splice(q,1);o=true}}while(++s<p);if(o){this._updateClassName()}};e.toggle=function(p,q){p+="";var o=this.contains(p),r=o?q!==true&&"remove":q!==false&&"add";if(r){this[r](p)}return !o};e.toString=function(){return this.join(" ")};if(b.defineProperty){var l={get:i,enumerable:true,configurable:true};try{b.defineProperty(m,a,l)}catch(h){if(h.number===-2146823252){l.enumerable=false;b.defineProperty(m,a,l)}}}else{if(b[f].__defineGetter__){m.__defineGetter__(a,i)}}}(self))};
+;
 var MediumEditorExtended, RichTextComponent,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -1069,7 +1073,7 @@ RichTextComponent = (function() {
     this.editor = $element[0].getElementsByClassName('rich-text-editor')[0];
     this.editor.innerHTML = initialContent || '';
     this.editorInstance = new MediumEditorExtended(this.editor, opts);
-    return this.editor.addEventListener('keyup', (function(_this) {
+    return this.editor.addEventListener('input', (function(_this) {
       return function() {
         return update(_this.editor.innerHTML);
       };
@@ -1384,7 +1388,9 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
           $scope.isElementBlock = false;
           $scope.isMouseHover = false;
           $scope.mouseOver = function(evt) {
-            return $scope.isMouseHover = true;
+            if (evt.target.tagName.toLowerCase() !== 'select') {
+              return $scope.isMouseHover = true;
+            }
           };
           $scope.mouseOut = function(evt) {
             return $scope.isMouseHover = false;
@@ -1414,8 +1420,10 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
-            $rootScope.$broadcast('ShowComponents', null);
-            return $rootScope.$broadcast('SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block));
+            if (evt.target.tagName.toLowerCase() !== 'select') {
+              $rootScope.$broadcast('ShowComponents', null);
+              return $rootScope.$broadcast('SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block));
+            }
           };
           $scope.select = function(evt) {
             return $scope.isSelected = true;
@@ -1747,7 +1755,7 @@ angular.module('faber').directive('trustHtml', function($sce) {
   };
 });
 
-angular.module("faber").run(["$templateCache", function($templateCache) {$templateCache.put("faber-block.html","<div ng-class=\"{\'faber-element-block\': isElementBlock, \'faber-group-block\': isGroupBlock, \'faber-group-item-block\': isGroupItemBlock, \'faber-block-preview\': isPreview,\'faber-block-hover\': isMouseHover, \'faber-block-selected\': isSelected, \'faber-block-moving\': isMoving}\" ng-mouseover=\"mouseOver($event)\" ng-mouseout=\"mouseOut($event)\" ng-click=\"onBlockClick($event)\" class=\"faber-block-item\"><div class=\"faber-block-actions\"><div ng-if=\"isGroupBlock\" class=\"faber-group-block-actions\"><button title=\"Edit\" ng-if=\"isPreview\" ng-click=\"edit($event)\" class=\"faber-edit-group-button faber-icon-edit toggled-on\"></button><button title=\"Preview\" ng-if=\"!isPreview\" ng-click=\"preview($event)\" class=\"faber-preview-group-button faber-icon-edit\"></button></div><div ng-if=\"isGroupItemBlock\" class=\"faber-group-item-block-actions\"><button title=\"Expand\" ng-if=\"!isExpanded\" ng-click=\"expand($event)\" class=\"faber-icon-plus\"></button><button title=\"Collapse\" ng-if=\"isExpanded\" ng-click=\"collapse($event)\" class=\"faber-icon-minus\"></button></div><label class=\"faber-select faber-block-position\"><button title=\"Change order\" class=\"faber-icon-sort\"></button><select ng-model=\"$parent.$index\" ng-options=\"i as (i == $parent.$index ? (i+1)+\' (current)\' : i+1) for i in indexRange()\" ng-change=\"onSelectChange()\"></select></label><button title=\"Remove\" ng-click=\"removeSelf()\" class=\"faber-icon-remove\"></button></div><faber-group-item-block ng-if=\"isGroupItemBlock\"></faber-group-item-block><faber-element-block ng-if=\"isElementBlock\"></faber-element-block><faber-group-block ng-if=\"isGroupBlock\" ng-class=\"{\'faber-group-block-preview\': isPreview}\"></faber-group-block></div>");
+angular.module("faber").run(["$templateCache", function($templateCache) {$templateCache.put("faber-block.html","<div ng-class=\"{\'faber-element-block\': isElementBlock, \'faber-group-block\': isGroupBlock, \'faber-group-item-block\': isGroupItemBlock, \'faber-block-preview\': isPreview,\'faber-block-hover\': isMouseHover, \'faber-block-selected\': isSelected, \'faber-block-moving\': isMoving}\" ng-mouseover=\"mouseOver($event)\" ng-mouseout=\"mouseOut($event)\" ng-click=\"onBlockClick($event)\" class=\"faber-block-item\"><div class=\"faber-block-actions\"><div ng-if=\"isGroupBlock\" class=\"faber-group-block-actions\"><button title=\"Edit\" ng-if=\"isPreview\" ng-click=\"edit($event)\" class=\"faber-edit-group-button faber-icon-edit toggled-on\"></button><button title=\"Preview\" ng-if=\"!isPreview\" ng-click=\"preview($event)\" class=\"faber-preview-group-button faber-icon-edit\"></button></div><div ng-if=\"isGroupItemBlock\" class=\"faber-group-item-block-actions\"><button title=\"Expand\" ng-if=\"!isExpanded\" ng-click=\"expand($event)\" class=\"faber-icon-plus\"></button><button title=\"Collapse\" ng-if=\"isExpanded\" ng-click=\"collapse($event)\" class=\"faber-icon-minus\"></button></div><label class=\"faber-select faber-block-position\"><select ng-model=\"$parent.$index\" ng-options=\"i as (i == $parent.$index ? (i+1)+\' (current)\' : i+1) for i in indexRange()\" ng-change=\"onSelectChange()\"></select><button title=\"Change order\" class=\"faber-icon-sort\"></button></label><button title=\"Remove\" ng-click=\"removeSelf()\" class=\"faber-icon-remove\"></button></div><faber-group-item-block ng-if=\"isGroupItemBlock\"></faber-group-item-block><faber-element-block ng-if=\"isElementBlock\"></faber-element-block><faber-group-block ng-if=\"isGroupBlock\" ng-class=\"{\'faber-group-block-preview\': isPreview}\"></faber-group-block></div>");
 $templateCache.put("faber-components.html","<div ng-click=\"toggleComponents($event)\"><div ng-if=\"!showingComponents\" class=\"faber-components-line\"></div><i ng-if=\"!showingComponents\" class=\"faber-icon-plus\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components | filter : {type: \'element\'}\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li><li ng-if=\"hasGroupComponents()\" class=\"faber-component\"><button ng-click=\"insertGroupBlock($event)\" class=\"faber-group-button\"><span class=\"faber-icon-group\"></span>Group</button></li><li ng-if=\"component.type == \'group\'\" class=\"faber-component\"><button ng-click=\"insertGroupItemBlock($event)\" class=\"faber-group-button\">Item</button></li></ul></div>");
 $templateCache.put("faber-editor.html","<faber-components></faber-components><div class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
 $templateCache.put("faber-element-block.html","<faber-component-renderer data-faber-component-renderer-block=\"block\"></faber-component-renderer>");

@@ -38,7 +38,7 @@ class RichTextComponent
 
     @editorInstance = new MediumEditorExtended @editor, opts
 
-    @editor.addEventListener 'keyup', ()=>
+    @editor.addEventListener 'input', ()=>
       update @editor.innerHTML
 
   selected: ($scope, $element, update)->

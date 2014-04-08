@@ -205,7 +205,11 @@
 .medium-editor-toolbar {
   background-color: #444444; }
   .medium-editor-toolbar li {
-    padding: 0; }
+    padding: 0;
+    width: 50px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
     .medium-editor-toolbar li button {
       min-width: 50px;
       height: 50px;
@@ -213,7 +217,10 @@
       border-right: 1px solid #777777;
       background-color: transparent;
       color: white;
-      transition: background-color 0.2s ease-in, color 0.2s ease-in; }
+      transition: background-color 0.2s ease-in, color 0.2s ease-in;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
       .medium-editor-toolbar li button:hover {
         background-color: #111111;
         color: white; }
@@ -579,6 +586,8 @@ faber-components {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box; }
+      .faber-blocks faber-block .faber-block-actions button {
+        margin-right: 3px; }
     .faber-blocks faber-block .faber-group-item-block > .faber-block-actions {
       z-index: 1; }
     .faber-blocks faber-block .faber-block-position {
@@ -611,6 +620,8 @@ faber-components {
     display: block; }
     .faber-blocks faber-component-renderer > div {
       padding: 1em; }
+  .faber-blocks faber-render {
+    display: block; }
   .faber-blocks .faber-block-preview faber-component-renderer > div {
     padding: 0; }
 
