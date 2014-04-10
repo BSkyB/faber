@@ -192,7 +192,13 @@
     opacity: 1; } }
 
 .rich-text-editor {
-  margin: 1em 0; }
+  margin: 1em 0;
+  min-height: 1em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+  .rich-text-editor p {
+    display: block; }
 
 .medium-toolbar-arrow-under:after {
   top: 50px;
@@ -205,7 +211,11 @@
 .medium-editor-toolbar {
   background-color: #444444; }
   .medium-editor-toolbar li {
-    padding: 0; }
+    padding: 0;
+    width: 50px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; }
     .medium-editor-toolbar li button {
       min-width: 50px;
       height: 50px;
@@ -213,7 +223,10 @@
       border-right: 1px solid #777777;
       background-color: transparent;
       color: white;
-      transition: background-color 0.2s ease-in, color 0.2s ease-in; }
+      transition: background-color 0.2s ease-in, color 0.2s ease-in;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
       .medium-editor-toolbar li button:hover {
         background-color: #111111;
         color: white; }
@@ -249,7 +262,8 @@
   padding: 0.5em; }
 
 .medium-editor-placeholder:after {
-  color: #dddddd; }
+  color: #dddddd;
+  height: 0; }
 
 .medium-editor-anchor-preview i {
   margin: 5px; }
@@ -612,7 +626,10 @@ faber-components {
   .faber-blocks faber-component-renderer {
     display: block; }
     .faber-blocks faber-component-renderer > div {
-      padding: 1em; }
+      padding: 1em;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box; }
   .faber-blocks faber-render {
     display: block; }
   .faber-blocks .faber-block-preview faber-component-renderer > div {

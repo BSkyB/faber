@@ -1,4 +1,7 @@
 angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout) ->
+  isEventTargetSelect = (evt)->
+    return evt and evt.target and evt.target.tagName.toLowerCase() is 'select'
+
   scope:
     'block': '=faberBlockContent'
   restrict: 'E'
@@ -38,7 +41,8 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         $scope.isMouseHover = true
 
       $scope.mouseOut = (evt)->
-        $scope.isMouseHover = false
+        unless isEventTargetSelect(evt)
+          $scope.isMouseHover = false
 
       # Get available index range that can be used to move in the parent block's children
       # Used to create the select options
@@ -63,8 +67,9 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.onBlockClick = (evt)->
         evt.stopPropagation() if evt
 
-        $rootScope.$broadcast 'ShowComponents', null
-        $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
+        unless isEventTargetSelect(evt)
+          $rootScope.$broadcast 'ShowComponents', null
+          $rootScope.$broadcast 'SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block)
 
       # Select the block
       $scope.select = (evt)->
