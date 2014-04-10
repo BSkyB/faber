@@ -4,4 +4,4 @@ coverage
 test/e2e/*.js
 
 .sass-cache
-src/.sass-cache
+src/css/.sass-cache
