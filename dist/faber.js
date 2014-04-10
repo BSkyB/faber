@@ -1085,7 +1085,6 @@ RichTextComponent = (function() {
   };
 
   RichTextComponent.prototype.unselected = function($scope, $element, update) {
-    $element[0].getElementsByClassName('rich-text-editor')[0].blur();
     return update(this.editor.innerHTML);
   };
 
@@ -1357,6 +1356,10 @@ angular.module('faber').controller('GroupItemBlockController', function($rootSco
 });
 
 angular.module('faber').directive('faberBlock', function($rootScope, $compile, $timeout) {
+  var isEventTargetSelect;
+  isEventTargetSelect = function(evt) {
+    return evt && evt.target && evt.target.tagName.toLowerCase() === 'select';
+  };
   return {
     scope: {
       'block': '=faberBlockContent'
@@ -1388,12 +1391,12 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
           $scope.isElementBlock = false;
           $scope.isMouseHover = false;
           $scope.mouseOver = function(evt) {
-            if (evt.target.tagName.toLowerCase() !== 'select') {
-              return $scope.isMouseHover = true;
-            }
+            return $scope.isMouseHover = true;
           };
           $scope.mouseOut = function(evt) {
-            return $scope.isMouseHover = false;
+            if (!isEventTargetSelect(evt)) {
+              return $scope.isMouseHover = false;
+            }
           };
           $scope.indexRange = function() {
             var i, max, min, res, _i;
@@ -1420,7 +1423,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
-            if (evt.target.tagName.toLowerCase() !== 'select') {
+            if (!isEventTargetSelect(evt)) {
               $rootScope.$broadcast('ShowComponents', null);
               return $rootScope.$broadcast('SelectBlockOfIndex', $scope.$parent, $scope.$parent.block.blocks.indexOf($scope.block));
             }
