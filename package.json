@@ -14,7 +14,7 @@
     "karma-jasmine": "~0.1.5",
     "karma-coverage": "~0.2.0",
     "karma-phantomjs-launcher": "~0.1.2",
-    "gulp": "~3.5.5",
+    "gulp": "~3.6.0",
     "gulp-coffee": "~1.4.1",
     "gulp-jade": "~0.4.2",
     "gulp-karma": "lazd/gulp-karma",

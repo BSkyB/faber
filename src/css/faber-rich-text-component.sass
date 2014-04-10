@@ -37,6 +37,11 @@ $medium_editor_link_color: #fff
 
 .rich-text-editor
   margin: 1em 0
+  min-height: 1em
+  +box-sizing(border-box)
+
+  p
+    display: block
 
 .medium-toolbar-arrow-under:after
   top: $medium_editor_button_size
@@ -112,6 +117,18 @@ $medium_editor_link_color: #fff
 .medium-editor-placeholder
   &:after
     color: $medium_editor_border_color
+
+    //position: relative
+    //display: block
+    //width: 0
+    height: 0
+    //font-style: italic
+    //overflow: visible
+    //white-space: nowrap
+    //content: attr(data-placeholder)
+
+  //&:after
+  //  display: none
 
 .medium-editor-anchor-preview
   i

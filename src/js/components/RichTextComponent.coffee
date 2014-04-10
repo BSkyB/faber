@@ -45,5 +45,4 @@ class RichTextComponent
     $element[0].getElementsByClassName('rich-text-editor')[0].focus()
 
   unselected: ($scope, $element, update)->
-    $element[0].getElementsByClassName('rich-text-editor')[0].blur()
     update @editor.innerHTML
