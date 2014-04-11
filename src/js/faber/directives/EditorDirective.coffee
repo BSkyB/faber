@@ -25,6 +25,7 @@ angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeou
       # make sure to close all components menu
       $timeout ()->
         $rootScope.$broadcast 'ShowComponents', null
+        $rootScope.$broadcast 'CollapseAll'
 
 
     $rootScope.$watch 'isExpanded', ()->
