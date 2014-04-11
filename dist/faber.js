@@ -1444,6 +1444,9 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
+            if (!$scope.isGroupBlock) {
+              return;
+            }
             $scope.isPreview = false;
             $rootScope.$broadcast('ResetIsMoving');
             return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
@@ -1452,6 +1455,9 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
+            if (!$scope.isGroupBlock) {
+              return;
+            }
             $scope.isPreview = true;
             return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
           };
@@ -1459,11 +1465,17 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
+            if (!$scope.isGroupItemBlock) {
+              return;
+            }
             return $scope.isExpanded = true;
           };
           $scope.collapse = function(evt) {
             if (evt) {
               evt.stopPropagation();
+            }
+            if (!$scope.isGroupItemBlock) {
+              return;
             }
             return $scope.isExpanded = false;
           };
@@ -1480,6 +1492,9 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             } else {
               return $scope.unselect();
             }
+          });
+          $scope.$on('PreviewAll', function(evt) {
+            return $scope.preview();
           });
           $scope.$on('CollapseAll', function(evt) {
             return $scope.isExpanded = false;
@@ -1676,8 +1691,12 @@ angular.module('faber').directive('faberEditor', function($rootScope, $document,
         }
       }, true);
       $scope.$on('imported', function(evt, blocks) {
+        $element.css('display', 'none');
         return $timeout(function() {
-          return $rootScope.$broadcast('ShowComponents', null);
+          $rootScope.$broadcast('ShowComponents', null);
+          $rootScope.$broadcast('PreviewAll');
+          $rootScope.$broadcast('CollapseAll');
+          return $element.css('display', 'block');
         });
       });
       return $rootScope.$watch('isExpanded', function() {
