@@ -91,6 +91,8 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.edit = (evt)->
         evt.stopPropagation() if evt
 
+        return unless $scope.isGroupBlock
+
         $scope.isPreview = false
 
         $rootScope.$broadcast 'ResetIsMoving'
@@ -100,6 +102,8 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.preview = (evt)->
         evt.stopPropagation() if evt
 
+        return unless $scope.isGroupBlock
+
         $scope.isPreview = true
         $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
@@ -107,11 +111,15 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.expand = (evt)->
         evt.stopPropagation() if evt
 
+        return unless $scope.isGroupItemBlock
+
         $scope.isExpanded = true
 
       # Collapse group item block
       $scope.collapse = (evt)->
         evt.stopPropagation() if evt
+
+        return unless $scope.isGroupItemBlock
 
         $scope.isExpanded = false
 

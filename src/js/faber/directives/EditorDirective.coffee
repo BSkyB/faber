@@ -22,11 +22,16 @@ angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeou
     , true
 
     $scope.$on 'imported', (evt, blocks) ->
-      # make sure to close all components menu
+      # make sure to...
+      # close all components menu
+      # switch group blocks to preview mode
+      # prevent editor block from flickering between the transition
+      $element.css('display', 'none')
       $timeout ()->
         $rootScope.$broadcast 'ShowComponents', null
         $rootScope.$broadcast 'PreviewAll'
         $rootScope.$broadcast 'CollapseAll'
+        $element.css('display', 'block')
 
 
     $rootScope.$watch 'isExpanded', ()->
