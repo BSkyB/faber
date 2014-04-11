@@ -206,6 +206,20 @@ describe 'BlockDirective:', ()->
 
       expect(@scope.isSelected).toBe false
 
+  describe 'when preview all event is fired,', ->
+    describe 'if it is a group block,', ->
+      it 'should be switched to preview mode', ->
+        @scope.isGroupBlock = true
+        rootScope.$broadcast 'PreviewAll'
+
+        expect(@scope.isPreview).toBe true
+
+    describe 'if it is not a group block', ->
+      it 'should not be switched to preview mode', ->
+        rootScope.$broadcast 'PreviewAll'
+        
+        expect(@scope.isPreview).toBe false
+
   describe 'when collapse all event is fired,', ->
     beforeEach ->
       rootScope.$broadcast 'CollapseAll'
