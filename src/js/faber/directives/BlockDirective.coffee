@@ -128,6 +128,9 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         else
           $scope.unselect()
 
+      $scope.$on 'PreviewAll', (evt)->
+        $scope.preview()
+
       $scope.$on 'CollapseAll', (evt)->
         $scope.isExpanded = false
 
