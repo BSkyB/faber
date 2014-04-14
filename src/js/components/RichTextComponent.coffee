@@ -23,7 +23,7 @@ class RichTextComponent
   name: 'Rich Text',
   id: 'rich-text',
   type: 'element',
-  template: '<p>{{$id}}</p><div class="rich-text-editor" data-tust-html><br/></div>'
+  template: '<div class="rich-text-editor" data-tust-html><br/></div>'
 
   editor: null
   editorInstance: null
