@@ -90,7 +90,8 @@ describe 'ComponentRendererDirective:', ->
 
     describe 'when unselected the rendered block', ->
       it 'should be able to call unselected callback of the component', ->
-        @scope.unselectRendered()
+        rootScope.$broadcast 'SelectBlockOfIndex', rootScope, 1
+        @blockScope.$digest()
 
         expect(callbacks.unselectedCallback).toHaveBeenCalled()
         expect(callbacks.unselectedCallback.mostRecentCall.args[0]).toEqual @scope

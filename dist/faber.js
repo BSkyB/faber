@@ -1585,6 +1585,8 @@ angular.module('faber').directive('faberComponentRenderer', function($compile, c
         }
         if (scope.block.blocks[index] === $scope.block) {
           return $scope.selectRendered();
+        } else {
+          return $scope.unselectRendered();
         }
       });
     }

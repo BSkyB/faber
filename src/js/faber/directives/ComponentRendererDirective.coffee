@@ -53,5 +53,5 @@ angular.module('faber').directive 'faberComponentRenderer', ($compile, component
 
       if scope.block.blocks[index] is $scope.block
         $scope.selectRendered()
-#      else if scope is $scope
-#        $scope.unselectRendered()
+      else
+        $scope.unselectRendered()
