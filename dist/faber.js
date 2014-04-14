@@ -1085,7 +1085,6 @@ RichTextComponent = (function() {
   };
 
   RichTextComponent.prototype.unselected = function($scope, $element, update) {
-    console.log('unselect', $scope.$id);
     return update(this.editor.innerHTML);
   };
 
