@@ -7,6 +7,7 @@ angular.module('faber').directive 'faberComponentRenderer', ($compile, component
 
   link: ($scope, $element, $attrs)->
     $scope.isGroupPreview = $scope.checkGroupPreview() or false
+    $scope.isSelected = false
 
     setComponent = (content)->
       template = $scope.component.template
@@ -23,9 +24,11 @@ angular.module('faber').directive 'faberComponentRenderer', ($compile, component
     $scope.component = null
 
     $scope.selectRendered = ()->
+      $scope.isSelected = true
       $scope.component.selected($scope, $element, $scope.updateRendered) if $scope.component.selected
 
     $scope.unselectRendered = ()->
+      $scope.isSelected = false
       $scope.component.unselected($scope, $element, $scope.updateRendered) if $scope.component.unselected
 
     $scope.updateRendered = (content)->
@@ -47,11 +50,12 @@ angular.module('faber').directive 'faberComponentRenderer', ($compile, component
       setComponent $scope.block.content
 
     $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
-      unless scope
-        $scope.unselectRendered()
+      if !scope
+        if $scope.isSelected
+          $scope.unselectRendered()
         return
 
       if scope.block.blocks[index] is $scope.block
         $scope.selectRendered()
-#      else if scope is $scope
-#        $scope.unselectRendered()
+      else if $scope.isSelected
+        $scope.unselectRendered()
