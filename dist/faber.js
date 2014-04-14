@@ -1085,6 +1085,7 @@ RichTextComponent = (function() {
   };
 
   RichTextComponent.prototype.unselected = function($scope, $element, update) {
+    console.log('unselect', $scope.$id);
     return update(this.editor.innerHTML);
   };
 
@@ -1532,6 +1533,7 @@ angular.module('faber').directive('faberComponentRenderer', function($compile, c
     link: function($scope, $element, $attrs) {
       var setComponent;
       $scope.isGroupPreview = $scope.checkGroupPreview() || false;
+      $scope.isSelected = false;
       setComponent = function(content) {
         var $component, template, wrapper;
         template = $scope.component.template;
@@ -1550,11 +1552,13 @@ angular.module('faber').directive('faberComponentRenderer', function($compile, c
       };
       $scope.component = null;
       $scope.selectRendered = function() {
+        $scope.isSelected = true;
         if ($scope.component.selected) {
           return $scope.component.selected($scope, $element, $scope.updateRendered);
         }
       };
       $scope.unselectRendered = function() {
+        $scope.isSelected = false;
         if ($scope.component.unselected) {
           return $scope.component.unselected($scope, $element, $scope.updateRendered);
         }
@@ -1580,12 +1584,14 @@ angular.module('faber').directive('faberComponentRenderer', function($compile, c
       });
       return $scope.$on('SelectBlockOfIndex', function(evt, scope, index) {
         if (!scope) {
-          $scope.unselectRendered();
+          if ($scope.isSelected) {
+            $scope.unselectRendered();
+          }
           return;
         }
         if (scope.block.blocks[index] === $scope.block) {
           return $scope.selectRendered();
-        } else {
+        } else if ($scope.isSelected) {
           return $scope.unselectRendered();
         }
       });
