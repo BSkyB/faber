@@ -89,13 +89,27 @@ describe 'ComponentRendererDirective:', ->
         expect(callbacks.selectedCallback.mostRecentCall.args[1]).toEqual @element
 
     describe 'when unselected the rendered block', ->
-      it 'should be able to call unselected callback of the component', ->
-        rootScope.$broadcast 'SelectBlockOfIndex', rootScope, 1
-        @blockScope.$digest()
+      describe 'if the block is not already selected', ->
+        it 'should not call unselected callback of the component', ->
+          @scope.isSelected = false
+          @blockScope.$digest()
 
-        expect(callbacks.unselectedCallback).toHaveBeenCalled()
-        expect(callbacks.unselectedCallback.mostRecentCall.args[0]).toEqual @scope
-        expect(callbacks.unselectedCallback.mostRecentCall.args[1]).toEqual @element
+          rootScope.$broadcast 'SelectBlockOfIndex', rootScope, 1
+          @blockScope.$digest()
+
+          expect(callbacks.unselectedCallback).not.toHaveBeenCalled()
+
+      describe 'if the block is already selected', ->
+        it 'should be able to call unselected callback of the component', ->
+          @scope.selectRendered()
+          @blockScope.$digest()
+
+          rootScope.$broadcast 'SelectBlockOfIndex', rootScope, 1
+          @blockScope.$digest()
+
+          expect(callbacks.unselectedCallback).toHaveBeenCalled()
+          expect(callbacks.unselectedCallback.mostRecentCall.args[0]).toEqual @scope
+          expect(callbacks.unselectedCallback.mostRecentCall.args[1]).toEqual @element
 
     describe 'when update is called with content data', ->
       it 'shoud update the block\'s content data', ->

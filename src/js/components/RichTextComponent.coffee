@@ -23,7 +23,7 @@ class RichTextComponent
   name: 'Rich Text',
   id: 'rich-text',
   type: 'element',
-  template: '<div class="rich-text-editor" data-tust-html><br/></div>'
+  template: '<p>{{$id}}</p><div class="rich-text-editor" data-tust-html><br/></div>'
 
   editor: null
   editorInstance: null
@@ -45,4 +45,5 @@ class RichTextComponent
     $element[0].getElementsByClassName('rich-text-editor')[0].focus()
 
   unselected: ($scope, $element, update)->
+    console.log 'unselect', $scope.$id
     update @editor.innerHTML
