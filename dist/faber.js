@@ -1317,10 +1317,12 @@ angular.module('faber').controller('EditorController', function($rootScope, $sco
   });
 });
 
-angular.module('faber').controller('ElementBlockController', function() {
-  return $controller('BlockController', {
+angular.module('faber').controller('ElementBlockController', function($controller, $scope) {
+  var _base;
+  $controller('BlockController', {
     $scope: $scope
   });
+  return (_base = $scope.block).content || (_base.content = '');
 });
 
 angular.module('faber').controller('GroupBlockController', function($rootScope, $controller, $scope, componentsService) {
@@ -1717,7 +1719,7 @@ angular.module('faber').directive('faberElementBlock', function($rootScope, $com
   return {
     restrict: 'E',
     templateUrl: 'faber-element-block.html',
-    controller: 'BlockController'
+    controller: 'ElementBlockController'
   };
 });
 
