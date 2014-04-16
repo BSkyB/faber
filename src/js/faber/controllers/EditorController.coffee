@@ -55,4 +55,4 @@ angular.module('faber').controller 'EditorController', ($rootScope, $scope, $con
     configEditor config
 
   $rootScope.$on 'BlockUpdated', (evt)->
-    angular.module('faber').fire 'BlockUpdated', angular.copy($scope.block)
+    angular.module('faber').fire 'BlockUpdated', angular.copy($scope.block.blocks)
