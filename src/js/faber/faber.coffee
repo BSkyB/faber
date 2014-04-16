@@ -26,6 +26,15 @@ window.faber = angular.extend(
         scope: scope
         context: (context ? context : scope)
 
+    stopListening: (type, handler)->
+      if !(listeners = this.listeners)
+        return
+
+      if !(handlers = listeners[type])
+        return
+
+      handlers.splice handlers.indexOf(handler), 1
+
     fire: (type, data, context)->
       if !(listeners = this.listeners)
         return

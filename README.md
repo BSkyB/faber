@@ -100,9 +100,13 @@ faber.import(json);
 `data`: (object) updated block data
 
 ```javascript
-faber.listen('BlockUpdated', function(data) {
-  // do something with data
-});
+function doSomething = () {
+  // do something
+};
+
+faber.listen('BlockUpdated', doSomething);
+
+faber.stopListening('BlockUpdated', doSomething);
 ```
 
 
