@@ -41,7 +41,7 @@ angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log,
   $scope.remove = (block)->
     if confirm 'Are you sure you want to permanently remove this block?\n\nYou can\'t undo this action.'
       $scope.block.blocks.splice($scope.block.blocks.indexOf(block), 1)
-      contentService.save()
+      $rootScope.$broadcast 'BlockUpdated'
 
   # Insert a child block to the given index
   $scope.insert = (index, block)->
@@ -58,7 +58,7 @@ angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log,
     if from >= 0 and from < max and to >= 0 and to < max
       $scope.block.blocks.splice to, 0, $scope.block.blocks.splice(from, 1)[0]
       $scope.$broadcast 'BlockMoved'
-      contentService.save()
+      $rootScope.$broadcast 'BlockUpdated'
 
   # ==================
   # WATCH
@@ -73,12 +73,12 @@ angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log,
         $log.warn 'cannot find a component of the given name': val
       else
         $scope.component = component or new FaberComponent()
-        contentService.save()
+        $rootScope.$broadcast 'BlockUpdated'
 
   # If block's content changes save it
   $scope.$watch 'block.content', ()->
-    contentService.save()
+    $rootScope.$broadcast 'BlockUpdated'
 
   # If a child block is added or removed save the changes
   $scope.$watch 'block.blocks', ()->
-    contentService.save()
+    $rootScope.$broadcast 'BlockUpdated'

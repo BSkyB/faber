@@ -8,7 +8,7 @@
     "angular-animate": "~1.2.14"
   },
   "devDependencies": {
-    "medium-editor": "~1.7.5",
+    "medium-editor": "~1.8.0",
     "angular-mocks": "~1.2.14"
   },
   "ignore": [

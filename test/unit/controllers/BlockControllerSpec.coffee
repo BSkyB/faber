@@ -75,21 +75,23 @@ describe 'BlockController:', ->
         contentService = $injector.get 'contentService'
         config = faberConfig
 
-    it 'should save the changed data to local storage when content changes', ->
-      spyOn contentService, 'save'
+    it 'should broadcast BlockUpdated event when content changes', ->
+      spyOn rootScope, '$broadcast'
+
       scope.block.content = 'hello'
       scope.$digest()
 
-      expect(contentService.save).toHaveBeenCalled()
+      expect(rootScope.$broadcast).toHaveBeenCalledWith 'BlockUpdated'
 
-    it 'should save the changed children blocks to local storage when a child block is added', ->
-      spyOn contentService, 'save'
+    it 'should broadcast BlockUpdated event when a child block is added', ->
+      spyOn rootScope, '$broadcast'
+
       scope.add
         content: 'hello'
         component: 'text'
       scope.$digest()
 
-      expect(contentService.save).toHaveBeenCalled()
+      expect(rootScope.$broadcast).toHaveBeenCalledWith 'BlockUpdated'
 
   describe 'when a component is set for the block,', ->
     beforeEach ->

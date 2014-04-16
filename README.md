@@ -93,6 +93,19 @@ faber.import(json);
 > It will return JSON formatted blocks
 
 
+## Faber events
+
+### BlockUpdated
+
+`data`: (object) updated block data
+
+```javascript
+faber.listen('BlockUpdated', function(data) {
+  // do something with data
+});
+```
+
+
 ## Faber configuration
 
 The configuration can be done using `faberConfig` constant when faber is initialised.

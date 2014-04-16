@@ -53,3 +53,6 @@ angular.module('faber').controller 'EditorController', ($rootScope, $scope, $con
 
   $scope.$on 'ConfigUpdated', (evt, config)->
     configEditor config
+
+  $rootScope.$on 'BlockUpdated', (evt)->
+    angular.module('faber').fire 'BlockUpdated', $scope.block
