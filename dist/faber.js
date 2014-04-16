@@ -1455,6 +1455,16 @@ window.faber = angular.extend(angular.module('faber', ['ngAnimate']).value('fabe
       }
     });
   },
+  stopListening: function(type, handler) {
+    var handlers, listeners;
+    if (!(listeners = this.listeners)) {
+      return;
+    }
+    if (!(handlers = listeners[type])) {
+      return;
+    }
+    return handlers.splice(handlers.indexOf(handler), 1);
+  },
   fire: function(type, data, context) {
     var handler, handlers, listeners, _i, _len;
     if (!(listeners = this.listeners)) {
