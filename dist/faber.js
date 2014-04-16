@@ -1665,7 +1665,7 @@ angular.module('faber').controller('EditorController', function($rootScope, $sco
     return configEditor(config);
   });
   return $rootScope.$on('BlockUpdated', function(evt) {
-    return angular.module('faber').fire('BlockUpdated', $scope.block);
+    return angular.module('faber').fire('BlockUpdated', angular.copy($scope.block));
   });
 });
 
