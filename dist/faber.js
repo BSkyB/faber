@@ -1366,7 +1366,7 @@ RichTextComponent = (function() {
   RichTextComponent.prototype.editorInstance = null;
 
   RichTextComponent.prototype.init = function($scope, $element, initialContent, update) {
-    var opts;
+    var event, opts, _i, _len, _ref, _results;
     opts = {
       buttons: ['bold', 'italic', 'underline', 'anchor', 'unorderedlist', 'orderedlist', 'header1', 'header2', 'header3', 'quote'],
       placeholder: 'Type your text'
@@ -1374,11 +1374,17 @@ RichTextComponent = (function() {
     this.editor = $element[0].getElementsByClassName('rich-text-editor')[0];
     this.editor.innerHTML = initialContent || '';
     this.editorInstance = new MediumEditorExtended(this.editor, opts);
-    return this.editor.addEventListener('input', (function(_this) {
-      return function() {
-        return update(_this.editor.innerHTML);
-      };
-    })(this));
+    _ref = ['keyup', 'input', 'blur', 'paste'];
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      event = _ref[_i];
+      _results.push(this.editor.addEventListener(event, (function(_this) {
+        return function() {
+          return update(_this.editor.innerHTML);
+        };
+      })(this)));
+    }
+    return _results;
   };
 
   RichTextComponent.prototype.selected = function($scope, $element, update) {
@@ -1875,7 +1881,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
   };
 });
 
-angular.module('faber').directive('faberComponentRenderer', function($compile, componentsService) {
+angular.module('faber').directive('faberComponentRenderer', function($rootScope, $compile, componentsService) {
   return {
     restrict: 'AE',
     template: '<div ng-class="component.id"></div>',
@@ -1918,7 +1924,8 @@ angular.module('faber').directive('faberComponentRenderer', function($compile, c
       };
       $scope.updateRendered = function(content) {
         if (content) {
-          return $scope.block.content = content;
+          $scope.block.content = content;
+          return $rootScope.$broadcast('BlockUpdated');
         }
       };
       $scope.$watch('block.component', function(val) {

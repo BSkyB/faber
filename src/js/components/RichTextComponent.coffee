@@ -38,8 +38,10 @@ class RichTextComponent
 
     @editorInstance = new MediumEditorExtended @editor, opts
 
-    @editor.addEventListener 'input', ()=>
-      update @editor.innerHTML
+    for event in ['keyup', 'input', 'blur', 'paste']
+      @editor.addEventListener event, ()=>
+        update @editor.innerHTML
+
 
   selected: ($scope, $element, update)->
     $element[0].getElementsByClassName('rich-text-editor')[0].focus()

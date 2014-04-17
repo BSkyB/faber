@@ -1,4 +1,4 @@
-angular.module('faber').directive 'faberComponentRenderer', ($compile, componentsService)->
+angular.module('faber').directive 'faberComponentRenderer', ($rootScope, $compile, componentsService)->
   restrict: 'AE'
   template: '<div ng-class="component.id"></div>'
   scope:
@@ -34,6 +34,7 @@ angular.module('faber').directive 'faberComponentRenderer', ($compile, component
     $scope.updateRendered = (content)->
       if content
         $scope.block.content = content
+        $rootScope.$broadcast 'BlockUpdated'
 
     $scope.$watch 'block.component', (val)->
       if !$scope.block
