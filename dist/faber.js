@@ -1601,7 +1601,7 @@ angular.module('faber').controller('BlockController', function($rootScope, $scop
   });
   $scope.$watch('block.content', function() {
     return $rootScope.$broadcast('BlockUpdated');
-  });
+  }, true);
   return $scope.$watch('block.blocks', function() {
     return $rootScope.$broadcast('BlockUpdated');
   });

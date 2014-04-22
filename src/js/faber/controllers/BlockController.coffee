@@ -78,6 +78,7 @@ angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log,
   # If block's content changes save it
   $scope.$watch 'block.content', ()->
     $rootScope.$broadcast 'BlockUpdated'
+  , true
 
   # If a child block is added or removed save the changes
   $scope.$watch 'block.blocks', ()->
