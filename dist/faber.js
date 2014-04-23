@@ -1372,7 +1372,7 @@ RichTextComponent = (function() {
       placeholder: 'Type your text'
     };
     this.editor = $element[0].getElementsByClassName('rich-text-editor')[0];
-    this.editor.innerHTML = initialContent || '';
+    this.editor.innerHTML = initialContent.html || '';
     this.editorInstance = new MediumEditorExtended(this.editor, opts);
     _ref = ['keyup', 'input', 'blur', 'paste'];
     _results = [];
@@ -1380,7 +1380,9 @@ RichTextComponent = (function() {
       event = _ref[_i];
       _results.push(this.editor.addEventListener(event, (function(_this) {
         return function() {
-          return update(_this.editor.innerHTML);
+          return update({
+            html: _this.editor.innerHTML
+          });
         };
       })(this)));
     }
@@ -1392,7 +1394,9 @@ RichTextComponent = (function() {
   };
 
   RichTextComponent.prototype.unselected = function($scope, $element, update) {
-    return update(this.editor.innerHTML);
+    return update({
+      html: this.editor.innerHTML
+    });
   };
 
   return RichTextComponent;
