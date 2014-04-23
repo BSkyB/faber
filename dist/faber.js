@@ -1373,6 +1373,9 @@ RichTextComponent = (function() {
     };
     this.editor = $element[0].getElementsByClassName('rich-text-editor')[0];
     this.editor.innerHTML = initialContent.html || '';
+    update({
+      html: this.editor.innerHTML
+    });
     this.editorInstance = new MediumEditorExtended(this.editor, opts);
     _ref = ['keyup', 'input', 'blur', 'paste'];
     _results = [];

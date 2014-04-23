@@ -36,6 +36,8 @@ class RichTextComponent
     @editor = $element[0].getElementsByClassName('rich-text-editor')[0]
     @editor.innerHTML = initialContent.html or ''
 
+    update html: @editor.innerHTML
+
     @editorInstance = new MediumEditorExtended @editor, opts
 
     for event in ['keyup', 'input', 'blur', 'paste']
