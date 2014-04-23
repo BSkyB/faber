@@ -34,17 +34,17 @@ class RichTextComponent
       placeholder: 'Type your text'
 
     @editor = $element[0].getElementsByClassName('rich-text-editor')[0]
-    @editor.innerHTML = initialContent or ''
+    @editor.innerHTML = initialContent.html or ''
 
     @editorInstance = new MediumEditorExtended @editor, opts
 
     for event in ['keyup', 'input', 'blur', 'paste']
       @editor.addEventListener event, ()=>
-        update @editor.innerHTML
+        update html: @editor.innerHTML
 
 
   selected: ($scope, $element, update)->
     $element[0].getElementsByClassName('rich-text-editor')[0].focus()
 
   unselected: ($scope, $element, update)->
-    update @editor.innerHTML
+    update html: @editor.innerHTML
