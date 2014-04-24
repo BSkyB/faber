@@ -1719,7 +1719,10 @@ angular.module('faber').controller('GroupItemBlockController', function($rootSco
     $scope: $scope
   });
   (_base = $scope.block).blocks || (_base.blocks = []);
-  return $scope.components = componentsService.findByType('element');
+  $scope.components = componentsService.findByType('element');
+  return $scope.$watch('block.title', function() {
+    return $rootScope.$broadcast('BlockUpdated');
+  });
 });
 
 angular.module('faber').directive('faberBlock', function($rootScope, $compile, $timeout) {

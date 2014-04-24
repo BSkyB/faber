@@ -5,3 +5,6 @@ angular.module('faber').controller 'GroupItemBlockController', ($rootScope, $con
   $scope.block.blocks or= []
 
   $scope.components = componentsService.findByType 'element'
+
+  $scope.$watch 'block.title', ()->
+    $rootScope.$broadcast 'BlockUpdated'
