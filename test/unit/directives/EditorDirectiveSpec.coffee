@@ -121,9 +121,9 @@ describe 'EditorDirective:', ()->
     describe 'if the content is empty', ->
       it 'should show the component list', ->
         contentService.import '[
-          {"component":"group-component-1","blocks":[]},
           {"component":"a-component"},
-          {"component":"group-component-2","blocks":[]}
+          {"component":"a-component"},
+          {"component":"a-component"}
         ]'
         scope.$digest()
         $timeout.flush()

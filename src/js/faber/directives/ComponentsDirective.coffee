@@ -27,8 +27,12 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
         else
           $scope.showingComponents = false
 
+    $scope.$watchCollection 'block.blocks', (val)->
+      if val.length is 0
+        $scope.showingComponents = true
+
     $scope.$on 'ShowComponents', (evt, id)->
-      $scope.showingComponents = (id is $scope.$id)
+      $scope.showingComponents = ($scope.block.blocks.length is 0) or (id is $scope.$id)
 
     $scope.insertBlock = (evt, comp)->
       evt.stopPropagation() if evt
@@ -51,4 +55,5 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
 
     $scope.toggleComponents = (evt)->
       evt.stopPropagation() if evt
+      console.log $scope.block.blocks.length
       $scope.showingComponents = !$scope.showingComponents
