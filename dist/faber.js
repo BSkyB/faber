@@ -2040,7 +2040,6 @@ angular.module('faber').directive('faberComponents', function($rootScope, $filte
         if (evt) {
           evt.stopPropagation();
         }
-        console.log($scope.block.blocks.length);
         return $scope.showingComponents = !$scope.showingComponents;
       };
     }

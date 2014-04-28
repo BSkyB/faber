@@ -55,5 +55,4 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
 
     $scope.toggleComponents = (evt)->
       evt.stopPropagation() if evt
-      console.log $scope.block.blocks.length
       $scope.showingComponents = !$scope.showingComponents
