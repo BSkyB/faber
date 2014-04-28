@@ -2255,7 +2255,7 @@ angular.module('faber').factory('configService', function($rootScope) {
   };
 });
 
-angular.module('faber').factory('contentService', function($rootScope, faberConfig) {
+angular.module('faber').factory('contentService', function($rootScope, $timeout, faberConfig) {
   var content, service;
   content = {
     blocks: []
@@ -2273,7 +2273,7 @@ angular.module('faber').factory('contentService', function($rootScope, faberConf
     "import": function(json) {
       var imported;
       imported = angular.fromJson(json);
-      if (angular.isArray(imported)) {
+      if (angular.isArray(imported) && !$rootScope.$$phase) {
         content.blocks = imported;
         $rootScope.$broadcast('imported', content.blocks);
         return true;
