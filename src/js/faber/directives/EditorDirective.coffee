@@ -28,7 +28,9 @@ angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeou
       # prevent editor block from flickering between the transition
       $element.css('display', 'none')
       $timeout ()->
-        $rootScope.$broadcast 'ShowComponents', null
+        unless blocks.length is 0
+          $rootScope.$broadcast 'ShowComponents', null
+
         $rootScope.$broadcast 'PreviewAll'
         $rootScope.$broadcast 'CollapseAll'
         $element.css('display', 'block')

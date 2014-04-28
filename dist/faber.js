@@ -2071,7 +2071,9 @@ angular.module('faber').directive('faberEditor', function($rootScope, $document,
       $scope.$on('imported', function(evt, blocks) {
         $element.css('display', 'none');
         return $timeout(function() {
-          $rootScope.$broadcast('ShowComponents', null);
+          if (blocks.length !== 0) {
+            $rootScope.$broadcast('ShowComponents', null);
+          }
           $rootScope.$broadcast('PreviewAll');
           $rootScope.$broadcast('CollapseAll');
           return $element.css('display', 'block');
