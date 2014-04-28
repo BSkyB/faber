@@ -2007,10 +2007,13 @@ angular.module('faber').directive('faberComponents', function($rootScope, $filte
           }
         }
       });
-      $scope.$on('ShowComponents', function(evt, id) {
-        if (id !== $scope.$id) {
-          return $scope.showingComponents = false;
+      $scope.$watchCollection('block.blocks', function(val) {
+        if (val.length === 0) {
+          return $scope.showingComponents = true;
         }
+      });
+      $scope.$on('ShowComponents', function(evt, id) {
+        return $scope.showingComponents = ($scope.block.blocks.length === 0) || (id === $scope.$id);
       });
       $scope.insertBlock = function(evt, comp) {
         var index;
@@ -2037,6 +2040,7 @@ angular.module('faber').directive('faberComponents', function($rootScope, $filte
         if (evt) {
           evt.stopPropagation();
         }
+        console.log($scope.block.blocks.length);
         return $scope.showingComponents = !$scope.showingComponents;
       };
     }
@@ -2063,7 +2067,9 @@ angular.module('faber').directive('faberEditor', function($rootScope, $document,
         }
         if (!isInside) {
           return $rootScope.$apply(function() {
-            $rootScope.$broadcast('ShowComponents', null);
+            if ($scope.block.blocks.length !== 0) {
+              $rootScope.$broadcast('ShowComponents', null);
+            }
             return $rootScope.$broadcast('SelectBlockOfIndex', null);
           });
         }
@@ -2161,7 +2167,7 @@ angular.module("faber").run(["$templateCache", function($templateCache) {$templa
 $templateCache.put("faber-components.html","<div ng-click=\"toggleComponents($event)\"><div ng-if=\"!showingComponents\" class=\"faber-components-line\"></div><i ng-if=\"!showingComponents\" class=\"faber-icon-plus\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components | filter : {type: \'element\'}\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li><li ng-if=\"hasGroupComponents()\" class=\"faber-component\"><button ng-click=\"insertGroupBlock($event)\" class=\"faber-group-button\"><span class=\"faber-icon-group\"></span>Group</button></li><li ng-if=\"component.type == \'group\'\" class=\"faber-component\"><button ng-click=\"insertGroupItemBlock($event)\" class=\"faber-group-button\">Item</button></li></ul></div>");
 $templateCache.put("faber-editor.html","<faber-components></faber-components><div class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
 $templateCache.put("faber-element-block.html","<faber-component-renderer data-faber-component-renderer-block=\"block\"></faber-component-renderer>");
-$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\"></faber-component-renderer><faber-components ng-if=\"!isPreview\"></faber-components><div ng-hide=\"isPreview\" class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
+$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\"></faber-component-renderer><faber-components ng-show=\"!isPreview\"></faber-components><div ng-hide=\"isPreview\" class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
 $templateCache.put("faber-group-item-block.html","<label class=\"faber-group-item-title\"><input type=\"text\" placeholder=\"Type the item\'s title\" ng-model=\"block.title\"/></label><faber-components ng-if=\"isExpanded\"></faber-components><div ng-if=\"isExpanded\" class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
 $templateCache.put("faber-render.html","<div ng-repeat=\"block in data.blocks\" ng-if=\"data\"><faber-component-renderer data-faber-component-renderer-block=\"block\" data-faber-group-preview=\"isGroupPreview()\"></faber-component-renderer></div>");}]);
 angular.module('faber').factory('componentsService', function($filter, $log) {
