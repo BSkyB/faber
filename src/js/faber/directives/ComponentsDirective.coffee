@@ -28,8 +28,7 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
           $scope.showingComponents = false
 
     $scope.$on 'ShowComponents', (evt, id)->
-      unless id is $scope.$id
-        $scope.showingComponents = false
+      $scope.showingComponents = (id is $scope.$id)
 
     $scope.insertBlock = (evt, comp)->
       evt.stopPropagation() if evt
