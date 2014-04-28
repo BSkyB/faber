@@ -2275,6 +2275,7 @@ angular.module('faber').factory('contentService', function($rootScope, $timeout,
       imported = angular.fromJson(json);
       if (angular.isArray(imported) && !$rootScope.$$phase) {
         content.blocks = imported;
+        $rootScope.$apply();
         $rootScope.$broadcast('imported', content.blocks);
         return true;
       } else {
