@@ -5,7 +5,7 @@ label.faber-select.faber-group-component(ng-hide="isPreview")
 
 faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview")
 
-faber-components(ng-if="!isPreview")
+faber-components(ng-show="!isPreview")
 
 .faber-blocks(ng-hide="isPreview")
   .faber-block-repeat(ng-repeat="data in block.blocks")

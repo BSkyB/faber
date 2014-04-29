@@ -12,3 +12,7 @@ angular.module('faber').directive 'faberGroupBlock', () ->
       unless val is $scope.component?.id
         $scope.block.component = val
         $scope.isSelected = true
+
+#    $scope.$watchCollection 'block.blocks', (val)->
+#      if val.length is 0
+#        $scope.$broadcast 'ShowComponents', $scope.$id

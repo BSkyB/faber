@@ -17,7 +17,8 @@ angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeou
 
       unless isInside
         $rootScope.$apply ()->
-          $rootScope.$broadcast 'ShowComponents', null
+          unless $scope.block.blocks.length is 0
+            $rootScope.$broadcast 'ShowComponents', null
           $rootScope.$broadcast 'SelectBlockOfIndex', null
     , true
 
@@ -28,11 +29,16 @@ angular.module('faber').directive 'faberEditor', ($rootScope, $document, $timeou
       # prevent editor block from flickering between the transition
       $element.css('display', 'none')
       $timeout ()->
-        $rootScope.$broadcast 'ShowComponents', null
+        unless blocks.length is 0
+          $rootScope.$broadcast 'ShowComponents', null
+
         $rootScope.$broadcast 'PreviewAll'
         $rootScope.$broadcast 'CollapseAll'
         $element.css('display', 'block')
 
+#    $scope.$watchCollection 'block.blocks', (val)->
+#      if val.length is 0
+#        $scope.$broadcast 'ShowComponents', $scope.$id
 
     $rootScope.$watch 'isExpanded', ()->
       $rootScope.$broadcast if $rootScope.isExpanded then 'ExpandAll' else 'CollapseAll'

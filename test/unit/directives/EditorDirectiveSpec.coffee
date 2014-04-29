@@ -4,6 +4,7 @@ describe 'EditorDirective:', ()->
   contentService = null
   element = null
   scope = null
+  $timeout = null
 
   beforeEach module 'faber'
 
@@ -15,6 +16,8 @@ describe 'EditorDirective:', ()->
       componentsService = $injector.get 'componentsService'
       contentService = $injector.get 'contentService'
       configService = $injector.get 'configService'
+
+      $timeout = $injector.get '$timeout'
 
       configService.init
         components: [
@@ -114,6 +117,27 @@ describe 'EditorDirective:', ()->
       expect(obj[1].component).toBe 'a-component'
       expect(obj[2].component).toBe 'b-component'
 
+  describe 'when a block is deleted', ->
+    describe 'if the content is empty', ->
+      it 'should show the component list', ->
+        contentService.import '[
+          {"component":"a-component"},
+          {"component":"a-component"},
+          {"component":"a-component"}
+        ]'
+        scope.$digest()
+        $timeout.flush()
+
+        # before delete all blocks
+        expect(scope.block.blocks.length).toBe 3
+        expect(element.find('faber-components').find('ul').length).toBe 0
+
+        scope.block.blocks = []
+        scope.$digest()
+
+        # after all blocks are deleted
+        expect(element.find('faber-components').find('ul').length).toBe 1
+
   describe 'when it has child blocks,', ->
     beforeEach ->
       @groupBlock1 = component: 'group-component-1'
@@ -165,21 +189,30 @@ describe 'EditorDirective:', ()->
         expect(element.find('faber-element-block').length).toBe 2
 
   describe 'when content is imported,', ->
-    beforeEach ->
-      contentService.import '[
-        {"component":"group-component-1","blocks":[]},
-        {"component":"a-component"},
-        {"component":"group-component-2","blocks":[]}
-      ]'
-      scope.$digest()
+    describe 'if the content is empty', ->
+      beforeEach ->
+        contentService.import '[]'
+        scope.$digest()
+        $timeout.flush()
 
-    it 'should not highlight/select any blocks', ->
-      faberBlocks = element.find('faber-block')
+      it 'should not hide component list', ->
+        expect(element.find('faber-components').find('ul').length).toBe 1
 
-      inject ($timeout)->
-        $timeout ()->
-          expect(scope.block.blocks.length).toBe 3
-          expect(faberBlocks.length).toBe 3
-          expect(angular.element(faberBlocks[0]).isolateScope().isSelected).toBeFalsy()
-          expect(angular.element(faberBlocks[1]).isolateScope().isSelected).toBeFalsy()
-          expect(angular.element(faberBlocks[2]).isolateScope().isSelected).toBeFalsy()
+
+    describe 'if the content is not empty', ->
+      beforeEach ->
+        contentService.import '[
+          {"component":"group-component-1","blocks":[]},
+          {"component":"a-component"},
+          {"component":"group-component-2","blocks":[]}
+        ]'
+        scope.$digest()
+
+      it 'should not highlight/select any blocks', ->
+        faberBlocks = element.find('faber-block')
+
+        expect(scope.block.blocks.length).toBe 3
+        expect(faberBlocks.length).toBe
+        expect(angular.element(faberBlocks[0]).isolateScope().isSelected).toBeFalsy()
+        expect(angular.element(faberBlocks[1]).isolateScope().isSelected).toBeFalsy()
+        expect(angular.element(faberBlocks[2]).isolateScope().isSelected).toBeFalsy()

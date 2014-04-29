@@ -1,4 +1,4 @@
-angular.module('faber').factory 'contentService', ($rootScope, faberConfig) ->
+angular.module('faber').factory 'contentService', ($rootScope, $timeout, faberConfig) ->
   # Initialise blocks collection
   content =
     blocks: []
@@ -25,8 +25,10 @@ angular.module('faber').factory 'contentService', ($rootScope, faberConfig) ->
     import: (json) ->
       imported = angular.fromJson json
 
-      if angular.isArray imported
+      if angular.isArray(imported) and !$rootScope.$$phase
+        # if import is called multiple times in one cycle, push it to be called in the next cycle
         content.blocks = imported
+        $rootScope.$apply()
         $rootScope.$broadcast 'imported', content.blocks
         return true
       else

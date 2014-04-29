@@ -1,9 +1,12 @@
 describe 'ComponentsDirective:', ->
+  $timeout = contentService = null
+
   beforeEach module 'faber'
 
   beforeEach ->
     inject ($compile, $rootScope, $injector)->
-#      @componentsService = $injector.get 'componentsService'
+      $timeout = $injector.get '$timeout'
+      contentService = $injector.get 'contentService'
       configService = $injector.get 'configService'
 
       scope = $rootScope.$new()
@@ -62,5 +65,23 @@ describe 'ComponentsDirective:', ->
     @scope.$digest()
 
     expect(@element.find('li').length).toBe 0
+
+  describe 'if the scope has empty content', ->
+    it 'should be kept open', ->
+      contentService.import '[
+        {"component":"a-component"},
+        {"component":"a-component"},
+        {"component":"a-component"}
+      ]'
+      @scope.$digest()
+      $timeout.flush()
+
+      expect(@scope.block.blocks.length).toBe 3
+      expect(@element.find('ul').length).toBe 0
+
+      @scope.block.blocks = []
+      @scope.$digest()
+
+      expect(@element.find('ul').length).toBe 1
 
 
