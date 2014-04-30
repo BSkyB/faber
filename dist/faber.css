@@ -191,6 +191,9 @@
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
     opacity: 1; } }
 
+.rich-text-wrapper .ie-exec-command-stopper {
+  display: none; }
+
 .rich-text-editor {
   margin: 1em 0;
   min-height: 1em;

@@ -1359,7 +1359,7 @@ RichTextComponent = (function() {
 
   RichTextComponent.prototype.type = 'element';
 
-  RichTextComponent.prototype.template = '<div class="rich-text-editor" data-tust-html><br/></div>';
+  RichTextComponent.prototype.template = '<div class="rich-text-wrapper"><div class="ie-exec-command-stopper"></div><div class="rich-text-editor"><br/></div><div class="ie-exec-command-stopper"></div></div>';
 
   RichTextComponent.prototype.editor = null;
 
