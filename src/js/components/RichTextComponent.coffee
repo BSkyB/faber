@@ -23,7 +23,7 @@ class RichTextComponent
   name: 'Rich Text',
   id: 'rich-text',
   type: 'element',
-  template: '<div class="rich-text-editor" data-tust-html><br/></div>'
+  template: '<div class="rich-text-wrapper"><div class="ie-exec-command-stopper"></div><div class="rich-text-editor"><br/></div><div class="ie-exec-command-stopper"></div></div>'
 
   editor: null
   editorInstance: null
