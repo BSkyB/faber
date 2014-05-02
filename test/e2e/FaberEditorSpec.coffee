@@ -1,13 +1,13 @@
 describe 'Faber Editor', ->
 
   beforeEach ->
-    targetUrl = 'http://localhost:1337/'
+    targetUrl = '/'
     browser.ignoreSynchronization = true
     browser.get targetUrl
-    browser.wait ()->
-      browser.driver.getCurrentUrl().then (url)->
-        targetUrl == url
-    , 2000, 'It\'s taking too long to load ' + targetUrl + '!'
+#    browser.wait ()->
+#      browser.driver.getCurrentUrl().then (url)->
+#        targetUrl == url
+#    , 2000, 'It\'s taking too long to load ' + targetUrl + '!'
 
   describe 'when initialised', ->
     components = protractor.By.tagName('faber-components')

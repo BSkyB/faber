@@ -166,6 +166,17 @@ gulp.task('protractor', ['webdriver_update'], function() {
 //        .on('error', function(e) { throw e })
 });
 
+gulp.task('browserstack', function() {
+    return gulp.src(['./test/e2e/**/*.coffee'])
+        .pipe(coffee())
+        .pipe(gulp.dest('./test/e2e'))
+        .pipe(protractor({
+            configFile: "test/config/protractor.conf.js",
+            args: ['--baseUrl', 'http://test-faber.herokuapp.com/']
+        }))
+//        .on('error', function(e) { throw e })
+});
+
 gulp.task('watch', ['connect'], function() {
     gulp.watch(['./src/**/*.coffee', './test/**/*.coffee'], ['coffee']);
     gulp.watch(['./src/**/*.jade'], ['jade', 'templatecache']);
