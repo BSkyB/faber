@@ -13,7 +13,7 @@ describe 'Faber Editor', ->
     components = protractor.By.tagName('faber-components')
 
     it 'should only show one component list', ->
-      expect(element.all(components).count()).toEqual 0
+      expect(element.all(components).count()).toEqual 1
 
     it 'should show all default element components', ->
       expect(element(components).element.all(protractor.By.repeater('comp in components')).count()).toEqual 2
