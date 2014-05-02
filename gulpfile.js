@@ -171,7 +171,7 @@ gulp.task('browserstack', function() {
         .pipe(coffee())
         .pipe(gulp.dest('./test/e2e'))
         .pipe(protractor({
-            configFile: "test/config/protractor.conf.js",
+            configFile: "test/config/browserstack.conf.js",
             args: ['--baseUrl', 'http://test-faber.herokuapp.com/']
         }))
 //        .on('error', function(e) { throw e })

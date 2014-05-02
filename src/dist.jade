@@ -9,3 +9,31 @@ html(lang="en")
     body
         #faber(ng-app="faber")
             faber-editor
+        script(type='text/javascript').
+            var faberConfig = {
+                // (array) List of components to be imported and managed by components service
+                components: [
+                  RichTextComponent
+                ,
+                  function() {
+                    return {
+                      name: 'Element Component',
+                      id: 'element-component',
+                      type: 'element',
+                      template: '<p>element component</p>'
+                    }
+                  }
+                ,
+                  OrderedListComponent
+                ,
+                  function() {
+                    return {
+                      name: 'Group Component',
+                      id: 'group-component',
+                      type: 'group',
+                      template: '<ul><li>group component item</li></ul>'
+                    }
+                  }
+                ]
+            };
+            faber.init(faberConfig);

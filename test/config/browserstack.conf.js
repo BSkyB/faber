@@ -1,5 +1,8 @@
 require('coffee-script');
 
+username = process.env.BS_USERNAME;
+key = process.env.BS_AUTHKEY;
+
 // An example configuration file.
 exports.config = {
   // The file path to the selenium server jar ()
@@ -7,14 +10,20 @@ exports.config = {
 
     chromeOnly: false,
 
-    multiCapabilities: [
+    capabilities: {
+        'browserName': 'chrome',
+        'browserstack.user': username,
+        'browserstack.key': key
+    },
+
+    /*multiCapabilities: [
         {
             'browserName': 'chrome'
         },
         {
             'browserName': 'firefox'
         }
-    ],
+    ],*/
 
   onPrepare: function() {
     global.By = protractor.by;
@@ -25,12 +34,5 @@ exports.config = {
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 30000
-  },
-
-    params: {
-        login: {
-            user: process.env.BS_USERNAME,
-            password: process.env.BS_PASSWORD
-        }
-    }
+  }
 };
