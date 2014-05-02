@@ -20,7 +20,4 @@ deployment:
       - git fetch --unshallow
       - git push git@heroku.com:test-faber.git $CIRCLE_SHA1:refs/heads/master -f
       - gulp browserstack
-  artifact:
-    branch: master
-    commands:
       - 'cp -R dist $CIRCLE_ARTIFACTS'
