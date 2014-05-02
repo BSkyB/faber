@@ -1,29 +1,26 @@
 require('coffee-script');
+var browsers = require('../../.browsers.json');
 
-username = process.env.BS_USERNAME;
-key = process.env.BS_AUTHKEY;
+var username = process.env.BS_USERNAME;
+var key = process.env.BS_AUTHKEY;
+var project = process.env.CIRCLE_PROJECT_REPONAME
+var build_num = process.env.CIRCLE_BUILD_NUM
 
-// An example configuration file.
+for(var i=0 ; i < browsers.length ; ++i) {
+    b = browsers[i];
+    b['browserstack.user'] = username;
+    b['browserstack.key'] = key;
+    b['browserstack.project'] = project;
+    b['browserstack.build'] = build_num;
+}
+
+
 exports.config = {
-  // The file path to the selenium server jar ()
     seleniumAddress: 'http://hub.browserstack.com/wd/hub',
 
     chromeOnly: false,
 
-    capabilities: {
-        'browserName': 'chrome',
-        'browserstack.user': username,
-        'browserstack.key': key
-    },
-
-    /*multiCapabilities: [
-        {
-            'browserName': 'chrome'
-        },
-        {
-            'browserName': 'firefox'
-        }
-    ],*/
+    multiCapabilities: browsers,
 
   onPrepare: function() {
     global.By = protractor.by;
