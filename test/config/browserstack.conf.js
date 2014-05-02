@@ -3,7 +3,7 @@ require('coffee-script');
 // An example configuration file.
 exports.config = {
   // The file path to the selenium server jar ()
-  seleniumServerJar: 'http://hub.browserstack.com/wd/hub',
+    seleniumAddress: 'http://hub.browserstack.com/wd/hub',
 
     chromeOnly: false,
 
