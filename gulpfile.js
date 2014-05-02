@@ -130,7 +130,8 @@ gulp.task('dist-test', ['dist-build'], function() {
     return gulp.src([DIST_DIR + '/angular.js', DIST_DIR + '/angular-animate.js', DIST_DIR + '/angular-mocks.js', DIST_DIR + '/faber.js'].concat(TEST_FILES))
         .pipe(karma({
             configFile: 'test/config/karma.conf.js'
-        }));
+        }))
+        .on('error', function(e) { throw e });
 });
 
 gulp.task('dist-min-test', ['dist-build'], function() {
