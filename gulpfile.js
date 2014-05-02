@@ -174,7 +174,7 @@ gulp.task('browserstack', function() {
             configFile: "test/config/browserstack.conf.js",
             args: ['--baseUrl', 'http://test-faber.herokuapp.com/']
         }))
-//        .on('error', function(e) { throw e })
+        .on('error', function(e) { throw e })
 });
 
 gulp.task('watch', ['connect'], function() {
