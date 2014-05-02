@@ -31,4 +31,4 @@ describe 'Faber Spec:', ->
 
       expect(exported).toBe sampleJson
       expect(@rootScope.$broadcast).toHaveBeenCalled()
-      expect(@rootScope.$broadcast.mostRecentCall.args[0]).toBe 'exported fail'
+      expect(@rootScope.$broadcast.mostRecentCall.args[0]).toBe 'exported'

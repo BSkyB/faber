@@ -151,7 +151,8 @@ gulp.task('karma', ['build'], function() {
 gulp.task('karma-specs', ['build'], function() {
     return gulp.src(BUILTIN_COMPONENTS.concat(SRC_FILES).concat(TEST_FILES)).pipe(karma({
         configFile: 'test/config/karma.conf.js'
-    }));
+    }))
+    .on('error', function(e) { throw e });
 });
 
 gulp.task('webdriver_update', webdriver_update);
