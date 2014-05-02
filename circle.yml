@@ -14,6 +14,10 @@ test:
     - 'gulp dist'
 
 deployment:
+  test:
+    branch: master
+    heroku:
+      appname: test-faber
   artifact:
     branch: master
     commands:

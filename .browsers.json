@@ -1,0 +1,16 @@
+{
+    "chrome": {
+        "human": "Chrome 33 on OS X Mavericks",
+        "browser_version":"33.0",
+        "browser":"chrome",
+        "os":"OS X",
+        "os_version":"Mavericks"
+    },
+    "firefox": {
+        "human": "Firefox 27 on OS X Mavericks",
+        "browser_version":"27.0",
+        "browser":"Firefox",
+        "os":"OS X",
+        "os_version":"Mavericks"
+    }
+}

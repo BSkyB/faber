@@ -156,14 +156,14 @@ gulp.task('karma-specs', ['build'], function() {
 gulp.task('webdriver_update', webdriver_update);
 
 gulp.task('protractor', ['webdriver_update'], function() {
-    gulp.src(['./test/e2e/**/*.coffee'])
+    return gulp.src(['./test/e2e/**/*.coffee'])
         .pipe(coffee())
         .pipe(gulp.dest('./test/e2e'))
         .pipe(protractor({
             configFile: "test/config/protractor.conf.js",
             args: ['--baseUrl', 'http://localhost:1337/']
         }))
-        .on('error', function(e) { throw e })
+//        .on('error', function(e) { throw e })
 });
 
 gulp.task('watch', ['connect'], function() {

@@ -1,4 +1,4 @@
-describe "angularjs homepage", ->
+xdescribe "angularjs homepage", ->
   it "should greet the named user", ->
     browser.get "http://www.angularjs.org"
     element(protractor.By.model("yourName")).sendKeys "Julie"
