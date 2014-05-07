@@ -264,6 +264,8 @@
   font-size: 0.8em;
   padding: 0.5em; }
 
+.medium-editor-placeholder:focus:after {
+  display: none; }
 .medium-editor-placeholder:after {
   color: #dddddd;
   height: 0; }
