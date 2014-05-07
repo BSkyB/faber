@@ -119,6 +119,10 @@ $medium_editor_link_color: #fff
   padding: 0.5em
 
 .medium-editor-placeholder
+  &:focus
+    &:after
+      display: none
+
   &:after
     color: $medium_editor_border_color
 
