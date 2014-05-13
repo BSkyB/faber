@@ -10,6 +10,7 @@ for(var i=0 ; i < browsers.length ; ++i) {
     b = browsers[i];
     b['browserstack.user'] = username;
     b['browserstack.key'] = key;
+    b['browserstack.debug'] = true;
     b['project'] = project;
     b['build'] = build_num;
 }
