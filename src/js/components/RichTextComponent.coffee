@@ -4,6 +4,13 @@
 `
 
 class MediumEditorExtended extends MediumEditor
+  restoreSelection = (savedSel)->
+    sel = window.getSelection();
+    if (savedSel)
+      sel.removeAllRanges();
+      for s in savedSel
+        sel.addRange s
+
   constructor: (elements, options)->
     @defaults.firstHeader = 'h1'
     @defaults.secondHeader = 'h2'
@@ -18,6 +25,60 @@ class MediumEditorExtended extends MediumEditor
       'header3': '<li><button class="medium-editor-action medium-editor-action-header3" data-action="append-h3" data-element="h3">H3</button></li>'
 
     super(btnType) or buttonTemplates[btnType]
+
+  toolbarFormAnchor: ()->
+    anchor = super()
+    target = document.createElement('select')
+
+    targetSelf = document.createElement('option')
+    targetSelf.value = '_self'
+    targetSelf.text = 'Self'
+
+    targetBlank = document.createElement('option')
+    targetBlank.value = '_blank'
+    targetBlank.text = 'Blank'
+
+    target.appendChild targetSelf
+    target.appendChild targetBlank
+
+    anchor.insertBefore(target, anchor.getElementsByTagName('a')[0])
+    return anchor
+
+  bindAnchorForm: ()->
+    linkCancel = @anchorForm.querySelector('a')
+    target = @anchorForm.querySelector('select')
+
+    @anchorForm.addEventListener 'click', (e)=>
+      e.stopPropagation()
+
+    @anchorInput.addEventListener 'keyup', (e)=>
+      if e.keyCode is 13
+        e.preventDefault()
+        @createLink e.currentTarget
+
+    @anchorInput.addEventListener 'click', (e)=>
+      e.stopPropagation()
+      @keepToolbarAlive = true
+
+    @anchorInput.addEventListener 'blur', (e)=>
+      @keepToolbarAlive = true
+      @checkSelection()
+
+    linkCancel.addEventListener 'click', (e)=>
+      e.preventDefault()
+      @showToolbarActions()
+      restoreSelection @savedSelection
+
+    target.addEventListener 'click', (e)=>
+      e.stopPropagation()
+      @keepToolbarAlive = true
+
+    document.addEventListener 'click', (e)=>
+      unless e.target is @anchorForm
+        @keepToolbarAlive = false
+        @checkSelection()
+
+    return @
 
 class RichTextComponent
   name: 'Rich Text',
