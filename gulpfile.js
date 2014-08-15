@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var annotate = require('gulp-ng-annotate');
 var coffee = require('gulp-coffee');
 var jade = require('gulp-jade');
 var sass = require('gulp-ruby-sass');
@@ -104,7 +105,8 @@ gulp.task('dist-build-js', ['build'], function() {
     return gulp.src(BUILTIN_COMPONENTS.concat(DIST_FILES))
         .pipe(concat('faber.js'))
         .pipe(gulp.dest(DIST_DIR))
-        .pipe(uglify({mangle: false}))
+        .pipe(annotate())
+        .pipe(uglify({mangle: true}))
         .pipe(rename('faber.min.js'))
         .pipe(gulp.dest(DIST_DIR));
 });
