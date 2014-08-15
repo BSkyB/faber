@@ -3,7 +3,9 @@
   "version": "0.2.7",
   "description": "Block based content editor",
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "gulp-ng-annotate": "^0.3.0"
+  },
   "devDependencies": {
     "karma": "0.11.14",
     "protractor": "~0.22.0",
