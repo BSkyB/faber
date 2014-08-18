@@ -24,13 +24,15 @@ var SRC_FILES = [
         DEV_DIR + '/js/lib/angular-mocks/angular-mocks.js',
         DEV_DIR + '/js/faber/classes/FaberComponent.js',
         DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js'
+        DEV_DIR + '/js/faber/**/*.js',
+        DEV_DIR + '/js/module.js'
 ];
 
 var DIST_FILES = [
         DEV_DIR + '/js/faber/classes/FaberComponent.js',
         DEV_DIR + '/js/faber/faber.js',
-        DEV_DIR + '/js/faber/**/*.js'
+        DEV_DIR + '/js/faber/**/*.js',
+        DEV_DIR + '/js/module.js'
 ];
 
 var BUILTIN_COMPONENTS = [

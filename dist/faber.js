@@ -2380,3 +2380,11 @@ angular.module('faber').factory('contentService', function($rootScope, $timeout,
   $rootScope.$on('BlockUpdated', service.save);
   return service;
 });
+
+if('undefined' !== typeof module && 'undefined' !== typeof module.exports) {
+  module.exports = {
+    Editor: window.faber,
+    OrderedListComponent: OrderedListComponent,
+    RichTextComponent: RichTextComponent
+  }
+}

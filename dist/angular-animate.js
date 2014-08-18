@@ -1,5 +1,5 @@
 /**
- * @license AngularJS v1.2.16
+ * @license AngularJS v1.2.16-build.31+sha.7cccb8b
  * (c) 2010-2014 Google, Inc. http://angularjs.org
  * License: MIT
  */
@@ -338,12 +338,9 @@ angular.module('ngAnimate', ['ng'])
           //operation which performs CSS transition and keyframe
           //animations sniffing. This is always included for each
           //element animation procedure if the browser supports
-          //transitions and/or keyframe animations. The default
-          //animation is added to the top of the list to prevent
-          //any previous animations from affecting the element styling
-          //prior to the element being animated.
+          //transitions and/or keyframe animations
           if ($sniffer.transitions || $sniffer.animations) {
-            matches.push($injector.get(selectors['']));
+            classes.push('');
           }
 
           for(var i=0; i < classes.length; i++) {
@@ -1118,7 +1115,7 @@ angular.module('ngAnimate', ['ng'])
 
         //but it may not need to cancel out the existing timeout
         //if the timestamp is less than the previous one
-        var futureTimestamp = Date.now() + totalTime;
+        var futureTimestamp = Date.now() + (totalTime * 1000);
         if(futureTimestamp <= closingTimestamp) {
           return;
         }
@@ -1217,7 +1214,7 @@ angular.module('ngAnimate', ['ng'])
           parentElement.data(NG_ANIMATE_PARENT_KEY, ++parentCounter);
           parentID = parentCounter;
         }
-        return parentID + '-' + extractElementNode(element).getAttribute('class');
+        return parentID + '-' + extractElementNode(element).className;
       }
 
       function animateSetup(animationEvent, element, className, calculationDecorator) {
@@ -1322,7 +1319,7 @@ angular.module('ngAnimate', ['ng'])
       function animateRun(animationEvent, element, className, activeAnimationComplete) {
         var node = extractElementNode(element);
         var elementData = element.data(NG_ANIMATE_CSS_DATA_KEY);
-        if(node.getAttribute('class').indexOf(className) == -1 || !elementData) {
+        if(node.className.indexOf(className) == -1 || !elementData) {
           activeAnimationComplete();
           return;
         }
