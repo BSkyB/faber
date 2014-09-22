@@ -43,17 +43,21 @@ var faberConfig = {
   components: [
     RichTextComponent,
     function() {
-      name: 'Element Component'
-      id: 'element-component'
-      type: 'element'
-      template: '<p>element component</p>'
+      return {
+        name: 'Element Component',
+        id: 'element-component',
+        type: 'element',
+        template: '<p>element component</p>'
+      }
     },
     OrderedListComponent,
     function() {
-      name: 'Group Component'
-      id: 'group-component'
-      type: 'group'
-      template: '<ul><li>group component itenm</li></ul>'
+      return {
+        name: 'Group Component',
+        id: 'group-component',
+        type: 'group',
+        template: '<ul><li>group component itenm</li></ul>'
+      }
     }
   ]
 };
