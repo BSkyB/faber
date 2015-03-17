@@ -325,7 +325,7 @@ describe 'Faber Editor', ->
           {"component":"element-component","content":"block 3"}
         ]'
 
-      blocks = element.all(protractor.By.css('faber-editor > .faber-blocks > div[ng-repeat="data in block.blocks"] > faber-block'))
+      blocks = element.all(protractor.By.css('faber-editor > faber-block-list > .faber-blocks > div[ng-repeat="data in block.blocks"] > faber-block'))
       groupBlock = blocks.get 2
 
     describe 'imported blocks', ->

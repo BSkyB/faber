@@ -7,4 +7,4 @@ angular.module('faber').directive 'faberBlockList', () ->
   controller: 'BlockListController'
 
   link: ($scope, $element, attrs, blockController) ->
-    console.log "Block list linked"
+    $scope.isExpanded = $scope.$parent.isExpanded
