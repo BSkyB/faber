@@ -18,8 +18,9 @@ angular.module('faber').directive 'faberComponentRenderer', ($rootScope, $compil
       $element.find('div').append $component
 
       if $scope.component.init
-        $scope.component.init($scope, $element, content, $scope.updateRendered) if $scope.component.type is 'element'
-        $scope.component.init($scope, $element, content) if $scope.component.type is 'group'
+        return $scope.component.init($scope, $element, content) if $scope.component.type is 'group'
+
+        $scope.component.init($scope, $element, content, $scope.updateRendered)
 
     $scope.component = null
 

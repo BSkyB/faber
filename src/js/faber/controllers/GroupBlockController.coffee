@@ -4,18 +4,5 @@ angular.module('faber').controller 'GroupBlockController', ($rootScope, $control
 
   $scope.block.blocks or= []
 
-  # retrieve available component list for the current block
-  $scope.components = [
-    name: 'Item'
-    id: 'group-item'
-    template: ''
-  ]
-
-  # retrieve available group component list for the current block an be switched
+  $scope.components = [componentsService.findById 'group-item']
   $scope.groupComponents = componentsService.findByType 'group'
-
-  # Insert an empty group item glock in to a group block
-  $scope.insertGroupItem = (index)->
-    groupItem =
-      blocks: []
-    $scope.block.blocks.splice(index, 0, groupItem)

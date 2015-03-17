@@ -111,7 +111,7 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.expand = (evt)->
         evt.stopPropagation() if evt
 
-        return unless $scope.isGroupItemBlock
+        return unless $scope.component.isCollapsible
 
         $scope.isExpanded = true
 
@@ -119,7 +119,7 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.collapse = (evt)->
         evt.stopPropagation() if evt
 
-        return unless $scope.isGroupItemBlock
+        return unless $scope.component.isCollapsible
 
         $scope.isExpanded = false
 
@@ -146,12 +146,12 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         $scope.isExpanded = true
 
       $scope.$watchCollection '[$parent.component, component]', ()->
-        $scope.isElementBlock = $scope.isGroupBlock = $scope.isGroupItemBlock = false
+        $scope.isElementBlock = $scope.isGroupBlock = false
 
-        if $scope.$parent.component and $scope.$parent.component.type is 'group'
-          $scope.isGroupItemBlock = true
-        else if $scope.component
+        if $scope.component
           if $scope.component.type is 'element'
             $scope.isElementBlock = true
           if $scope.component.type is 'group'
             $scope.isGroupBlock = true
+          if $scope.component.type is 'internal'
+            $scope.isInternalBlock = true

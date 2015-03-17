@@ -50,9 +50,6 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
     $scope.insertGroupBlock = (evt)->
       $scope.insertGroup buttonClickWithIndexReturn(evt, $scope)
 
-    $scope.insertGroupItemBlock = (evt)->
-      $scope.insertGroupItem buttonClickWithIndexReturn(evt, $scope)
-
     $scope.toggleComponents = (evt)->
       evt.stopPropagation() if evt
       $scope.showingComponents = !$scope.showingComponents

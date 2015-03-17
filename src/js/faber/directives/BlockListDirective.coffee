@@ -1,8 +1,8 @@
 angular.module('faber').directive 'faberBlockList', () ->
-  scope:
-    'block': '=faberBlock'
-    'components': '=faberAvailableComponents'
   restrict: 'E'
+  scope:
+    block: '=faberBlock'
+    components: '=faberAvailableComponents'
   templateUrl: 'faber-block-list.html'
   controller: 'BlockListController'
 

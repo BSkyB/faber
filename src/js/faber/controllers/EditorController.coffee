@@ -1,8 +1,22 @@
 angular.module('faber').controller 'EditorController', ($rootScope, $scope, $controller, $log, configService, contentService, componentsService) ->
+  internalComponents = [
+    GroupItemComponent
+  ]
+
+  injectComponents = (dest, src) ->
+    # FIXME this is awful.
+    # Can't be bothered to do it optimally on such a short list
+    res = angular.copy dest
+    for cmp in src
+      res.push(cmp) unless dest.indexOf(cmp) > -1
+
+    res
 
   configEditor = (config)->
     $rootScope.isExpanded = if angular.isDefined config.expanded then config.expanded else true
-    componentsService.init config.components or []
+
+    components = injectComponents (config.components or []), internalComponents
+    componentsService.init components
 
     # retrieve available component list for the current block
     $scope.components = componentsService.getAll()

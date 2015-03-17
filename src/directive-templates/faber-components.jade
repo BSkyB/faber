@@ -11,4 +11,4 @@ div(ng-click="toggleComponents($event)")
         | Group
 
     li.faber-component(ng-if="component.type == 'group'")
-      button.faber-group-button(ng-click="insertGroupItemBlock($event)") Item
+      button.faber-group-button(ng-click="insertBlock($event, {component: 'group-item'})") Item

@@ -48,8 +48,8 @@
       button
         margin-right: 3px
 
-    .faber-group-item-block
-      & > .faber-block-actions
+    faber-group-block faber-block
+      & .faber-block-actions
         z-index: 1
 
     .faber-block-position
@@ -73,7 +73,7 @@
       top: 5px
       padding: 0 1em
 
-  faber-group-item-block
+  faber-component-renderer > .group-item
     display: block
     padding: 1em
     background: #fff
@@ -81,7 +81,7 @@
 
     +box-sizing(border-box)
 
-    & > faber-components:first-of-type
+    & > faber-block-list > faber-components:first-of-type
       margin-top: 2.5em
 
   faber-component-renderer
