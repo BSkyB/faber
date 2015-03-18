@@ -17,6 +17,7 @@ class GroupItemComponent
 
     $scope.components = componentsService.findByType 'element'
     $scope.block.blocks or= []
+    delete $scope.block.content # don't need content on a group item
 
     $scope.isExpanded = true
     $scope.$parent.$watch 'isExpanded', ()->
