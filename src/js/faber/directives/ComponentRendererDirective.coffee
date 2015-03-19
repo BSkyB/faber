@@ -2,6 +2,7 @@ angular.module('faber').directive 'faberComponentRenderer', ($rootScope, $compil
   restrict: 'AE'
   template: '<div ng-class="component.id"></div>'
   scope:
+    isExpanded: '='
     block: '=faberComponentRendererBlock'
     checkGroupPreview: '&faberGroupPreview'
 

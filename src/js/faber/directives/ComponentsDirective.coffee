@@ -20,7 +20,7 @@ angular.module('faber').directive 'faberComponents', ($rootScope, $filter, $time
         $rootScope.$broadcast 'ShowComponents', $scope.$id
 
     $scope.$watch 'isExpanded', (val)->
-      if $scope.isGroupItemBlock
+      if $scope.component && $scope.component.id == 'group-item'
         if val
           if $scope.block.blocks.length is 0
             $scope.showingComponents = true
