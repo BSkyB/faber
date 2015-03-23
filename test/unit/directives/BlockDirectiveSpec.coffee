@@ -2,6 +2,7 @@ describe 'BlockDirective:', ()->
   blockTemplate = '<faber-block data-faber-block-content="passedDownBlock"></faber-block>'
 
   config = null
+  injector = null
   rootScope = null
   compile = null
   componentsService = null
@@ -17,6 +18,7 @@ describe 'BlockDirective:', ()->
     scope = rootScope.$new()
     scope.passedDownBlock = rootScope.block.blocks[0]
     element = compile(template or blockTemplate)(scope)
+    element.data('$injector', injector) # OMG.
     scope.$digest()
 
     return element
@@ -34,6 +36,7 @@ describe 'BlockDirective:', ()->
 
       compile = $compile
       rootScope = $rootScope
+      injector = $injector
       componentsService = $injector.get 'componentsService'
       componentsService.init [
         ()->
@@ -47,6 +50,8 @@ describe 'BlockDirective:', ()->
         ()->
           id: 'child-component'
           type: 'element'
+      ,
+        GroupItemComponent
       ]
 
       @element = createDirective()
@@ -127,6 +132,8 @@ describe 'BlockDirective:', ()->
         beforeEach ->
           @scope.block.blocks = [
             # group item 1
+            component: 'group-item'
+            title: "Item 1"
             blocks: [
               component: 'child-component'
             ,
@@ -134,58 +141,64 @@ describe 'BlockDirective:', ()->
             ]
           ,
             # group item 2
+            component: 'group-item'
+            title: "Item 2"
             blocks: [
               component: 'child-component'
             ]
           ]
           @scope.$digest()
 
-          @groupItem1Element = @element.find('faber-group-item-block')[0]
-          @groupItem1Wrapper = angular.element(@groupItem1Element).parent() # wrapping faber-block
-          @groupItem1WrapperScope = @groupItem1Wrapper.scope()
+          @groupItemBlock1 = @element.find('faber-block')[0]
+          @groupItemBlock1Scope = angular.element(@groupItemBlock1).isolateScope()
+
+          @groupItem1Renderer = angular.element(@groupItemBlock1).find('faber-component-renderer')[0]
+          @groupItem1RendererScope = angular.element(@groupItem1Renderer).isolateScope()
 
         describe 'if there are group item blocks', ->
-          it 'should have correct number of faber-group-item-block', ->
+          it 'should have the correct number of group items', ->
             expect(@scope.block.blocks.length).toBe 2
-            expect(@element.find('faber-group-item-block').length).toBe 2
+            expect(@element[0].querySelectorAll('div.group-item').length).toBe 2
 
-          it 'should be able to collapse an expanded group item block', ->
-            @groupItem1WrapperScope.isExpanded = false
-            @groupItem1WrapperScope.$digest()
+          it 'should be able to expand a collapsed group item block', ->
+            @groupItemBlock1Scope.isExpanded = false
+            @groupItemBlock1Scope.$digest()
 
             # check it's not expanded first
-            expect(@groupItem1WrapperScope.isExpanded).toBe false
+            expect(@groupItemBlock1Scope.isExpanded).toBe false
+            expect(@groupItem1RendererScope.isExpanded).toBe false
 
-            expandButton = angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-plus')
+            expandButton = @groupItemBlock1.querySelector('button.faber-icon-plus')
 
             # expand button should be there
             expect(expandButton).not.toBe null
 
             # collapse button should not be there
-            expect(angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-minus')).toBe null
+            expect(@groupItemBlock1.querySelector('button.faber-icon-minus')).toBe null
 
             $expandButton = angular.element expandButton
             $expandButton.triggerHandler 'click'
-            @groupItem1WrapperScope.$digest()
+            @groupItemBlock1Scope.$digest()
 
-            expect(@groupItem1WrapperScope.isExpanded).toBe true
+            expect(@groupItem1RendererScope.isExpanded).toBe true
 
-          it 'should be able to expand a collapsed group item block', ->
-            @groupItem1WrapperScope.isExpanded = true
-            @groupItem1WrapperScope.$digest()
+          it 'should be able to collapse an expanded group item block', ->
+            @groupItemBlock1Scope.isExpanded = true
+            @groupItemBlock1Scope.$digest()
 
-            expect(@groupItem1WrapperScope.isExpanded).toBe true
+            expect(@groupItemBlock1Scope.isExpanded).toBe true
+            expect(@groupItem1RendererScope.isExpanded).toBe true
 
-            collapseButton = angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-minus')
+            collapseButton = @groupItemBlock1.querySelector('button.faber-icon-minus')
 
             expect(collapseButton).not.toBe null
-            expect(angular.element(@groupItem1Element).parent()[0].querySelector('button.faber-icon-plus')).toBe null
+            expect(@groupItemBlock1.querySelector('button.faber-icon-plus')).toBe null
 
             $collapseButton = angular.element collapseButton
             $collapseButton.triggerHandler 'click'
-            @groupItem1WrapperScope.$digest()
+            @groupItemBlock1Scope.$digest()
 
-            expect(@groupItem1WrapperScope.isExpanded).toBe false
+            expect(@groupItem1RendererScope.isExpanded).toBe false
 
   describe 'when a block is selected,', ->
     it 'if the block is the selected block it should set highlight the block', ->
@@ -217,7 +230,7 @@ describe 'BlockDirective:', ()->
     describe 'if it is not a group block', ->
       it 'should not be switched to preview mode', ->
         rootScope.$broadcast 'PreviewAll'
-        
+
         expect(@scope.isPreview).toBe false
 
   describe 'when collapse all event is fired,', ->

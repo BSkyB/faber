@@ -8,5 +8,5 @@ angular.module('faber').controller 'GroupBlockController', ($rootScope, $control
   for block in $scope.block.blocks
     block.component = "group-item"
 
-  $scope.components = componentsService.findById 'group-item'
+  $scope.components = [componentsService.findById 'group-item']
   $scope.groupComponents = componentsService.findByType 'group'

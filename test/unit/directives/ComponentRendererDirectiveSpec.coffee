@@ -36,6 +36,7 @@ describe 'ComponentRendererDirective:', ->
       componentsService.init [
         elementComp
         groupComp
+        GroupItemComponent
       ]
 
       rootScope = $rootScope
@@ -124,6 +125,7 @@ describe 'ComponentRendererDirective:', ->
         rootScope.block =
           component: 'group-component'
           blocks: [
+            component: 'group-item'
             blocks: [
               component: 'sample-component'
               content: 'Lorem ipsum 1'
@@ -135,24 +137,25 @@ describe 'ComponentRendererDirective:', ->
         scope = $rootScope.$new()
         scope.passedDownBlock = rootScope.block
         @blockElement = $compile('<faber-block data-faber-block-content="passedDownBlock"></faber-block>')(scope)
+        @blockElement.data('$injector', $injector)
         scope.$digest()
         @blockScope = @blockElement.isolateScope()
 
-        @groupItemBlockElement = @blockElement.find('faber-group-item-block')
+        @groupItemBlockElement = angular.element(@blockElement.find('faber-block')[0])
         @groupItemBlockScope = @groupItemBlockElement.scope()
         @groupItemBlockScope.isExpanded = true
         @groupItemBlockScope.$digest()
 
     it 'should be able to render the template of the given components', ->
-      expect(@groupItemBlockElement.find('faber-component-renderer').length).toBe 2
-      expect(angular.element(@groupItemBlockElement.find('faber-component-renderer')[0]).text()).toBe 'Lorem ipsum 1'
-      expect(angular.element(@groupItemBlockElement.find('faber-component-renderer')[1]).text()).toBe 'Lorem ipsum 2'
+      expect(@groupItemBlockElement[0].querySelectorAll('.sample-component').length).toBe 2
+      expect(angular.element(@groupItemBlockElement[0].querySelectorAll('.sample-component')[0]).text()).toBe 'Lorem ipsum 1'
+      expect(angular.element(@groupItemBlockElement[0].querySelectorAll('.sample-component')[1]).text()).toBe 'Lorem ipsum 2'
 
     it 'should be able to call init callback of the component', ->
-      firstRendererElement = angular.element @groupItemBlockElement.find('faber-component-renderer')[0]
+      firstRendererElement = angular.element @groupItemBlockElement.find('faber-component-renderer')[1]
       firstRendererScope = firstRendererElement.isolateScope()
 
-      secondRendererElement = angular.element @groupItemBlockElement.find('faber-component-renderer')[1]
+      secondRendererElement = angular.element @groupItemBlockElement.find('faber-component-renderer')[2]
       secondRendererScope = secondRendererElement.isolateScope()
 
       expect(callbacks.initCallback).toHaveBeenCalled()

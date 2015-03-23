@@ -4,11 +4,14 @@ describe 'GroupBlockDirective:', ()->
   config = null
   rootScope = null
   compile = null
+  injector = null
   componentsService = null
 
   createDirective = (template)->
     scope = rootScope.$new()
     element = compile(template or blockTemplate)(scope)
+    element.data('$injector', injector)
+
     scope.$digest()
 
     return element
@@ -26,6 +29,7 @@ describe 'GroupBlockDirective:', ()->
 
       compile = $compile
       rootScope = $rootScope
+      injector = $injector
       componentsService = $injector.get 'componentsService'
 
     componentsService.init [
@@ -42,11 +46,14 @@ describe 'GroupBlockDirective:', ()->
         id: 'another-group-component'
         name: 'Another Group Component'
         type: 'group'
+    ,
+      GroupItemComponent
     ]
 
     @element = createDirective()
     @scope = @element.scope()
-    @scope.component = componentsService.findById 'group-component'
+
+    @scope.block.component = 'group-component'
     @scope.$digest()
 
   describe 'when initialised,', ->
@@ -88,4 +95,4 @@ describe 'GroupBlockDirective:', ()->
     it 'should add a group item block', ->
       expect(@scope.block.blocks.length).toBe 1
       expect(@element.find('faber-block').length).toBe 1
-      expect(@element.find('faber-block').find('faber-group-item-block').length).toBe 1
+      expect(@element.find('faber-block')[0].querySelectorAll('.group-item').length).toBe 1
