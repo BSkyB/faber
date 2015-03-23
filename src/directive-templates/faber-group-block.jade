@@ -6,5 +6,6 @@ label.faber-select.faber-group-component(ng-hide="isPreview")
 faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview")
 
 faber-block-list(ng-show="!isPreview",
+                 data-is-expanded="isExpanded",
                  data-faber-block="block",
                  data-faber-available-components="components")

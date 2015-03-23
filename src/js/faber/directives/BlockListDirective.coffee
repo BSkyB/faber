@@ -3,5 +3,6 @@ angular.module('faber').directive 'faberBlockList', () ->
   scope:
     block: '=faberBlock'
     components: '=faberAvailableComponents'
+    isExpanded: '=isExpanded'
   templateUrl: 'faber-block-list.html'
   controller: 'BlockListController'
