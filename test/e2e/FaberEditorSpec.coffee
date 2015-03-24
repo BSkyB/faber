@@ -165,10 +165,10 @@ describe 'Faber Editor', ->
       beforeEach ->
         $itemButton = element(protractor.By.buttonText('Item'))
         $itemButton.click()
-        $itemBlock = $groupBlock.element(protractor.By.tagName('faber-group-item-block'))
+        $itemBlock = $groupBlock.element(protractor.By.css('.group-item'))
 
       it 'should have title field', ->
-        expect($groupBlock.element.all(protractor.By.tagName('faber-group-item-block')).count()).toEqual 1
+        expect($groupBlock.element.all(protractor.By.css('.group-item')).count()).toEqual 1
         expect($itemBlock.element(protractor.By.model('block.title')).isPresent()).toBeTruthy()
 
       describe 'components', ->
