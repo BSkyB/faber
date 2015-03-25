@@ -9,6 +9,7 @@ class GroupItemComponent
   <input type="text" placeholder="Type the item\'s title" ng-model="block.title">
 </label>
 <faber-block-list ng-show="isExpanded"
+                  data-is-expanded="isExpanded"
                   data-faber-block="block"
                   data-faber-available-components="components">'
 

@@ -49,9 +49,6 @@ angular.module('faber').directive 'faberComponentRenderer', ($rootScope, $compil
         initialContent = if $scope.component.type is 'element' then $scope.block.content else angular.copy($scope.block.blocks)
         setComponent initialContent
 
-    $scope.$on 'BlockModeChanged', (evt, val)->
-      setComponent $scope.block.content
-
     $scope.$on 'SelectBlockOfIndex', (evt, scope, index)->
       if !scope
         if $scope.isSelected

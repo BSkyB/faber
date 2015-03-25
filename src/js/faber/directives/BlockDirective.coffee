@@ -96,7 +96,6 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         $scope.isPreview = false
 
         $rootScope.$broadcast 'ResetIsMoving'
-        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Switch to preview mode on group block
       $scope.preview = (evt)->
@@ -105,7 +104,6 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         return unless $scope.isGroupBlock
 
         $scope.isPreview = true
-        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Expand group item block
       $scope.expand = (evt)->

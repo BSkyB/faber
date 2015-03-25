@@ -1374,7 +1374,7 @@ GroupItemComponent = (function() {
 
   GroupItemComponent.prototype.isCollapsible = true;
 
-  GroupItemComponent.prototype.template = '<label class="faber-group-item-title"> <input type="text" placeholder="Type the item\'s title" ng-model="block.title"> </label> <faber-block-list ng-show="isExpanded" data-faber-block="block" data-faber-available-components="components">';
+  GroupItemComponent.prototype.template = '<label class="faber-group-item-title"> <input type="text" placeholder="Type the item\'s title" ng-model="block.title"> </label> <faber-block-list ng-show="isExpanded" data-is-expanded="isExpanded" data-faber-block="block" data-faber-available-components="components">';
 
   GroupItemComponent.prototype.init = function($scope, $element, initialContent) {
     var componentsService, _base;
@@ -1911,8 +1911,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
               return;
             }
             $scope.isPreview = false;
-            $rootScope.$broadcast('ResetIsMoving');
-            return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
+            return $rootScope.$broadcast('ResetIsMoving');
           };
           $scope.preview = function(evt) {
             if (evt) {
@@ -1921,8 +1920,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (!$scope.isGroupBlock) {
               return;
             }
-            $scope.isPreview = true;
-            return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
+            return $scope.isPreview = true;
           };
           $scope.expand = function(evt) {
             if (evt) {
@@ -2054,9 +2052,6 @@ angular.module('faber').directive('faberComponentRenderer', function($rootScope,
           initialContent = $scope.component.type === 'element' ? $scope.block.content : angular.copy($scope.block.blocks);
           return setComponent(initialContent);
         }
-      });
-      $scope.$on('BlockModeChanged', function(evt, val) {
-        return setComponent($scope.block.content);
       });
       return $scope.$on('SelectBlockOfIndex', function(evt, scope, index) {
         if (!scope) {
@@ -2259,8 +2254,8 @@ $templateCache.put("faber-block.html","<div ng-class=\"{\'faber-element-block\':
 $templateCache.put("faber-components.html","<div ng-click=\"toggleComponents($event)\"><div ng-if=\"!showingComponents\" class=\"faber-components-line\"></div><i ng-if=\"!showingComponents\" class=\"faber-icon-plus\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components | filter : {type: \'element\'}\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li><li ng-if=\"hasGroupComponents()\" class=\"faber-component\"><button ng-click=\"insertGroupBlock($event)\" class=\"faber-group-button\"><span class=\"faber-icon-group\"></span>Group</button></li><li ng-if=\"component.type == \'group\'\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: \'group-item\'})\" class=\"faber-group-button\">Item</button></li></ul></div>");
 $templateCache.put("faber-editor.html","<faber-block-list data-faber-block=\"block\" data-faber-available-components=\"components\" data-is-expanded=\"true\"></faber-block-list>");
 $templateCache.put("faber-element-block.html","<faber-component-renderer data-faber-component-renderer-block=\"block\" data-is-expanded=\"isExpanded\"></faber-component-renderer>");
-$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\"></faber-component-renderer><faber-block-list ng-show=\"!isPreview\" data-is-expanded=\"isExpanded\" data-faber-block=\"block\" data-faber-available-components=\"components\"></faber-block-list>");
-$templateCache.put("faber-render.html","<div ng-repeat=\"block in data.blocks\" ng-if=\"data\"><faber-component-renderer data-faber-component-renderer-block=\"block\" data-faber-group-preview=\"isGroupPreview()\"></faber-component-renderer></div>");}]);
+$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\" data-is-expanded=\"true\"></faber-component-renderer><faber-block-list ng-if=\"!isPreview\" data-is-expanded=\"isExpanded\" data-faber-block=\"block\" data-faber-available-components=\"components\"></faber-block-list>");
+$templateCache.put("faber-render.html","<div ng-repeat=\"block in data.blocks\" ng-if=\"data\"><faber-component-renderer data-faber-component-renderer-block=\"block\" data-faber-group-preview=\"isGroupPreview()\" data-is-expanded=\"true\"></faber-component-renderer></div>");}]);
 angular.module('faber').factory('componentsService', function($filter, $log) {
   var raws, validate;
   raws = [];

@@ -3,9 +3,9 @@ label.faber-select.faber-group-component(ng-hide="isPreview")
     select(ng-model="currentComponent", ng-options="c.id as c.name for c in groupComponents")
     i.faber-icon-button.faber-icon-arrow-down
 
-faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview")
+faber-component-renderer(data-faber-component-renderer-block="block", ng-if="isPreview", data-is-expanded="true")
 
-faber-block-list(ng-show="!isPreview",
+faber-block-list(ng-if="!isPreview",
                  data-is-expanded="isExpanded",
                  data-faber-block="block",
                  data-faber-available-components="components")
