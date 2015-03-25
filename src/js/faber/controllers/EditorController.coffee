@@ -6,7 +6,7 @@ angular.module('faber').controller 'EditorController', ($rootScope, $scope, $con
   injectComponents = (dest, src) ->
     # FIXME this is awful.
     # Can't be bothered to do it optimally on such a short list
-    res = angular.copy dest
+    res = [].concat(dest)
     for cmp in src
       res.push(cmp) unless dest.indexOf(cmp) > -1
 

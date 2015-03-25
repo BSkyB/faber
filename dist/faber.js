@@ -1718,7 +1718,7 @@ angular.module('faber').controller('EditorController', function($rootScope, $sco
   internalComponents = [GroupItemComponent];
   injectComponents = function(dest, src) {
     var cmp, res, _i, _len;
-    res = angular.copy(dest);
+    res = [].concat(dest);
     for (_i = 0, _len = src.length; _i < _len; _i++) {
       cmp = src[_i];
       if (!(dest.indexOf(cmp) > -1)) {
