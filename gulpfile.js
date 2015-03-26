@@ -91,6 +91,11 @@ gulp.task('dev-copy-icons', function() {
         .pipe(gulp.dest(DEV_DIR + '/css/fonts'));
 });
 
+gulp.task('dev-copy-exports', function() {
+    return gulp.src('./src/js/module.js')
+    .pipe(gulp.dest(DEV_DIR + '/js/'));
+})
+
 gulp.task('dist-copy-icons', function() {
     return gulp.src([
         './src/css/fonts/*'
@@ -190,7 +195,7 @@ gulp.task('watch', ['connect'], function() {
 });
 
 gulp.task('install', ['bower']);
-gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache', 'dev-copy-icons']);
+gulp.task('build', ['coffee', 'jade', 'sass', 'templatecache', 'dev-copy-icons', 'dev-copy-exports']);
 
 gulp.task('dev', ['build', 'watch']);
 gulp.task('devtest', ['karma', 'watch']);
