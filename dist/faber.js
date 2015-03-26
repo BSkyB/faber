@@ -1361,6 +1361,33 @@ if (typeof module === 'object') {
 
 }(window, document));
 
+var GroupItemComponent;
+
+GroupItemComponent = (function() {
+  function GroupItemComponent() {}
+
+  GroupItemComponent.prototype.name = 'Item';
+
+  GroupItemComponent.prototype.id = 'group-item';
+
+  GroupItemComponent.prototype.type = 'internal';
+
+  GroupItemComponent.prototype.isCollapsible = true;
+
+  GroupItemComponent.prototype.template = '<label class="faber-group-item-title"> <input type="text" placeholder="Type the item\'s title" ng-model="block.title"> </label> <faber-block-list ng-show="isExpanded" data-is-expanded="isExpanded" data-faber-block="block" data-faber-available-components="components">';
+
+  GroupItemComponent.prototype.init = function($scope, $element, initialContent) {
+    var componentsService, _base;
+    componentsService = $element.injector().get('componentsService');
+    $scope.components = componentsService.findByType('element');
+    (_base = $scope.block).blocks || (_base.blocks = []);
+    return delete $scope.block.content;
+  };
+
+  return GroupItemComponent;
+
+})();
+
 var OrderedListComponent;
 
 OrderedListComponent = (function() {
@@ -1482,6 +1509,8 @@ FaberComponent = (function() {
 
   FaberComponent.prototype.topLevelOnly = false;
 
+  FaberComponent.prototype.isCollapsible = false;
+
   function FaberComponent(opts) {
     if (opts == null) {
       opts = [];
@@ -1599,7 +1628,6 @@ angular.module('faber').animation('.faber-block-repeat', function($window, $docu
 
 angular.module('faber').controller('BlockController', function($rootScope, $scope, $log, componentsService, contentService) {
   $scope.block || ($scope.block = {});
-  $scope.components = componentsService.getAll();
   $scope.component = null;
   $scope.validateBlock = function(block) {
     var component, isTopLevelScope, result;
@@ -1677,11 +1705,33 @@ angular.module('faber').controller('BlockController', function($rootScope, $scop
   });
 });
 
+angular.module('faber').controller('BlockListController', function($rootScope, $controller, $scope, componentsService) {
+  $controller('BlockController', {
+    $scope: $scope
+  });
+  $scope.blocks || ($scope.blocks = []);
+  return $scope.components || ($scope.components = componentsService.findByType('element'));
+});
+
 angular.module('faber').controller('EditorController', function($rootScope, $scope, $controller, $log, configService, contentService, componentsService) {
-  var configEditor, validateElementBlock, validateGroupBlock, validateImported;
+  var configEditor, injectComponents, internalComponents, validateElementBlock, validateGroupBlock, validateImported;
+  internalComponents = [GroupItemComponent];
+  injectComponents = function(dest, src) {
+    var cmp, res, _i, _len;
+    res = [].concat(dest);
+    for (_i = 0, _len = src.length; _i < _len; _i++) {
+      cmp = src[_i];
+      if (!(dest.indexOf(cmp) > -1)) {
+        res.push(cmp);
+      }
+    }
+    return res;
+  };
   configEditor = function(config) {
+    var components;
     $rootScope.isExpanded = angular.isDefined(config.expanded) ? config.expanded : true;
-    componentsService.init(config.components || []);
+    components = injectComponents(config.components || [], internalComponents);
+    componentsService.init(components);
     return $scope.components = componentsService.getAll();
   };
   $controller('BlockController', {
@@ -1754,38 +1804,18 @@ angular.module('faber').controller('ElementBlockController', function($controlle
 });
 
 angular.module('faber').controller('GroupBlockController', function($rootScope, $controller, $scope, componentsService) {
-  var _base;
+  var block, _base, _i, _len, _ref;
   $controller('BlockController', {
     $scope: $scope
   });
   (_base = $scope.block).blocks || (_base.blocks = []);
-  $scope.components = [
-    {
-      name: 'Item',
-      id: 'group-item',
-      template: ''
-    }
-  ];
-  $scope.groupComponents = componentsService.findByType('group');
-  return $scope.insertGroupItem = function(index) {
-    var groupItem;
-    groupItem = {
-      blocks: []
-    };
-    return $scope.block.blocks.splice(index, 0, groupItem);
-  };
-});
-
-angular.module('faber').controller('GroupItemBlockController', function($rootScope, $controller, $scope, componentsService) {
-  var _base;
-  $controller('BlockController', {
-    $scope: $scope
-  });
-  (_base = $scope.block).blocks || (_base.blocks = []);
-  $scope.components = componentsService.findByType('element');
-  return $scope.$watch('block.title', function() {
-    return $rootScope.$broadcast('BlockUpdated');
-  });
+  _ref = $scope.block.blocks;
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    block = _ref[_i];
+    block.component = "group-item";
+  }
+  $scope.components = [componentsService.findById('group-item')];
+  return $scope.groupComponents = componentsService.findByType('group');
 });
 
 angular.module('faber').directive('faberBlock', function($rootScope, $compile, $timeout) {
@@ -1881,8 +1911,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
               return;
             }
             $scope.isPreview = false;
-            $rootScope.$broadcast('ResetIsMoving');
-            return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
+            return $rootScope.$broadcast('ResetIsMoving');
           };
           $scope.preview = function(evt) {
             if (evt) {
@@ -1891,14 +1920,13 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (!$scope.isGroupBlock) {
               return;
             }
-            $scope.isPreview = true;
-            return $scope.$broadcast('BlockModeChanged', $scope.isPreview);
+            return $scope.isPreview = true;
           };
           $scope.expand = function(evt) {
             if (evt) {
               evt.stopPropagation();
             }
-            if (!$scope.isGroupItemBlock) {
+            if (!$scope.component.isCollapsible) {
               return;
             }
             return $scope.isExpanded = true;
@@ -1907,7 +1935,7 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             if (evt) {
               evt.stopPropagation();
             }
-            if (!$scope.isGroupItemBlock) {
+            if (!$scope.component.isCollapsible) {
               return;
             }
             return $scope.isExpanded = false;
@@ -1936,15 +1964,16 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
             return $scope.isExpanded = true;
           });
           return $scope.$watchCollection('[$parent.component, component]', function() {
-            $scope.isElementBlock = $scope.isGroupBlock = $scope.isGroupItemBlock = false;
-            if ($scope.$parent.component && $scope.$parent.component.type === 'group') {
-              return $scope.isGroupItemBlock = true;
-            } else if ($scope.component) {
+            $scope.isElementBlock = $scope.isGroupBlock = false;
+            if ($scope.component) {
               if ($scope.component.type === 'element') {
                 $scope.isElementBlock = true;
               }
               if ($scope.component.type === 'group') {
-                return $scope.isGroupBlock = true;
+                $scope.isGroupBlock = true;
+              }
+              if ($scope.component.type === 'internal') {
+                return $scope.isInternalBlock = true;
               }
             }
           });
@@ -1954,11 +1983,25 @@ angular.module('faber').directive('faberBlock', function($rootScope, $compile, $
   };
 });
 
+angular.module('faber').directive('faberBlockList', function() {
+  return {
+    restrict: 'E',
+    scope: {
+      block: '=faberBlock',
+      components: '=faberAvailableComponents',
+      isExpanded: '=isExpanded'
+    },
+    templateUrl: 'faber-block-list.html',
+    controller: 'BlockListController'
+  };
+});
+
 angular.module('faber').directive('faberComponentRenderer', function($rootScope, $compile, componentsService) {
   return {
     restrict: 'AE',
     template: '<div ng-class="component.id"></div>',
     scope: {
+      isExpanded: '=',
       block: '=faberComponentRendererBlock',
       checkGroupPreview: '&faberGroupPreview'
     },
@@ -1974,12 +2017,10 @@ angular.module('faber').directive('faberComponentRenderer', function($rootScope,
         wrapper.empty();
         $element.find('div').append($component);
         if ($scope.component.init) {
-          if ($scope.component.type === 'element') {
-            $scope.component.init($scope, $element, content, $scope.updateRendered);
-          }
           if ($scope.component.type === 'group') {
             return $scope.component.init($scope, $element, content);
           }
+          return $scope.component.init($scope, $element, content, $scope.updateRendered);
         }
       };
       $scope.component = null;
@@ -2011,9 +2052,6 @@ angular.module('faber').directive('faberComponentRenderer', function($rootScope,
           initialContent = $scope.component.type === 'element' ? $scope.block.content : angular.copy($scope.block.blocks);
           return setComponent(initialContent);
         }
-      });
-      $scope.$on('BlockModeChanged', function(evt, val) {
-        return setComponent($scope.block.content);
       });
       return $scope.$on('SelectBlockOfIndex', function(evt, scope, index) {
         if (!scope) {
@@ -2060,7 +2098,7 @@ angular.module('faber').directive('faberComponents', function($rootScope, $filte
         }
       });
       $scope.$watch('isExpanded', function(val) {
-        if ($scope.isGroupItemBlock) {
+        if ($scope.component && $scope.component.id === 'group-item') {
           if (val) {
             if ($scope.block.blocks.length === 0) {
               return $scope.showingComponents = true;
@@ -2095,9 +2133,6 @@ angular.module('faber').directive('faberComponents', function($rootScope, $filte
       };
       $scope.insertGroupBlock = function(evt) {
         return $scope.insertGroup(buttonClickWithIndexReturn(evt, $scope));
-      };
-      $scope.insertGroupItemBlock = function(evt) {
-        return $scope.insertGroupItem(buttonClickWithIndexReturn(evt, $scope));
       };
       return $scope.toggleComponents = function(evt) {
         if (evt) {
@@ -2184,17 +2219,6 @@ angular.module('faber').directive('faberGroupBlock', function() {
   };
 });
 
-angular.module('faber').directive('faberGroupItemBlock', function() {
-  return {
-    restrict: 'E',
-    templateUrl: 'faber-group-item-block.html',
-    controller: 'GroupItemBlockController',
-    link: function($scope, $element, attrs, blockController) {
-      return $element[0].querySelector('.faber-group-item-title input').focus();
-    }
-  };
-});
-
 angular.module('faber').directive('faberRender', function($compile, componentsService) {
   return {
     restrict: 'AE',
@@ -2225,20 +2249,20 @@ angular.module('faber').directive('trustHtml', function($sce) {
   };
 });
 
-angular.module("faber").run(["$templateCache", function($templateCache) {$templateCache.put("faber-block.html","<div ng-class=\"{\'faber-element-block\': isElementBlock, \'faber-group-block\': isGroupBlock, \'faber-group-item-block\': isGroupItemBlock, \'faber-block-preview\': isPreview,\'faber-block-hover\': isMouseHover, \'faber-block-selected\': isSelected, \'faber-block-moving\': isMoving}\" ng-mouseover=\"mouseOver($event)\" ng-mouseout=\"mouseOut($event)\" ng-click=\"onBlockClick($event)\" class=\"faber-block-item\"><div class=\"faber-block-actions\"><div ng-if=\"isGroupBlock\" class=\"faber-group-block-actions\"><button title=\"Edit\" ng-if=\"isPreview\" ng-click=\"edit($event)\" class=\"faber-edit-group-button faber-icon-edit toggled-on\"></button><button title=\"Preview\" ng-if=\"!isPreview\" ng-click=\"preview($event)\" class=\"faber-preview-group-button faber-icon-edit\"></button></div><div ng-if=\"isGroupItemBlock\" class=\"faber-group-item-block-actions\"><button title=\"Expand\" ng-if=\"!isExpanded\" ng-click=\"expand($event)\" class=\"faber-icon-plus\"></button><button title=\"Collapse\" ng-if=\"isExpanded\" ng-click=\"collapse($event)\" class=\"faber-icon-minus\"></button></div><label class=\"faber-select faber-block-position\"><select ng-model=\"$parent.$index\" ng-options=\"i as (i == $parent.$index ? (i+1)+\' (current)\' : i+1) for i in indexRange()\" ng-change=\"onSelectChange()\"></select><button title=\"Change order\" class=\"faber-icon-sort\"></button></label><button title=\"Remove\" ng-click=\"removeSelf()\" class=\"faber-icon-remove\"></button></div><faber-group-item-block ng-if=\"isGroupItemBlock\"></faber-group-item-block><faber-element-block ng-if=\"isElementBlock\"></faber-element-block><faber-group-block ng-if=\"isGroupBlock\" ng-class=\"{\'faber-group-block-preview\': isPreview}\"></faber-group-block></div>");
-$templateCache.put("faber-components.html","<div ng-click=\"toggleComponents($event)\"><div ng-if=\"!showingComponents\" class=\"faber-components-line\"></div><i ng-if=\"!showingComponents\" class=\"faber-icon-plus\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components | filter : {type: \'element\'}\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li><li ng-if=\"hasGroupComponents()\" class=\"faber-component\"><button ng-click=\"insertGroupBlock($event)\" class=\"faber-group-button\"><span class=\"faber-icon-group\"></span>Group</button></li><li ng-if=\"component.type == \'group\'\" class=\"faber-component\"><button ng-click=\"insertGroupItemBlock($event)\" class=\"faber-group-button\">Item</button></li></ul></div>");
-$templateCache.put("faber-editor.html","<faber-components></faber-components><div class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
-$templateCache.put("faber-element-block.html","<faber-component-renderer data-faber-component-renderer-block=\"block\"></faber-component-renderer>");
-$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\"></faber-component-renderer><faber-components ng-show=\"!isPreview\"></faber-components><div ng-hide=\"isPreview\" class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
-$templateCache.put("faber-group-item-block.html","<label class=\"faber-group-item-title\"><input type=\"text\" placeholder=\"Type the item\'s title\" ng-model=\"block.title\"/></label><faber-components ng-if=\"isExpanded\"></faber-components><div ng-if=\"isExpanded\" class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
-$templateCache.put("faber-render.html","<div ng-repeat=\"block in data.blocks\" ng-if=\"data\"><faber-component-renderer data-faber-component-renderer-block=\"block\" data-faber-group-preview=\"isGroupPreview()\"></faber-component-renderer></div>");}]);
+angular.module("faber").run(["$templateCache", function($templateCache) {$templateCache.put("faber-block-list.html","<faber-components></faber-components><div class=\"faber-blocks\"><div ng-repeat=\"data in block.blocks\" class=\"faber-block-repeat\"><faber-block data-faber-block-content=\"data\"></faber-block><faber-components></faber-components></div></div>");
+$templateCache.put("faber-block.html","<div ng-class=\"{\'faber-element-block\': isElementBlock, \'faber-group-block\': isGroupBlock, \'faber-group-item-block\': isGroupItemBlock, \'faber-block-preview\': isPreview,\'faber-block-hover\': isMouseHover, \'faber-block-selected\': isSelected, \'faber-block-moving\': isMoving}\" ng-mouseover=\"mouseOver($event)\" ng-mouseout=\"mouseOut($event)\" ng-click=\"onBlockClick($event)\" class=\"faber-block-item\"><div class=\"faber-block-actions\"><div ng-if=\"isGroupBlock\" class=\"faber-group-block-actions\"><button title=\"Edit\" ng-if=\"isPreview\" ng-click=\"edit($event)\" class=\"faber-edit-group-button faber-icon-edit toggled-on\"></button><button title=\"Preview\" ng-if=\"!isPreview\" ng-click=\"preview($event)\" class=\"faber-preview-group-button faber-icon-edit\"></button></div><div ng-if=\"component.isCollapsible\" class=\"faber-group-item-block-actions\"><button title=\"Expand\" ng-if=\"!isExpanded\" ng-click=\"expand($event)\" class=\"faber-icon-plus\"></button><button title=\"Collapse\" ng-if=\"isExpanded\" ng-click=\"collapse($event)\" class=\"faber-icon-minus\"></button></div><label class=\"faber-select faber-block-position\"><select ng-model=\"$parent.$index\" ng-options=\"i as (i == $parent.$index ? (i+1)+\' (current)\' : i+1) for i in indexRange()\" ng-change=\"onSelectChange()\"></select><button title=\"Change order\" class=\"faber-icon-sort\"></button></label><button title=\"Remove\" ng-click=\"removeSelf()\" class=\"faber-icon-remove\"></button></div><faber-element-block ng-if=\"isElementBlock || isInternalBlock\"></faber-element-block><faber-group-block ng-if=\"isGroupBlock\" ng-class=\"{\'faber-group-block-preview\': isPreview}\"></faber-group-block></div>");
+$templateCache.put("faber-components.html","<div ng-click=\"toggleComponents($event)\"><div ng-if=\"!showingComponents\" class=\"faber-components-line\"></div><i ng-if=\"!showingComponents\" class=\"faber-icon-plus\"></i><ul ng-if=\"showingComponents\" class=\"faber-available-components\"><li ng-repeat=\"comp in components | filter : {type: \'element\'}\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: comp.id })\">{{comp.name}}</button></li><li ng-if=\"hasGroupComponents()\" class=\"faber-component\"><button ng-click=\"insertGroupBlock($event)\" class=\"faber-group-button\"><span class=\"faber-icon-group\"></span>Group</button></li><li ng-if=\"component.type == \'group\'\" class=\"faber-component\"><button ng-click=\"insertBlock($event, {component: \'group-item\'})\" class=\"faber-group-button\">Item</button></li></ul></div>");
+$templateCache.put("faber-editor.html","<faber-block-list data-faber-block=\"block\" data-faber-available-components=\"components\" data-is-expanded=\"true\"></faber-block-list>");
+$templateCache.put("faber-element-block.html","<faber-component-renderer data-faber-component-renderer-block=\"block\" data-is-expanded=\"isExpanded\"></faber-component-renderer>");
+$templateCache.put("faber-group-block.html","<label ng-hide=\"isPreview\" class=\"faber-select faber-group-component\"><span>{{component.name}}<select ng-model=\"currentComponent\" ng-options=\"c.id as c.name for c in groupComponents\"></select><i class=\"faber-icon-button faber-icon-arrow-down\"></i></span></label><faber-component-renderer data-faber-component-renderer-block=\"block\" ng-if=\"isPreview\" data-is-expanded=\"true\"></faber-component-renderer><faber-block-list ng-if=\"!isPreview\" data-is-expanded=\"isExpanded\" data-faber-block=\"block\" data-faber-available-components=\"components\"></faber-block-list>");
+$templateCache.put("faber-render.html","<div ng-repeat=\"block in data.blocks\" ng-if=\"data\"><faber-component-renderer data-faber-component-renderer-block=\"block\" data-faber-group-preview=\"isGroupPreview()\" data-is-expanded=\"true\"></faber-component-renderer></div>");}]);
 angular.module('faber').factory('componentsService', function($filter, $log) {
   var raws, validate;
   raws = [];
   validate = function(component) {
     var comp;
     comp = new component();
-    return angular.isString(comp.id) && (comp.type === 'element' || comp.type === 'group');
+    return angular.isString(comp.id) && (comp.type === 'element' || comp.type === 'group' || comp.type === 'internal');
   };
   return {
     init: function(list) {
@@ -2380,12 +2404,3 @@ angular.module('faber').factory('contentService', function($rootScope, $timeout,
   $rootScope.$on('BlockUpdated', service.save);
   return service;
 });
-
-if('undefined' !== typeof module && 'undefined' !== typeof module.exports) {
-  module.exports = {
-    Editor: window.faber,
-    OrderedListComponent: OrderedListComponent,
-    MediumEditorExtended: MediumEditorExtended,
-    RichTextComponent: RichTextComponent
-  }
-}

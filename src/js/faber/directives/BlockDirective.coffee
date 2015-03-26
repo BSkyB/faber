@@ -96,7 +96,6 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         $scope.isPreview = false
 
         $rootScope.$broadcast 'ResetIsMoving'
-        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Switch to preview mode on group block
       $scope.preview = (evt)->
@@ -105,13 +104,12 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         return unless $scope.isGroupBlock
 
         $scope.isPreview = true
-        $scope.$broadcast 'BlockModeChanged', $scope.isPreview
 
       # Expand group item block
       $scope.expand = (evt)->
         evt.stopPropagation() if evt
 
-        return unless $scope.isGroupItemBlock
+        return unless $scope.component.isCollapsible
 
         $scope.isExpanded = true
 
@@ -119,7 +117,7 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
       $scope.collapse = (evt)->
         evt.stopPropagation() if evt
 
-        return unless $scope.isGroupItemBlock
+        return unless $scope.component.isCollapsible
 
         $scope.isExpanded = false
 
@@ -146,12 +144,12 @@ angular.module('faber').directive 'faberBlock', ($rootScope, $compile, $timeout)
         $scope.isExpanded = true
 
       $scope.$watchCollection '[$parent.component, component]', ()->
-        $scope.isElementBlock = $scope.isGroupBlock = $scope.isGroupItemBlock = false
+        $scope.isElementBlock = $scope.isGroupBlock = false
 
-        if $scope.$parent.component and $scope.$parent.component.type is 'group'
-          $scope.isGroupItemBlock = true
-        else if $scope.component
+        if $scope.component
           if $scope.component.type is 'element'
             $scope.isElementBlock = true
           if $scope.component.type is 'group'
             $scope.isGroupBlock = true
+          if $scope.component.type is 'internal'
+            $scope.isInternalBlock = true

@@ -4,6 +4,7 @@ class FaberComponent
   type: 'group'
   template: ''
   topLevelOnly: false
+  isCollapsible: false
 
   constructor: (opts = []) ->
     @id = opts.id or ''

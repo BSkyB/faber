@@ -36,6 +36,8 @@ describe 'GroupBlockController:', ->
           id: 'element-component-2'
           type: 'element'
           template: '<div></div>'
+      ,
+        GroupItemComponent
       ]
 
       scope = $rootScope.$new()

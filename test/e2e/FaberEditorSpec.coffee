@@ -165,10 +165,10 @@ describe 'Faber Editor', ->
       beforeEach ->
         $itemButton = element(protractor.By.buttonText('Item'))
         $itemButton.click()
-        $itemBlock = $groupBlock.element(protractor.By.tagName('faber-group-item-block'))
+        $itemBlock = $groupBlock.element(protractor.By.css('.group-item'))
 
       it 'should have title field', ->
-        expect($groupBlock.element.all(protractor.By.tagName('faber-group-item-block')).count()).toEqual 1
+        expect($groupBlock.element.all(protractor.By.css('.group-item')).count()).toEqual 1
         expect($itemBlock.element(protractor.By.model('block.title')).isPresent()).toBeTruthy()
 
       describe 'components', ->
@@ -325,7 +325,7 @@ describe 'Faber Editor', ->
           {"component":"element-component","content":"block 3"}
         ]'
 
-      blocks = element.all(protractor.By.css('faber-editor > .faber-blocks > div[ng-repeat="data in block.blocks"] > faber-block'))
+      blocks = element.all(protractor.By.css('faber-editor > faber-block-list > .faber-blocks > div[ng-repeat="data in block.blocks"] > faber-block'))
       groupBlock = blocks.get 2
 
     describe 'imported blocks', ->

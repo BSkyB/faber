@@ -1,8 +1,6 @@
 angular.module('faber').controller 'BlockController', ($rootScope, $scope, $log, componentsService, contentService) ->
   $scope.block or= {}
 
-  # retrieve available component list for the current block
-  $scope.components = componentsService.getAll()
   $scope.component = null
 
   # Check if the component of the block is valid component and the block has all necessary information

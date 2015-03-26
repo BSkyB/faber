@@ -1,0 +1,8 @@
+//- usage: <faber-block-list data-is-expanded="isExpanded"
+                             data-faber-block="the-block-rendering-the-list"
+                             data-faber-available-components="list-of-availble-components">
+faber-components
+.faber-blocks
+  .faber-block-repeat(ng-repeat="data in block.blocks")
+    faber-block(data-faber-block-content="data")
+    faber-components

@@ -62,7 +62,7 @@ describe 'EditorController:', ->
 
     it 'should config the editor with default settings', ->
       expect(@scope.isExpanded).toBe true
-      expect(@scope.components.length).toBe 2
+      expect(@scope.components.length).toBe 3
 
     it 'should update configurations if new config is available', ->
       faber.init newConfig
@@ -92,7 +92,7 @@ describe 'EditorController:', ->
       it 'should add it to the ComponentsService', ->
         allComponents = @componentsService.getAll()
 
-        expect(allComponents.length).toBe 1
+        expect(allComponents.length).toBe 2
         expect(allComponents[0]).toEqual new @elementComp()
 
     describe 'if given an group component,', ->
@@ -118,7 +118,7 @@ describe 'EditorController:', ->
       it 'should add it to the ComponentsService', ->
         allComponents = @componentsService.getAll()
 
-        expect(allComponents.length).toBe 1
+        expect(allComponents.length).toBe 2
         expect(allComponents[0]).toEqual new @groupComp()
 
   describe 'when content is imported,', ->

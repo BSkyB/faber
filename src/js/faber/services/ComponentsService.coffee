@@ -9,7 +9,7 @@ angular.module('faber').factory 'componentsService', ($filter, $log) ->
   #
   validate = (component) ->
     comp = new component()
-    return angular.isString(comp.id) and (comp.type is 'element' or comp.type is 'group')
+    return angular.isString(comp.id) and (comp.type is 'element' or comp.type is 'group' or comp.type is 'internal')
 
   # Initalizes the component service.
   #
