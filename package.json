@@ -1,6 +1,6 @@
 {
   "name": "faber",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Block based content editor",
   "private": true,
   "dependencies": {
